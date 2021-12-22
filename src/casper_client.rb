@@ -12,7 +12,17 @@ class CasperClient
   end
 
   def info_get_peers
-
+    puts "Enter IP Address:"
+    @ip_address = gets.chomp    # Example: 185.246.84.43
+    
+    puts "Enter Port Number:"   # Example: 7777
+    @port = gets.chomp.to_i
+    
+    self.url = "http://" + self.ip_address + ":" + self.port.to_s + "/rpc"
+    
+    client = Jimson::Client.new(self.url)
+    result = client.info_get_peers
+    # puts result
   end
 
 end
