@@ -35,7 +35,15 @@ class CasperClient
   end
 
   def chain_get_StateRootHash
+    # Uncomment below line for any ip address that is available in the network
+    # self.info_get_peers
+    # client = Jimson::Client.new(self.url)
 
+    client = Jimson::Client.new(@@test_url)
+    result = client.chain_get_state_root_hash
+
+    # Return state_root_hash value
+    @state_root_hash = result["state_root_hash"]
   end
 
 
@@ -44,7 +52,9 @@ end
 obj = CasperClient.new
 
 # Test chain_get_state_root_hash
-puts obj.info_get_peers
+# puts obj.info_get_peers
 
+# Test chain_get_StateRootHash
+puts obj.chain_get_StateRootHash
 
 
