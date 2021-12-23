@@ -34,6 +34,11 @@ class CasperClient
     # puts result
   end
 
+  def chain_get_StateRootHash
+
+  end
+
+
 end
 
 obj = CasperClient.new
