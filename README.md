@@ -11,18 +11,17 @@ gem install bundler
 ## How to install
 
 ```bash
+# There are two options to install casper_sdk
+
+# Option 1:
+# Install casper_sdk that is available in the https://guides.rubygems.org/
+gem install casper_sdk
+
+# Option 2:
 git clone git@github.com:saitgulmez/casper-ruby-sdk.git
 cd casper-ruby-sdk
 # It automatically installs all the required gems located in the Gemfile
 bundle install
-
-# There are two option to install casper_sdk
-
-# Option 1:
-# Install casper_sdk that available in the https://guides.rubygems.org/
-gem install casper_sdk
-
-# Option 2:
 # Install casper_sdk gem from repository
 # casper_sdk-X.Y.Z.gem will be generated after running below command
 gem build casper_sdk.gemspec
@@ -40,13 +39,12 @@ gem build casper_sdk.gemspec
 # Install RSpec
 gem install rspec
 # Run the test
-rpsec spec/client_spec.rb
+rspec spec/client_spec.rb
 ```
 
 ## How to generate docs
 ```bash
+gem install rdoc
 # Generate documentation from source code
 rdoc lib/casper_sdk.rb
 ```
-
-

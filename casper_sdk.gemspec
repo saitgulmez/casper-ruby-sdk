@@ -1,4 +1,4 @@
-#  hola_test1.gemsped
+# casper_sdk.gemspec
 
 Gem::Specification.new do |s|
   s.name        = 'casper_sdk'           

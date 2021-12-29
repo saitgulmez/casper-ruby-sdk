@@ -75,8 +75,6 @@
     <li ><a href="#method-c-new">::new</a>
     <li ><a href="#method-i-chain_get_StateRootHash">#chain_get_StateRootHash</a>
     <li ><a href="#method-i-info_get_peers">#info_get_peers</a>
-    <li ><a href="#method-i-set_ip_and_port">#set_ip_and_port</a>
-    <li ><a href="#method-i-set_ipaddress_and_port_number">#set_ipaddress_and_port_number</a>
   </ul>
 </div>
 
@@ -90,6 +88,8 @@
 
   <section class="description">
     
+<p>Class for interacting with the network via RPC</p>
+
   </section>
 
   <section id="5Buntitled-5D" class="documentation-section">
@@ -152,20 +152,29 @@
       <div id="method-c-new" class="method-detail ">
         <div class="method-heading">
           <span class="method-name">new</span><span
-            class="method-args">(ip_address = &quot;&quot;, port = 0)</span>
+            class="method-args">(ip_address, port = 7777)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
 
         <div class="method-description">
-          
+          <p>Constructor </p>
+<ul><li>
+<p>@param <a href="CasperClient.html#attribute-i-ip_address"><code>ip_address</code></a></p>
+</li><li>
+<p>@param  port</p>
+</li></ul>
 
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File src/casper_client.rb, line 9</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">ip_address</span> = <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-identifier">port</span> = <span class="ruby-value">0</span>)
+            <pre><span class="ruby-comment"># File lib/casper_sdk.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">ip_address</span>, <span class="ruby-identifier">port</span> = <span class="ruby-value">7777</span>)
   <span class="ruby-ivar">@ip_address</span> = <span class="ruby-identifier">ip_address</span>
   <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
-  <span class="ruby-ivar">@url</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-ivar">@url</span> = <span class="ruby-string">&quot;http://&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">ip_address</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;:&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">port</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/rpc&quot;</span>
   <span class="ruby-ivar">@state_root_hash</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-ivar">@peer_array</span> = []
+  <span class="ruby-ivar">@deploy_hash</span> = <span class="ruby-string">&quot;&quot;</span>
+  <span class="ruby-ivar">@deploy_hashes</span> = []
+  <span class="ruby-ivar">@auction_state_array</span> = []
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
@@ -188,18 +197,15 @@
         </div>
 
         <div class="method-description">
-          <p>Return <a href="CasperClient.html#attribute-i-state_root_hash"><code>state_root_hash</code></a> value</p>
+          <ul><li>
+<p>@return <a href="CasperClient.html#attribute-i-state_root_hash"><code>state_root_hash</code></a> value</p>
+</li></ul>
 
           <div class="method-source-code" id="chain_get_StateRootHash-source">
-            <pre><span class="ruby-comment"># File src/casper_client.rb, line 37</span>
+            <pre><span class="ruby-comment"># File lib/casper_sdk.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_get_StateRootHash</span>
-  <span class="ruby-comment"># Uncomment below line for any ip address that is available in the network</span>
-  <span class="ruby-comment"># self.info_get_peers</span>
-  <span class="ruby-comment"># client = Jimson::Client.new(self.url)</span>
-
-  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">@@test_url</span>)
+  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">chain_get_state_root_hash</span>
-
   <span class="ruby-ivar">@state_root_hash</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;state_root_hash&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -216,65 +222,16 @@
         </div>
 
         <div class="method-description">
-          <p>Return peers.</p>
+          <ul><li>
+<p>@return peers array</p>
+</li></ul>
 
           <div class="method-source-code" id="info_get_peers-source">
-            <pre><span class="ruby-comment"># File src/casper_client.rb, line 28</span>
+            <pre><span class="ruby-comment"># File lib/casper_sdk.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info_get_peers</span>
-  <span class="ruby-identifier">set_ipaddress_and_port_number</span>
-
   <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
   <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">info_get_peers</span>
-  <span class="ruby-comment"># puts result</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-        </div>
-
-
-      </div>
-
-      <div id="method-i-set_ip_and_port" class="method-detail ">
-        <div class="method-heading">
-          <span class="method-name">set_ip_and_port</span><span
-            class="method-args">(ip, port)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-
-        <div class="method-description">
-          
-
-          <div class="method-source-code" id="set_ip_and_port-source">
-            <pre><span class="ruby-comment"># File src/casper_client.rb, line 48</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_ip_and_port</span>(<span class="ruby-identifier">ip</span>, <span class="ruby-identifier">port</span>)
-  <span class="ruby-ivar">@ip</span> = <span class="ruby-identifier">ip</span>
-  <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-        </div>
-
-
-      </div>
-
-      <div id="method-i-set_ipaddress_and_port_number" class="method-detail ">
-        <div class="method-heading">
-          <span class="method-name">set_ipaddress_and_port_number</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-
-        <div class="method-description">
-          <p>Set ip address and port number</p>
-
-          <div class="method-source-code" id="set_ipaddress_and_port_number-source">
-            <pre><span class="ruby-comment"># File src/casper_client.rb, line 17</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_ipaddress_and_port_number</span>
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Enter IP Address:&quot;</span>
-  <span class="ruby-ivar">@ip_address</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>    
-  
-  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Enter Port Number:&quot;</span>   
-  <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">to_i</span>
-  
-  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span> = <span class="ruby-string">&quot;http://&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">ip_address</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;:&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">port</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/rpc&quot;</span>
+  <span class="ruby-ivar">@peer_array</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;peers&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
@@ -290,7 +247,7 @@
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="https://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.3.1.
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.4.0.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
