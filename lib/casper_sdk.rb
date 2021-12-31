@@ -34,5 +34,11 @@ class CasperClient
     @state_root_hash = result["state_root_hash"]
   end
 
+  # Get information about a single deploy by hash.
+  # * @param deploy_hash
+  # * @return Deploy
+  def info_get_deploy(deploy_Hash)
+  end
+
 end
 
