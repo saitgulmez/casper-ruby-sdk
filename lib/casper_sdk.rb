@@ -38,6 +38,11 @@ class CasperClient
   # * @param deploy_hash
   # * @return Deploy
   def info_get_deploy(deploy_Hash)
+    @h = {'deploy_hash' => deploy_Hash }
+    client = Jimson::Client.new(self.url)
+    result = client.info_get_deploy(@h)
+    hash1 = result["deploy"]
+    @deploy_hash = result["deploy"]
   end
 
 end
