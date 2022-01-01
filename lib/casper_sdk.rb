@@ -18,6 +18,7 @@ class CasperClient
     @deploy_hash = ""
     @deploy_hashes = []
     @auction_state_array = []
+    @auction_state = {}
   end
 
   # * @return peers array
@@ -43,6 +44,11 @@ class CasperClient
     result = client.info_get_deploy(@h)
     hash1 = result["deploy"]
     @deploy_hash = result["deploy"]
+  end
+
+  # Returns current auction system contract information.
+  # * @return auction_state
+  def state_get_AuctionInfo
   end
 
 end
