@@ -49,6 +49,9 @@ class CasperClient
   # Returns current auction system contract information.
   # * @return auction_state
   def state_get_AuctionInfo
+    client = Jimson::Client.new(self.url)
+    result = client.state_get_auction_info
+    @auction_state = result['auction_state']
   end
 
 end
