@@ -19,6 +19,7 @@ class CasperClient
     @deploy_hashes = []
     @auction_state_array = []
     @auction_state = {}
+    @node_status = {}
   end
 
   # * @return peers array
@@ -46,9 +47,6 @@ class CasperClient
     @deploy_hash = result["deploy"]
   end
 
-  def info_get_status
-  end
-
   # Returns current auction system contract information.
   # * @return auction_state
   def state_get_AuctionInfo
@@ -57,5 +55,11 @@ class CasperClient
     @auction_state = result['auction_state']
   end
 
+  # * Receive node status information 
+  # * @return node_status
+  def info_get_status
+    client = Jimson::Client.new(self.url)
+    @node_status = client.info_get_status
+  end
 end
 
