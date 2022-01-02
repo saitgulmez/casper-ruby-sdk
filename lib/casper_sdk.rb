@@ -46,6 +46,9 @@ class CasperClient
     @deploy_hash = result["deploy"]
   end
 
+  def info_get_status
+  end
+
   # Returns current auction system contract information.
   # * @return auction_state
   def state_get_AuctionInfo
