@@ -20,6 +20,7 @@ class CasperClient
     @auction_state_array = []
     @auction_state = {}
     @node_status = {}
+    @block_transfers = []
   end
 
   # * @return peers array
@@ -64,6 +65,8 @@ class CasperClient
 
   # * @return block_transfers
   def chain_get_block_transfers 
+    client = Jimson::Client.new(self.url)
+    @block_transfers = client.chain_get_block_transfers["transfers"]
   end
 end
 
