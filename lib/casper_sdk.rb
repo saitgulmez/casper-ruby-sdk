@@ -61,5 +61,9 @@ class CasperClient
     client = Jimson::Client.new(self.url)
     @node_status = client.info_get_status
   end
+
+  # * @return block_transfers
+  def chain_get_block_transfers 
+  end
 end
 
