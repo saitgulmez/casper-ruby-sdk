@@ -68,5 +68,8 @@ class CasperClient
     client = Jimson::Client.new(self.url)
     @block_transfers = client.chain_get_block_transfers["transfers"]
   end
+
+  def chain_get_block(block_Hash)
+  end
 end
 
