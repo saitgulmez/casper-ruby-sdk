@@ -81,5 +81,9 @@ class CasperClient
       @block_info
     end
   end
+
+  def chain_get_eraInfo_by_SwitchBlock    
+  end  
+  
 end
 
