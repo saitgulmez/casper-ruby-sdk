@@ -21,6 +21,7 @@ class CasperClient
     @auction_state = {}
     @node_status = {}
     @block_transfers = []
+    @block_info = {}
   end
 
   # * @return peers array
@@ -69,7 +70,16 @@ class CasperClient
     @block_transfers = client.chain_get_block_transfers["transfers"]
   end
 
-  def chain_get_block(block_Hash)
+  # * @return block_info
+  def chain_get_block(block_hash)
+    client = Jimson::Client.new(self.url)
+    result = client.chain_get_block({"block_identifier" => {"Hash" => block_hash}})
+    @block_info = result["block"]
+    if (!@block_info.empty?() && @block_info["hash"] != block_hash)
+      raise("Returned block does not have a matching hash.")
+    else
+      @block_info
+    end
   end
 end
 
