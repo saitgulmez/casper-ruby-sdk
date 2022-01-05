@@ -48,3 +48,33 @@ gem install rdoc
 # Generate documentation from source code
 rdoc lib/casper_sdk.rb
 ```
+
+## Usage examples
+### Get 5 peer IP addresses randomly
+```ruby
+require 'casper_sdk'
+
+# In order to interact with casper network we should give a valid ip address to the constructor
+# One of an ip address available in the network 
+node_ip_address = "74.208.245.69"
+client = CasperClient.new(node_ip_address)
+
+# Select 5 peers randomly from the network
+peers = client.info_get_peers.sample(5)
+
+
+# Store ip addresses of these peers into an array
+ips = []
+peers.select do |item|
+  ip = item["address"]
+  ips << ip[0, ip.index(':')]
+end
+
+# Print
+ips.each do |ip_address|
+  # Create a client object for each iteration
+  client = CasperClient.new(ip_address)
+  puts client.info_get_peers
+  puts client.chain_get_StateRootHash
+end
+```
