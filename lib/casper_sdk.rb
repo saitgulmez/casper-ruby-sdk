@@ -82,7 +82,12 @@ class CasperClient
     end
   end
 
-  def chain_get_eraInfo_by_SwitchBlock    
+  # * @param block_hash
+  # * @return era_summary
+  def chain_get_eraInfo_by_SwitchBlock
+    client = Jimson::Client.new(self.url)
+    result = client.chain_get_era_info_by_switch_block("block_identifier" => {"Hash" => block_hash})
+    result["era_summary"]  
   end  
   
 end
