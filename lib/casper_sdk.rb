@@ -90,5 +90,8 @@ class CasperClient
     result["era_summary"]  
   end  
   
+  def state_get_item
+  end
+
 end
 
