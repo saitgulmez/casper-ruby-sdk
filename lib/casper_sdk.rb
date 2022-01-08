@@ -95,8 +95,15 @@ class CasperClient
   # * @param path
   def state_get_item(stateRootHash, key, path)
     client = Jimson::Client.new(self.url)
-    response = client.state_get_item({ "state_root_hash" => stateRootHash, "key" => key, "path" => path})
+    response = client.state_get_item({ 
+      "state_root_hash" => stateRootHash, 
+      "key" => key, 
+      "path" => path
+    })
     response["stored_value"]
+  end
+
+  def state_get_dictionary_item
   end
 
 end
