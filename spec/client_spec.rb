@@ -1,5 +1,5 @@
-#spec/client_spec.rb
-require './lib/casper_sdk.rb'
+# client_spec.rb
+require './lib/casper_network.rb'
 
 describe CasperClient do
   client1 = CasperClient.new("185.246.84.43")

@@ -1,4 +1,4 @@
-# casper_client.rb
+# casper_network.rb
 require 'jimson'
 require 'json'
 
