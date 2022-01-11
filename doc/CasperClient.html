@@ -74,7 +74,15 @@
   <ul class="link-list" role="directory">
     <li ><a href="#method-c-new">::new</a>
     <li ><a href="#method-i-chain_get_StateRootHash">#chain_get_StateRootHash</a>
+    <li ><a href="#method-i-chain_get_block">#chain_get_block</a>
+    <li ><a href="#method-i-chain_get_block_transfers">#chain_get_block_transfers</a>
+    <li ><a href="#method-i-chain_get_eraInfo_by_SwitchBlock">#chain_get_eraInfo_by_SwitchBlock</a>
+    <li ><a href="#method-i-info_get_deploy">#info_get_deploy</a>
     <li ><a href="#method-i-info_get_peers">#info_get_peers</a>
+    <li ><a href="#method-i-info_get_status">#info_get_status</a>
+    <li ><a href="#method-i-state_get_AuctionInfo">#state_get_AuctionInfo</a>
+    <li ><a href="#method-i-state_get_dictionary_item">#state_get_dictionary_item</a>
+    <li ><a href="#method-i-state_get_item">#state_get_item</a>
   </ul>
 </div>
 
@@ -165,16 +173,35 @@
 </li></ul>
 
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/casper_sdk.rb, line 12</span>
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">ip_address</span>, <span class="ruby-identifier">port</span> = <span class="ruby-value">7777</span>)
   <span class="ruby-ivar">@ip_address</span> = <span class="ruby-identifier">ip_address</span>
   <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
   <span class="ruby-ivar">@url</span> = <span class="ruby-string">&quot;http://&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">ip_address</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;:&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">port</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/rpc&quot;</span>
+  
+  <span class="ruby-comment"># begin</span>
+  <span class="ruby-comment">#   response = RestClient.get(self.url)</span>
+  <span class="ruby-comment"># rescue RestClient::ResourceNotFound =&gt; e</span>
+  <span class="ruby-comment">#   # p e.class</span>
+  <span class="ruby-comment">#   p &quot;ResourceNotFound&quot;</span>
+  <span class="ruby-comment"># # rescue SocketError =&gt; e</span>
+  <span class="ruby-comment"># #   p e.class</span>
+  <span class="ruby-comment"># rescue Errno::ECONNREFUSED =&gt; e</span>
+  <span class="ruby-comment">#   # p e.class</span>
+  <span class="ruby-comment">#   p &quot;ECONNREFUSED&quot;</span>
+  <span class="ruby-comment"># rescue SocketError =&gt; e</span>
+  <span class="ruby-comment">#   p &quot;In Socket errror&quot;</span>
+  <span class="ruby-comment"># end</span>
+
   <span class="ruby-ivar">@state_root_hash</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-ivar">@peer_array</span> = []
   <span class="ruby-ivar">@deploy_hash</span> = <span class="ruby-string">&quot;&quot;</span>
   <span class="ruby-ivar">@deploy_hashes</span> = []
   <span class="ruby-ivar">@auction_state_array</span> = []
+  <span class="ruby-ivar">@auction_state</span> = {}
+  <span class="ruby-ivar">@node_status</span> = {}
+  <span class="ruby-ivar">@block_transfers</span> = []
+  <span class="ruby-ivar">@block_info</span> = {}
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
@@ -202,11 +229,128 @@
 </li></ul>
 
           <div class="method-source-code" id="chain_get_StateRootHash-source">
-            <pre><span class="ruby-comment"># File lib/casper_sdk.rb, line 31</span>
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_get_StateRootHash</span>
+  <span class="ruby-keyword">begin</span> 
+    <span class="ruby-identifier">status</span> = <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-value">5</span>) {
+      <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">chain_get_state_root_hash</span>
+      <span class="ruby-ivar">@state_root_hash</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;state_root_hash&quot;</span>]
+    }
+  <span class="ruby-keyword">rescue</span>
+    <span class="ruby-string">&#39;Timeout expired to retrieve state_root_hash value!&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-chain_get_block" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">chain_get_block</span><span
+            class="method-args">(block_hash)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <ul><li>
+<p>@return block_info</p>
+</li></ul>
+
+          <div class="method-source-code" id="chain_get_block-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 107</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_get_block</span>(<span class="ruby-identifier">block_hash</span>)
   <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
-  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">chain_get_state_root_hash</span>
-  <span class="ruby-ivar">@state_root_hash</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;state_root_hash&quot;</span>]
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">chain_get_block</span>({<span class="ruby-string">&quot;block_identifier&quot;</span> <span class="ruby-operator">=&gt;</span> {<span class="ruby-string">&quot;Hash&quot;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">block_hash</span>}})
+  <span class="ruby-ivar">@block_info</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;block&quot;</span>]
+  <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-ivar">@block_info</span>.<span class="ruby-identifier">empty?</span>() <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@block_info</span>[<span class="ruby-string">&quot;hash&quot;</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">block_hash</span>)
+    <span class="ruby-identifier">raise</span>(<span class="ruby-string">&quot;Returned block does not have a matching hash.&quot;</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-ivar">@block_info</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-chain_get_block_transfers" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">chain_get_block_transfers</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <ul><li>
+<p>@return block_transfers</p>
+</li></ul>
+
+          <div class="method-source-code" id="chain_get_block_transfers-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 101</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_get_block_transfers</span> 
+  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+  <span class="ruby-ivar">@block_transfers</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">chain_get_block_transfers</span>[<span class="ruby-string">&quot;transfers&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-chain_get_eraInfo_by_SwitchBlock" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">chain_get_eraInfo_by_SwitchBlock</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <ul><li>
+<p>@param block_hash</p>
+</li><li>
+<p>@return era_summary</p>
+</li></ul>
+
+          <div class="method-source-code" id="chain_get_eraInfo_by_SwitchBlock-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_get_eraInfo_by_SwitchBlock</span>
+  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">chain_get_era_info_by_switch_block</span>(<span class="ruby-string">&quot;block_identifier&quot;</span> <span class="ruby-operator">=&gt;</span> {<span class="ruby-string">&quot;Hash&quot;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">block_hash</span>})
+  <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;era_summary&quot;</span>]  
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-info_get_deploy" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">info_get_deploy</span><span
+            class="method-args">(deploy_Hash)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Get information about a single deploy by hash.</p>
+<ul><li>
+<p>@param deploy_hash</p>
+</li><li>
+<p>@return Deploy</p>
+</li></ul>
+
+          <div class="method-source-code" id="info_get_deploy-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 77</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info_get_deploy</span>(<span class="ruby-identifier">deploy_Hash</span>)
+  <span class="ruby-ivar">@h</span> = {<span class="ruby-string">&#39;deploy_hash&#39;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">deploy_Hash</span> }
+  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">info_get_deploy</span>(<span class="ruby-ivar">@h</span>)
+  <span class="ruby-identifier">hash1</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;deploy&quot;</span>]
+  <span class="ruby-ivar">@deploy_hash</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;deploy&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>
@@ -227,11 +371,122 @@
 </li></ul>
 
           <div class="method-source-code" id="info_get_peers-source">
-            <pre><span class="ruby-comment"># File lib/casper_sdk.rb, line 24</span>
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 49</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info_get_peers</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-identifier">status</span> = <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-identifier">timeout</span>(<span class="ruby-value">5</span>) {
+      <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">info_get_peers</span>
+      <span class="ruby-ivar">@peer_array</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;peers&quot;</span>]
+    }
+  <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Timeout</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span> 
+    <span class="ruby-string">&#39;Timeout expired to retrieve peers!&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-info_get_status" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">info_get_status</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <ul><li>
+<p>Receive node status information </p>
+</li><li>
+<p>@return node_status</p>
+</li></ul>
+
+          <div class="method-source-code" id="info_get_status-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">info_get_status</span>
   <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
-  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">info_get_peers</span>
-  <span class="ruby-ivar">@peer_array</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&quot;peers&quot;</span>]
+  <span class="ruby-ivar">@node_status</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">info_get_status</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-state_get_AuctionInfo" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">state_get_AuctionInfo</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <p>Returns current auction system contract information.</p>
+<ul><li>
+<p>@return auction_state</p>
+</li></ul>
+
+          <div class="method-source-code" id="state_get_AuctionInfo-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 87</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">state_get_AuctionInfo</span>
+  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+  <span class="ruby-identifier">result</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">state_get_auction_info</span>
+  <span class="ruby-ivar">@auction_state</span> = <span class="ruby-identifier">result</span>[<span class="ruby-string">&#39;auction_state&#39;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-state_get_dictionary_item" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">state_get_dictionary_item</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="state_get_dictionary_item-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 139</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">state_get_dictionary_item</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-state_get_item" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">state_get_item</span><span
+            class="method-args">(stateRootHash, key, path)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          <ul><li>
+<p>@param <a href="CasperClient.html#attribute-i-state_root_hash"><code>state_root_hash</code></a></p>
+</li><li>
+<p>@param key</p>
+</li><li>
+<p>@param path</p>
+</li></ul>
+
+          <div class="method-source-code" id="state_get_item-source">
+            <pre><span class="ruby-comment"># File lib/casper_network.rb, line 129</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">state_get_item</span>(<span class="ruby-identifier">stateRootHash</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">path</span>)
+  <span class="ruby-identifier">client</span> = <span class="ruby-constant">Jimson</span><span class="ruby-operator">::</span><span class="ruby-constant">Client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">url</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">state_get_item</span>({ 
+    <span class="ruby-string">&quot;state_root_hash&quot;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">stateRootHash</span>, 
+    <span class="ruby-string">&quot;key&quot;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">key</span>, 
+    <span class="ruby-string">&quot;path&quot;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">path</span>
+  })
+  <span class="ruby-identifier">response</span>[<span class="ruby-string">&quot;stored_value&quot;</span>]
 <span class="ruby-keyword">end</span></pre>
           </div>
         </div>

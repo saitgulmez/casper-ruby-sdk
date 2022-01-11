@@ -1,6 +1,12 @@
 # casper_network.rb
 require 'jimson'
 require 'json'
+require 'rdoc/rdoc'
+require "ipaddress"
+require 'resolv'
+require 'rest-client'
+require 'active_support/core_ext/hash/keys'
+require 'timeout'
 
 # Class for interacting with the network via RPC
 class CasperClient
@@ -13,6 +19,21 @@ class CasperClient
     @ip_address = ip_address
     @port = port
     @url = "http://" + self.ip_address + ":" + self.port.to_s + "/rpc"
+    
+    # begin
+    #   response = RestClient.get(self.url)
+    # rescue RestClient::ResourceNotFound => e
+    #   # p e.class
+    #   p "ResourceNotFound"
+    # # rescue SocketError => e
+    # #   p e.class
+    # rescue Errno::ECONNREFUSED => e
+    #   # p e.class
+    #   p "ECONNREFUSED"
+    # rescue SocketError => e
+    #   p "In Socket errror"
+    # end
+
     @state_root_hash = ""
     @peer_array = []
     @deploy_hash = ""
@@ -26,16 +47,28 @@ class CasperClient
 
   # * @return peers array
   def info_get_peers
-    client = Jimson::Client.new(self.url)
-    result = client.info_get_peers
-    @peer_array = result["peers"]
+    begin
+      status = Timeout::timeout(5) {
+        client = Jimson::Client.new(self.url)
+        result = client.info_get_peers
+        @peer_array = result["peers"]
+      }
+    rescue Timeout::Error 
+      'Timeout expired to retrieve peers!'
+    end
   end
 
   # * @return state_root_hash value
   def chain_get_StateRootHash
-    client = Jimson::Client.new(self.url)
-    result = client.chain_get_state_root_hash
-    @state_root_hash = result["state_root_hash"]
+    begin 
+      status = Timeout::timeout(5) {
+        client = Jimson::Client.new(self.url)
+        result = client.chain_get_state_root_hash
+        @state_root_hash = result["state_root_hash"]
+      }
+    rescue
+      'Timeout expired to retrieve state_root_hash value!'
+    end
   end
 
   # Get information about a single deploy by hash.
