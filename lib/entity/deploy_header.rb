@@ -1,6 +1,5 @@
 module Casper
   module Entity
-    
     class DeployHeader 
      
       # @param [String] account

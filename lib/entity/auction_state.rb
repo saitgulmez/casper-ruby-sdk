@@ -1,4 +1,3 @@
-
 module Casper
   module Entity
     class AuctionState
