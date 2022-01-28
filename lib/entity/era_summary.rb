@@ -2,6 +2,11 @@ module Casper
   module Entity
     class EraSummary
 
+      # @param [String] block_hash
+      # @param [Integer] era_id_
+      # @param [StoredValue] stored_value_
+      # @param [String] state_root_hash_
+      # @param [String] merkle_proof_
       def initialize(block_hash_, era_id_, stored_value_, state_root_hash_, merkle_proof_)
         @block_hash = block_hash_
         @era_id = era_id_
@@ -35,6 +40,5 @@ module Casper
         @merkle_proof
       end
     end
-
   end
 end
