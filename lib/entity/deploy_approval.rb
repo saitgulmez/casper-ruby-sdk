@@ -4,7 +4,7 @@ module Casper
 
       # @param [String] signer
       # @parama [String] signature
-      def initialize(signer = "", signature = "")
+      def initialize(signer, signature)
         @signer = signer
         @signature = signature
       end

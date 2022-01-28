@@ -9,7 +9,7 @@ module Casper
       # @param [String] body_hash
       # @param [Array] dependencies
       # @param [String] chain_name
-      def initialize(account = "", timestamp = 0, ttl, gas_price = 0, body_hash = "", dependencies = [], chain_name = "")
+      def initialize(account, timestamp, ttl, gas_price, body_hash, dependencies, chain_name)
         @account = account
         @timestamp = timestamp
         @ttl = ttl
