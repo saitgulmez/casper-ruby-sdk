@@ -5,12 +5,16 @@ module Casper
       # @param [String] bonding_purse
       # @param [String] staked_amount
       # @param [Integer] delegation_rate
-      # @param [String] funds_locked
-      def initialize(bonding_purse, staked_amount, delegation_rate, funds_locked)
+      # @param [VestingSchedule] vesting_schedule
+      # @param [Hash<Delegator>] delegators
+      # @param [Boolean] inactive
+      def initialize(bonding_purse, staked_amount, delegation_rate, vesting_schedule, delegators, inactive)
         @bonding_purse = bonding_purse
         @staked_amount = staked_amount
         @delegation_rate = delegation_rate
-        @funds_locked = funds_locked
+        @vesting_schedule = vesting_schedule
+        @delegators = delegators
+        @inactive = inactive
       end
 
       # @return [String] bonding_purse
@@ -28,9 +32,19 @@ module Casper
         @delegation_rate
       end
     
-      # @return [String] funds_locked
-      def get_funds_locked
-        @funds_locked
+      # @return [VestingSchedule] vesting_schedule
+      def get_vesting_schedule
+        @vesting_schedule
+      end
+
+      # @return [Delegator] delegators
+      def get_delegators
+        @delegators
+      end
+
+      # @return [true, false] inactive
+      def get_inactive
+        @inactive
       end
     end
   end

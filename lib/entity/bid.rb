@@ -2,42 +2,22 @@ module Casper
   module Entity
     class Bid
 
-      # @param [String] bonding_purse
-      # @param [String] staked_amount
-      # @param [Integer] delegation_rate
-      # @param [String] reward
-      # @param [Delegator] delegators
-      def initialize(bonding_purse, staked_amount, delegation_rate, reward, delegators)
-        @bonding_purse = bonding_purse
-        @staked_amount = staked_amount
-        @delegation_rate = delegation_rate
-        @reward = reward
-        @delegators = delegators
+      # @param [String] public_key
+      # @param [BidInfo] bid_info
+      def initialize(public_key, bid_info)
+        @public_key = public_key
+        @BidInfo = bid_info
+
       end
 
-      # @return [String] bonding_purse
-      def get_bonding_purse
-        @bonding_purse
+      # @return [String] public_key
+      def get_public_key
+        @public_key
       end
 
-      # @return [String] staked_amount
-      def get_staked_amount
-        @staked_amount
-      end
-
-      # @return [Integer] delegation_rate
-      def get_delegation_rate
-        @delegation_rate
-      end
-
-      # @return [String] reward
-      def get_reward
-        @reward
-      end
-
-      # @return [Delegator] delegators
-      def get_delegators
-        @delegators
+      # @return [BidInfo] bid_info
+      def get_bid_info
+        @bid_info
       end
     end
   end
