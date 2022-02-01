@@ -13,43 +13,26 @@ class CasperClient
   attr_accessor :ip_address, :port, :url, :state_root_hash
 
   # Constructor 
-  # * @param ip_address
-  # * @param  port 
-  def initialize(ip_address, port = 7777)
+  # @param [String] ip_address
+  def initialize(ip_address)
     @ip_address = ip_address
-    @port = port
-    @url = "http://" + self.ip_address + ":" + self.port.to_s + "/rpc"
-    
-    # begin
-    #   response = RestClient.get(self.url)
-    # rescue RestClient::ResourceNotFound => e
-    #   # p e.class
-    #   p "ResourceNotFound"
-    # # rescue SocketError => e
-    # #   p e.class
-    # rescue Errno::ECONNREFUSED => e
-    #   # p e.class
-    #   p "ECONNREFUSED"
-    # rescue SocketError => e
-    #   p "In Socket errror"
-    # end
-
+    @url = "http://" + @ip_address + ":7777/rpc"
     @state_root_hash = ""
     @peer_array = []
-    @deploy_hash = ""
-    @deploy_hashes = []
-    @auction_state_array = []
+    @block_hash = ""
+    @deploy = {}
     @auction_state = {}
     @node_status = {}
     @block_transfers = []
     @block_info = {}
+    @era_summary = {}
   end
 
-  # * @return peers array
+  # @return [Array<Hash>] peers array
   def info_get_peers
     begin
       status = Timeout::timeout(5) {
-        client = Jimson::Client.new(self.url)
+        client = Jimson::Client.new(@url)
         result = client.info_get_peers
         @peer_array = result["peers"]
       }
@@ -58,11 +41,11 @@ class CasperClient
     end
   end
 
-  # * @return state_root_hash value
-  def chain_get_StateRootHash
+  # @return [String] state_root_hash value
+  def chain_get_StateRootHash(block_hash = "")
     begin 
-      status = Timeout::timeout(5) {
-        client = Jimson::Client.new(self.url)
+      status = Timeout::timeout(10) {
+        client = Jimson::Client.new(@url)
         result = client.chain_get_state_root_hash
         @state_root_hash = result["state_root_hash"]
       }
@@ -72,72 +55,156 @@ class CasperClient
   end
 
   # Get information about a single deploy by hash.
-  # * @param deploy_hash
-  # * @return Deploy
-  def info_get_deploy(deploy_Hash)
-    @h = {'deploy_hash' => deploy_Hash }
-    client = Jimson::Client.new(self.url)
-    result = client.info_get_deploy(@h)
-    hash1 = result["deploy"]
-    @deploy_hash = result["deploy"]
-  end
-
-  # Returns current auction system contract information.
-  # * @return auction_state
-  def state_get_AuctionInfo
-    client = Jimson::Client.new(self.url)
-    result = client.state_get_auction_info
-    @auction_state = result['auction_state']
-  end
-
-  # * Receive node status information 
-  # * @return node_status
-  def info_get_status
-    client = Jimson::Client.new(self.url)
-    @node_status = client.info_get_status
-  end
-
-  # * @return block_transfers
-  def chain_get_block_transfers 
-    client = Jimson::Client.new(self.url)
-    @block_transfers = client.chain_get_block_transfers["transfers"]
-  end
-
-  # * @return block_info
-  def chain_get_block(block_hash)
-    client = Jimson::Client.new(self.url)
-    result = client.chain_get_block({"block_identifier" => {"Hash" => block_hash}})
-    @block_info = result["block"]
-    if (!@block_info.empty?() && @block_info["hash"] != block_hash)
-      raise("Returned block does not have a matching hash.")
-    else
-      @block_info
+  # @param [String] block_hash
+  # @return [Hash] Deploy
+  def info_get_deploy(block_hash)
+    begin
+      status = Timeout::timeout(5) {
+        client = Jimson::Client.new(@url)
+        response = client.info_get_deploy({"block_hash"=> block_hash })
+        @deploy = response["deploy"]
+        @deploy
+      }
+    rescue
+      'Timeout expired to retrieve Deploy!'
     end
   end
 
-  # * @param block_hash
-  # * @return era_summary
-  def chain_get_eraInfo_by_SwitchBlock
-    client = Jimson::Client.new(self.url)
-    result = client.chain_get_era_info_by_switch_block("block_identifier" => {"Hash" => block_hash})
-    result["era_summary"]  
+
+  # Receive node status information 
+  # @return node_status
+  def info_get_status
+    begin
+      status = Timeout::timeout(5) {
+        client = Jimson::Client.new(@url)
+        @node_status = client.info_get_status
+      }
+    rescue
+      'Timeout expired to retrieve node status information'
+    end
+  end
+
+  # @param [String] block_hash
+  # @return [Array<Hash>] block_transfers
+  def chain_get_block_transfers(block_hash = "") 
+    begin
+      status = Timeout::timeout(5) {
+        client = Jimson::Client.new(@url)
+        response = client.chain_get_block_transfers({
+          "block_identifier" => {"Hash" => block_hash}
+        })
+        @block_transfers = response["transfers"]
+        @block_transfers
+      }
+    rescue
+      'Timeout expired to retrieve block_transfers'
+    end
+  end
+
+  # @param [String] block_hash
+  # @return [Hash] block_info
+  def chain_get_block(block_hash)
+    begin 
+      state = Timeout::timeout(5) {
+        client = Jimson::Client.new(@url)
+        result = client.chain_get_block({"block_identifier" => {"Hash" => block_hash}})
+        @block_info = result["block"]
+        if (!@block_info.empty?() && @block_info["hash"] != block_hash)
+          raise("Returned block does not have a matching hash.")
+        else
+          @block_info
+        end
+      }
+    rescue
+      'Timeout expired to retrieve block_info'
+    end
+  end
+
+  # @param [String] block_hash
+  # @return [Hash] era_summary
+  def chain_get_eraInfo_by_SwitchBlock(block_hash)
+    begin
+      state = Timeout::timeout(30) {
+      client = Jimson::Client.new(@url)
+      response = client.chain_get_era_info_by_switch_block("block_identifier" => {"Hash" => block_hash})
+      @era_summary = response["era_summary"]
+      @era_summary
+      }
+    rescue
+      'Timeout expired to retrieve era_summary'
+    end
   end  
   
-  # * @param state_root_hash
-  # * @param key
-  # * @param path
-  def state_get_item(stateRootHash, key, path)
-    client = Jimson::Client.new(self.url)
-    response = client.state_get_item({ 
-      "state_root_hash" => stateRootHash, 
-      "key" => key, 
-      "path" => path
-    })
-    response["stored_value"]
+  # @param [String] state_root_hash
+  # @param [String] key
+  # @param [Array] path
+  def state_get_item(state_root_hash, key, path)
+    begin
+      state = Timeout::timeout(20) {
+        client = Jimson::Client.new(@url)
+        response = client.state_get_item({ 
+          "state_root_hash" => state_root_hash, 
+          "key" => key,
+          "path" => path
+        })
+        @stored_value = response["stored_value"]
+        @stored_value
+      }
+    rescue
+      'Timeout expired to retrieve stored_value'
+    end
   end
 
-  def state_get_dictionary_item
+  # @param [String] state_root_hash
+  # @param [String] item_key
+  # @param [String] uref
+  def state_get_dictionary_item(state_root_hash, item_key, uref)
+    begin
+      state = Timeout::timeout(5) {
+        client = Jimson::Client.new(@url)
+        response = client.state_get_dictionary_item({
+          "state_root_hash" => state_root_hash,
+          "dictionary_identifier" => {'URef' => 
+            {'seed_uref' => uref, 'dictionary_item_key' => item_key} }})
+        @stored_value = response["stored_value"]
+        @stored_value
+      }
+    rescue
+      'Timeout expired to retrieve stored_value'
+    end
   end
 
+  # @param [String] state_root_hash
+  # @param [String] balance_uref
+  def state_get_balance(state_root_hash, balance_uref)
+    begin
+      state = Timeout::timeout(5) {
+        client = Jimson::Client.new(@url)
+        response = client.state_get_balance({
+          "state_root_hash" => state_root_hash,
+          "purse_uref" => balance_uref
+        })
+        @balance_value = response["balance_value"]
+        @balance_value
+      }
+    rescue
+      'Timeout expired to retrieve balance_value'
+    end
+  end
+
+  # Returns current auction system contract information.
+  # @return [Hash] auction_state
+  def state_get_AuctionInfo
+    begin 
+      state = Timeout::timeout(50) {
+      client = Jimson::Client.new(@url)
+      response = client.state_get_auction_info
+      @auction_state = response['auction_state']
+      @auction_state
+      }
+    rescue
+      'Timeout expired to retrieve auction_state information!'
+    end
+  end
 end
 
