@@ -21,11 +21,12 @@ class CasperClient
     @peer_array = []
     @block_hash = ""
     @deploy = {}
-    @auction_state = {}
     @node_status = {}
     @block_transfers = []
     @block_info = {}
     @era_summary = {}
+    @balance_value = ""
+    @auction_state = {}
   end
 
   # @return [Array<Hash>] peers array
