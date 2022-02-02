@@ -32,7 +32,7 @@ class CasperClient
   # @return [Array<Hash>] peers array
   def info_get_peers
     begin
-      status = Timeout::timeout(5) {
+      status = Timeout::timeout(20) {
         client = Jimson::Client.new(@url)
         result = client.info_get_peers
         @peer_array = result["peers"]
@@ -58,12 +58,15 @@ class CasperClient
   # Get information about a single deploy by hash.
   # @param [String] block_hash
   # @return [Hash] Deploy
-  def info_get_deploy(block_hash)
+  def info_get_deploy(deploy_hash)
     begin
-      status = Timeout::timeout(5) {
+      status = Timeout::timeout(20) {
         client = Jimson::Client.new(@url)
-        response = client.info_get_deploy({"block_hash"=> block_hash })
+        response = client.info_get_deploy({"deploy_hash"=> deploy_hash })
         @deploy = response["deploy"]
+        # @deploy.keys.each do |key|  
+        #     @deploy[(key.to_sym rescue key) || key] = @deploy.delete(key)
+        # end
         @deploy
       }
     rescue
@@ -76,7 +79,7 @@ class CasperClient
   # @return node_status
   def info_get_status
     begin
-      status = Timeout::timeout(5) {
+      status = Timeout::timeout(10) {
         client = Jimson::Client.new(@url)
         @node_status = client.info_get_status
       }
@@ -106,7 +109,7 @@ class CasperClient
   # @return [Hash] block_info
   def chain_get_block(block_hash)
     begin 
-      state = Timeout::timeout(5) {
+      state = Timeout::timeout(10) {
         client = Jimson::Client.new(@url)
         result = client.chain_get_block({"block_identifier" => {"Hash" => block_hash}})
         @block_info = result["block"]
@@ -125,7 +128,7 @@ class CasperClient
   # @return [Hash] era_summary
   def chain_get_eraInfo_by_SwitchBlock(block_hash)
     begin
-      state = Timeout::timeout(30) {
+      state = Timeout::timeout(60) {
       client = Jimson::Client.new(@url)
       response = client.chain_get_era_info_by_switch_block("block_identifier" => {"Hash" => block_hash})
       @era_summary = response["era_summary"]
