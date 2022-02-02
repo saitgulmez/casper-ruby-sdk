@@ -106,7 +106,7 @@ clients.each do |client|
   puts client.chain_get_block(block_hash)
   puts client.chain_get_eraInfo_by_SwitchBlock(switch_block_hash)
   puts client.state_get_item("647C28545316E913969B032Cf506d5D242e0F857061E70Fb3DF55980611ace86", "bid-24b6D5Aabb8F0AC17D272763A405E9CECa9166B75B745Cf200695E172857c2dD", [])
-  puts client.state_get_dictionary_item("d5811c438982f231a9152011c0f6ce9ae9c716e8075a6edec8390f10072ecd29","f870e3cadfde21d7d7686fdf3d1a8413838274d363ca7b27ae71fc9125eb6743", "uref-0d689e987db7ee5be246282c3a7badf0411e34baeeab8e9d73c1223ae4ad02e5-007")
+  puts client.state_get_dictionary_item(state_root_hash, item_key, uref)
   state_root_hash = "610e932aef10d3e1fa04940c79a4a2789ee79c17046f1a9b45a2919f3600f3d5"
   uref = "uref-7de5e973b7d70bc2b328814411f2009aafd8dba901cfc2c588ba65088dcd22bb-007"
   puts client.state_get_balance(state_root_hash, uref)
