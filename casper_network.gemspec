@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'casper_network'           
-  s.version     = '0.1.0'
+  s.version     = '0.2.0'
   s.summary     = "Casper Ruby SDK "
   s.description = "Ruby gem enables developers to interact with the Casper Network."
   s.authors     = ["Mehmet Sait Gülmez"]

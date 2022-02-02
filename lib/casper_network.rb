@@ -56,7 +56,7 @@ class CasperClient
   end
 
   # Get information about a single deploy by hash.
-  # @param [String] block_hash
+  # @param [String] deploy_hash
   # @return [Hash] Deploy
   def info_get_deploy(deploy_hash)
     begin
