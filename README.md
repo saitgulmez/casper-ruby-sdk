@@ -41,6 +41,12 @@ gem install rspec
 # Run the test
 rspec spec/client_spec.rb
 ```
+## Mainnet Tests
+```bash
+git checkout milestone-2
+# Run the test
+rspec spec/mainnet_spec.rb
+```
 
 ## How to generate docs
 ```bash
