@@ -39,13 +39,15 @@ gem build casper_network.gemspec
 # Install RSpec
 gem install rspec
 # Run the test
-rspec spec/client_spec.rb
+rspec spec/mainnet_spec.rb
 ```
 ## Mainnet Tests
 ```bash
 git checkout milestone-2
 # Run the test
 rspec spec/mainnet_spec.rb
+# To see the test results in detail
+rspec -fd spec/mainnet_spec.rb
 ```
 
 ## How to generate docs
