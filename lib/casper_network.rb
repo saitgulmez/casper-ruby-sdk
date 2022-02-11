@@ -61,6 +61,9 @@ class CasperClient
   def info_get_deploy(deploy_hash)
     begin
       status = Timeout::timeout(20) {
+        if (deploy_hash == "" || deploy_hash == nil)
+          return "Server error -32602: Invalid params"
+        end
         client = Jimson::Client.new(@url)
         response = client.info_get_deploy({"deploy_hash"=> deploy_hash })
         @deploy = response["deploy"]
