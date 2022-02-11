@@ -13,102 +13,101 @@ uref = "uref-0d689e987db7ee5be246282c3a7badf0411e34baeeab8e9d73c1223ae4ad02e5-00
 describe CasperClient do
   # **********************************************************************************************
   # Test info_get_peers()
-  # describe "#info_get_peers" do
-  #   peers = client.info_get_peers 
-  #   context "Peers Array" do
-  #     it "passes, peers array is not nil" do 
-  #       expect(peers).to be_truthy
-  #     end
+  describe "#info_get_peers" do
+    peers = client.info_get_peers 
+    context "Peers Array" do
+      it "passes, peers array is not nil" do 
+        expect(peers).to be_truthy
+      end
      
-  #     it "passes, peers array is not empty" do 
-  #       expect(peers).not_to be_empty
-  #     end
+      it "passes, peers array is not empty" do 
+        expect(peers).not_to be_empty
+      end
      
-  #     # it "passes, size of both peer arrays are equal" do
-  #     #   # Check the length of the peers array 
-  #     #   client2 = CasperClient.new("34.192.231.34")
-  #     #   other_peers = client2.info_get_peers
+      it "passes, size of both peer arrays are equal" do
+        # Check the length of the peers array 
+        client2 = CasperClient.new("34.192.231.34")
+        other_peers = client2.info_get_peers
+        expect(peers.size).to eql(other_peers.size)
+      end
+     
+      it "passes, peers object is a type of Array" do
+        # Check whether ıt is an array or not
+        expect(client.info_get_peers).to be_an(Array)
+        # Check the length of the peers array 
+        expect(client.info_get_peers.length).to be > 0
+      end
 
-  #     #   expect(peers.size).to eql(other_peers.size)
-  #     # end
-     
-  #     it "passes, peers object is a type of Array" do
-  #       # Check whether ıt is an array or not
-  #       expect(client.info_get_peers).to be_an(Array)
-  #       # Check the length of the peers array 
-  #       expect(client.info_get_peers.length).to be > 0
-  #     end
-
-  #     it "passes, peers member are types of Hash" do
-  #       # Check type of peers elements
-  #       expect(peers[0]).to be_an_instance_of(Hash)
-  #     end
+      it "passes, peers member are types of Hash" do
+        # Check type of peers elements
+        expect(peers[0]).to be_an_instance_of(Hash)
+      end
         
-  #     peer = peers[0]
-  #     first_item = peer["node_id"]
-  #     second_item = peer["address"]
-  #     it "passes, peer members are types of String" do
-  #         expect(first_item).to be_an_instance_of(String)
-  #         expect(second_item).to be_an_instance_of(String)
-  #         expect(first_item.length).to eq(14)
-  #     end
+      peer = peers[0]
+      first_item = peer["node_id"]
+      second_item = peer["address"]
+      it "passes, peer members are types of String" do
+          expect(first_item).to be_an_instance_of(String)
+          expect(second_item).to be_an_instance_of(String)
+          expect(first_item.length).to eq(14)
+      end
       
-  #     it "passes, length of first_item equal #{first_item.length}"  do
-  #         expect(first_item.length).to eq(14)
-  #     end
+      it "passes, length of first_item equal #{first_item.length}"  do
+          expect(first_item.length).to eq(14)
+      end
       
-  #     peer.deep_symbolize_keys!
-  #     it "passes, peer includes node_id key" do
-  #         expect(peer).to have_key(:node_id)
-  #     end
+      peer.deep_symbolize_keys!
+      it "passes, peer includes node_id key" do
+          expect(peer).to have_key(:node_id)
+      end
 
-  #     it "passes, peer includes address key" do
-  #         expect(peer).to have_key(:address)
-  #     end
-  #   end
-  # end  
+      it "passes, peer includes address key" do
+          expect(peer).to have_key(:address)
+      end
+    end
+  end  
 
   # **********************************************************************************************
   # Test chain_get_StateRootHash 
-  # describe "#chain_get_StateRootHash" do
-  #   context "Without a block_hash parameter" do 
-  #     current_state_root_hash = client.chain_get_StateRootHash("")
-  #     it "passes,  current state_root_hash is a type of String" do
-  #       expect(current_state_root_hash).to be_an(String)
-  #     end
+  describe "#chain_get_StateRootHash" do
+    context "Without a block_hash parameter" do 
+      current_state_root_hash = client.chain_get_StateRootHash("")
+      it "passes,  current state_root_hash is a type of String" do
+        expect(current_state_root_hash).to be_an(String)
+      end
 
-  #     it "passes,  current state_root_hash is not nil" do
-  #       expect(current_state_root_hash).to be_truthy
-  #     end
+      it "passes,  current state_root_hash is not nil" do
+        expect(current_state_root_hash).to be_truthy
+      end
 
-  #     it "passes,  current state_root_hash is not empty" do
-  #       expect(current_state_root_hash).not_to be_empty
-  #     end
+      it "passes,  current state_root_hash is not empty" do
+        expect(current_state_root_hash).not_to be_empty
+      end
 
-  #     it "passes,  current state_root_hash is 64 characters long" do
-  #       expect(current_state_root_hash.length).to eq(64)
-  #     end
-  #   end
+      it "passes,  current state_root_hash is 64 characters long" do
+        expect(current_state_root_hash.length).to eq(64)
+      end
+    end
 
-  #   context "With a block_hash parameter" do 
-  #     current_state_root_hash = client.chain_get_StateRootHash(state_root_hash)
-  #     it "passes,  current state_root_hash is a type of String" do
-  #       expect(current_state_root_hash).to be_an(String)
-  #     end
+    context "With a block_hash parameter" do 
+      current_state_root_hash = client.chain_get_StateRootHash(state_root_hash)
+      it "passes,  current state_root_hash is a type of String" do
+        expect(current_state_root_hash).to be_an(String)
+      end
 
-  #     it "passes,  current state_root_hash is not nil" do
-  #       expect(current_state_root_hash).to be_truthy
-  #     end
+      it "passes,  current state_root_hash is not nil" do
+        expect(current_state_root_hash).to be_truthy
+      end
 
-  #     it "passes,  current state_root_hash is not empty" do
-  #       expect(current_state_root_hash).not_to be_empty
-  #     end
+      it "passes,  current state_root_hash is not empty" do
+        expect(current_state_root_hash).not_to be_empty
+      end
 
-  #     it "passes,  current state_root_hash is 64 characters long" do
-  #       expect(current_state_root_hash.length).to eq(64)
-  #     end
-  #   end
-  # end  
+      it "passes,  current state_root_hash is 64 characters long" do
+        expect(current_state_root_hash.length).to eq(64)
+      end
+    end
+  end  
 # **********************************************************************************************
 
   # Test info_get_deploy(deploy_hash)
