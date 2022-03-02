@@ -9,3 +9,4 @@
 
 ## Reporting a Vulnerability
 
+If you find a security vulnerability in Casper Ruby SDK, please send an email to cenggulmez.65@gmail.com.
