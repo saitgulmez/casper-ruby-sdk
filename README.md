@@ -128,3 +128,6 @@ clients.each do |client|
 end
 end
 ```
+
+- [doc](https://htmlpreview.github.io/?https://raw.githubusercontent.com/saitgulmez/casper-ruby-sdk/milestone-2/doc/CasperClient.html)
+- [readme](https://htmlpreview.github.io/?https://github.com/saitgulmez/casper-ruby-sdk/blob/milestone-2/doc/file.README.html)
