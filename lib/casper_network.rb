@@ -30,25 +30,10 @@ class CasperClient
     @era_summary = {}
     @balance_value = ""
     @auction_state = {}
-    #  @error = "Errno::ECONNREFUSED" if ip is not available in the network, "65.21.22.01"
-    #  @error = "Socket Error" if IP entered is invalid format, "65.21.xx.101" 
+   
     @rpc_error = Casper::RpcError::ErrorHandle.new
-    @error_type = @rpc_error.error_handling(@url)
-    # puts @error_type
-    @err = nil
-    # if @error_type == "SocketError"
-    #   @err = @error_type 
-    # end
-    if @error == "SocketError"
-      @err = @error_type
-    elsif @error_type == "Errno::ECONNREFUSED"
-      @err = @error_type
-    elsif @error_type == "ResourceNotFound"
-      @err = @error_type
-    # end
-    else
-      @err = @error_type
-    end
+    @err = @rpc_error.error_handling(@url)
+
   end
 
   def get_error 
