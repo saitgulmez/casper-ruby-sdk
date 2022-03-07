@@ -342,6 +342,7 @@ describe CasperClient do
     context "Returns an EraInfo from the network" do 
       switch_block_hash = "4696285db1ca6572f425cada612257f85a58a6a4034c09846afe360ba40e5df0"
       era_summary = client.chain_get_eraInfo_by_SwitchBlock(switch_block_hash)
+
       era_summary.deep_symbolize_keys!
 
       era_id = 3663
