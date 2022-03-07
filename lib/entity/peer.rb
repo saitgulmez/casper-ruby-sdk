@@ -4,9 +4,9 @@ module Casper
 
       # @param [String] node_id
       # @param [String] address 
-      def initialize(node_id, address)
-        @node_id = node_id
-        @address = address
+      def initialize(peer = {})
+        @node_id = peer[:node_id]
+        @address = peer[:address]
       end
 
       # @return [String] node_id
