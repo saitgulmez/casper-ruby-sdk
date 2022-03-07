@@ -7,9 +7,12 @@ require 'resolv'
 require 'rest-client'
 require 'active_support/core_ext/hash/keys'
 require 'timeout'
-
+require 'net/http'
+# require "./rpc/rpc.rb"
+require_relative './rpc/rpc_error.rb'
 # Class for interacting with the network via RPC
-class CasperClient
+
+class CasperClient 
   attr_accessor :ip_address, :port, :url, :state_root_hash
 
   # Constructor 
@@ -27,19 +30,41 @@ class CasperClient
     @era_summary = {}
     @balance_value = ""
     @auction_state = {}
+    #  @error = "Errno::ECONNREFUSED" if ip is not available in the network, "65.21.22.01"
+    #  @error = "Socket Error" if IP entered is invalid format, "65.21.xx.101" 
+    @rpc_error = Casper::RpcError::ErrorHandle.new
+    @error_type = @rpc_error.error_handling(@url)
+    # puts @error_type
+    @err = nil
+    # if @error_type == "SocketError"
+    #   @err = @error_type 
+    # end
+    if @error == "SocketError"
+      @err = @error_type
+    elsif @error_type == "Errno::ECONNREFUSED"
+      @err = @error_type
+    elsif @error_type == "ResourceNotFound"
+      @err = @error_type
+    # end
+    else
+      @err = @error_type
+    end
+  end
+
+  def get_error 
+    @err
   end
 
   # @return [Array<Hash>] peers array
   def info_get_peers
-    begin
-      status = Timeout::timeout(20) {
+      begin
         client = Jimson::Client.new(@url)
-        result = client.info_get_peers
-        @peer_array = result["peers"]
-      }
-    rescue Timeout::Error 
-      'Timeout expired to retrieve peers!'
-    end
+        response = client.info_get_peers
+        @peer_array = response["peers"]
+      rescue
+        @rpc_error = Casper::RpcError::ErrorHandle.new
+        @error = @rpc_error.error_handling(@url)
+      end
   end
 
   # @return [String] state_root_hash value
@@ -51,7 +76,8 @@ class CasperClient
         @state_root_hash = result["state_root_hash"]
       }
     rescue
-      'Timeout expired to retrieve state_root_hash value!'
+      @rpc_error = Casper::RpcError::ErrorHandle.new
+      @error = @rpc_error.error_handling(@url)
     end
   end
 
@@ -60,12 +86,12 @@ class CasperClient
   # @return [Hash] Deploy
   def info_get_deploy(deploy_hash)
     begin
-      status = Timeout::timeout(20) {
-        if (deploy_hash == "" || deploy_hash == nil)
-          return "Server error -32602: Invalid params"
-        end
+      status = Timeout::timeout(10) {
         client = Jimson::Client.new(@url)
         response = client.info_get_deploy({"deploy_hash"=> deploy_hash })
+        if (deploy_hash == "" || deploy_hash == nil)
+          Casper::RpcError::InvalidParameter.error
+        end
         @deploy = response["deploy"]
         # @deploy.keys.each do |key|  
         #     @deploy[(key.to_sym rescue key) || key] = @deploy.delete(key)
@@ -73,7 +99,7 @@ class CasperClient
         @deploy
       }
     rescue
-      'Timeout expired to retrieve Deploy!'
+      Casper::RpcError::InvalidParameter.error 
     end
   end
 
@@ -87,7 +113,8 @@ class CasperClient
         @node_status = client.info_get_status
       }
     rescue
-      'Timeout expired to retrieve node status information'
+      @rpc_error = Casper::RpcError::ErrorHandle.new
+      @error = @rpc_error.error_handling(@url)
     end
   end
 
@@ -104,7 +131,7 @@ class CasperClient
         @block_transfers
       }
     rescue
-      'Timeout expired to retrieve block_transfers'
+      Casper::RpcError::InvalidParameter.error
     end
   end
 
@@ -123,7 +150,7 @@ class CasperClient
         end
       }
     rescue
-      'Timeout expired to retrieve block_info'
+      Casper::RpcError::InvalidParameter.error
     end
   end
 
@@ -131,14 +158,19 @@ class CasperClient
   # @return [Hash] era_summary
   def chain_get_eraInfo_by_SwitchBlock(block_hash)
     begin
-      state = Timeout::timeout(60) {
+      state = Timeout::timeout(10) {
       client = Jimson::Client.new(@url)
       response = client.chain_get_era_info_by_switch_block("block_identifier" => {"Hash" => block_hash})
       @era_summary = response["era_summary"]
-      @era_summary
+      
+      if @era_summary == nil
+        Casper::RpcError::InvalidParameter.error
+      else
+        @era_summary
+      end
       }
     rescue
-      'Timeout expired to retrieve era_summary'
+      Casper::RpcError::InvalidParameter.error
     end
   end  
   
@@ -158,7 +190,7 @@ class CasperClient
         @stored_value
       }
     rescue
-      'Timeout expired to retrieve stored_value'
+      Casper::RpcError::InvalidParameter.error
     end
   end
 
@@ -167,17 +199,17 @@ class CasperClient
   # @param [String] uref
   def state_get_dictionary_item(state_root_hash, item_key, uref)
     begin
-      state = Timeout::timeout(5) {
+      state = Timeout::timeout(10) {
         client = Jimson::Client.new(@url)
         response = client.state_get_dictionary_item({
           "state_root_hash" => state_root_hash,
           "dictionary_identifier" => {'URef' => 
             {'seed_uref' => uref, 'dictionary_item_key' => item_key} }})
-        @stored_value = response["stored_value"]
-        @stored_value
+          @stored_value = response["stored_value"]
+          @stored_value
       }
     rescue
-      'Timeout expired to retrieve stored_value'
+      Casper::RpcError::InvalidParameter.error
     end
   end
 
@@ -195,7 +227,7 @@ class CasperClient
         @balance_value
       }
     rescue
-      'Timeout expired to retrieve balance_value'
+      Casper::RpcError::InvalidParameter.error
     end
   end
 
@@ -210,7 +242,8 @@ class CasperClient
       @auction_state
       }
     rescue
-      'Timeout expired to retrieve auction_state information!'
+      @rpc_error = Casper::RpcError::ErrorHandle.new
+      @error = @rpc_error.error_handling(@url)
     end
   end
 end
