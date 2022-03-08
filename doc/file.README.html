@@ -100,14 +100,26 @@
 <pre class="code ruby"><code class="ruby"><span class='comment'># Install RSpec
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='id identifier rubyid_install'>install</span> <span class='id identifier rubyid_rspec'>rspec</span>
 <span class='comment'># Run the test
-</span><span class='id identifier rubyid_rspec'>rspec</span> <span class='id identifier rubyid_spec'>spec</span><span class='op'>/</span><span class='id identifier rubyid_client_spec'>client_spec</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
+</span><span class='id identifier rubyid_rspec'>rspec</span> <span class='id identifier rubyid_spec'>spec</span><span class='op'>/</span><span class='id identifier rubyid_testnet_spec'>testnet_spec</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
+<span class='id identifier rubyid_rspec'>rspec</span> <span class='id identifier rubyid_spec'>spec</span><span class='op'>/</span><span class='id identifier rubyid_mainnet_spec'>mainnet_spec</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
+</code></pre>
+
+<h2 id="label-Testnet+Tests">Testnet Tests</h2>
+
+<pre class="code ruby"><code class="ruby">git checkout milestone-2
+# Run the test
+rspec spec/testnet_spec.rb
+# To see the test results in detail
+rspec -fd spec/testnet_spec.rb
 </code></pre>
 
 <h2 id="label-Mainnet+Tests">Mainnet Tests</h2>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_git'>git</span> <span class='id identifier rubyid_checkout'>checkout</span> <span class='id identifier rubyid_milestone'>milestone</span><span class='op'>-</span><span class='int'>2</span>
-<span class='comment'># Run the test
-</span><span class='id identifier rubyid_rspec'>rspec</span> <span class='id identifier rubyid_spec'>spec</span><span class='op'>/</span><span class='id identifier rubyid_mainnet_spec'>mainnet_spec</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
+<pre class="code ruby"><code class="ruby">git checkout milestone-2
+# Run the test
+rspec spec/mainnet_spec.rb
+# To see the test results in detail
+rspec -fd spec/mainnet_spec.rb
 </code></pre>
 
 <h2 id="label-How+to+generate+docs">How to generate docs</h2>
@@ -169,7 +181,7 @@ yardoc --help
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chain_get_block'>chain_get_block</span><span class='lparen'>(</span><span class='id identifier rubyid_block_hash'>block_hash</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_chain_get_eraInfo_by_SwitchBlock'>chain_get_eraInfo_by_SwitchBlock</span><span class='lparen'>(</span><span class='id identifier rubyid_switch_block_hash'>switch_block_hash</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_state_get_item'>state_get_item</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>647C28545316E913969B032Cf506d5D242e0F857061E70Fb3DF55980611ace86</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>bid-24b6D5Aabb8F0AC17D272763A405E9CECa9166B75B745Cf200695E172857c2dD</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_state_get_dictionary_item'>state_get_dictionary_item</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>d5811c438982f231a9152011c0f6ce9ae9c716e8075a6edec8390f10072ecd29</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>f870e3cadfde21d7d7686fdf3d1a8413838274d363ca7b27ae71fc9125eb6743</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>uref-0d689e987db7ee5be246282c3a7badf0411e34baeeab8e9d73c1223ae4ad02e5-007</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_state_get_dictionary_item'>state_get_dictionary_item</span><span class='lparen'>(</span><span class='id identifier rubyid_state_root_hash'>state_root_hash</span><span class='comma'>,</span> <span class='id identifier rubyid_item_key'>item_key</span><span class='comma'>,</span> <span class='id identifier rubyid_uref'>uref</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_state_root_hash'>state_root_hash</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>610e932aef10d3e1fa04940c79a4a2789ee79c17046f1a9b45a2919f3600f3d5</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_uref'>uref</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>uref-7de5e973b7d70bc2b328814411f2009aafd8dba901cfc2c588ba65088dcd22bb-007</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_state_get_balance'>state_get_balance</span><span class='lparen'>(</span><span class='id identifier rubyid_state_root_hash'>state_root_hash</span><span class='comma'>,</span> <span class='id identifier rubyid_uref'>uref</span><span class='rparen'>)</span>
@@ -178,10 +190,15 @@ yardoc --help
 <span class='kw'>end</span>
 <span class='kw'>end</span>
 </code></pre>
+<ul><li>
+<p><a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/saitgulmez/casper-ruby-sdk/milestone-2/doc/CasperClient.html">doc</a></p>
+</li><li>
+<p><a href="https://htmlpreview.github.io/?https://github.com/saitgulmez/casper-ruby-sdk/blob/milestone-2/doc/file.README.html">readme</a></p>
+</li></ul>
 </div></div>
 
       <div id="footer">
-  Generated on Thu Feb  3 02:13:56 2022 by
+  Generated on Tue Mar  8 13:04:31 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.0.2).
 </div>

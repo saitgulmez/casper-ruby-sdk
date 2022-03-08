@@ -165,7 +165,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(node_id, address)  &#x21d2; Peer </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(peer = {})  &#x21d2; Peer </a>
     
 
     
@@ -197,7 +197,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(node_id, address)  &#x21d2; <tt><span class='object_link'><a href="" title="Casper::Entity::Peer (class)">Peer</a></span></tt> 
+    #<strong>initialize</strong>(peer = {})  &#x21d2; <tt><span class='object_link'><a href="" title="Casper::Entity::Peer (class)">Peer</a></span></tt> 
   
 
   
@@ -254,9 +254,9 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 7</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_node_id'>node_id</span><span class='comma'>,</span> <span class='id identifier rubyid_address'>address</span><span class='rparen'>)</span>
-  <span class='ivar'>@node_id</span> <span class='op'>=</span> <span class='id identifier rubyid_node_id'>node_id</span>
-  <span class='ivar'>@address</span> <span class='op'>=</span> <span class='id identifier rubyid_address'>address</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_peer'>peer</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='ivar'>@node_id</span> <span class='op'>=</span> <span class='id identifier rubyid_peer'>peer</span><span class='lbracket'>[</span><span class='symbol'>:node_id</span><span class='rbracket'>]</span>
+  <span class='ivar'>@address</span> <span class='op'>=</span> <span class='id identifier rubyid_peer'>peer</span><span class='lbracket'>[</span><span class='symbol'>:address</span><span class='rbracket'>]</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -393,7 +393,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Feb  3 02:13:41 2022 by
+  Generated on Tue Mar  8 13:04:22 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.0.2).
 </div>
