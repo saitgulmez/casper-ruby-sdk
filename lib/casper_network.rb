@@ -1,4 +1,3 @@
-# casper_network.rb
 require 'jimson'
 require 'json'
 require 'rdoc/rdoc'
