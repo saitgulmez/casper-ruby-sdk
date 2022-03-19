@@ -4,8 +4,8 @@ require './lib/casper_network.rb'
 # Ip Address taken from Testnet
 # client = CasperClient.new("138.201.54.44")
 # Ip Address taken from Testnet
-client = CasperClient.new("65.21.227.101")  # IP is taken from "TestNet"
-client = CasperClient.new("138.201.54.44")  # IP is taken from "TestNet"
+# client = CasperClient.new("65.21.227.101")  # IP is taken from "TestNet"
+# client = CasperClient.new("138.201.54.44")  # IP is taken from "TestNet"
 client = CasperClient.new("5.9.23.55")      # IP is taken from "TestNet"
 
 # block_Hash taken from Testnet
@@ -16,7 +16,6 @@ state_root_hash = "2a62440a1e1e57bff71344aac8a7de169f6dd08d29cffe83b2fb5d6648971
 item_key = "f870e3cadfde21d7d7686fdf3d1a8413838274d363ca7b27ae71fc9125eb6743"
 uref = "uref-9199d08ff4ca4d52cd7a05ba0d2694204b7ebff963fec1c216f81bf654e0e59f-007"
 describe CasperClient do
-  # **********************************************************************************************
   url = "65.21.0.X"
   client2 = CasperClient.new(url) 
   it "fails, wrong ip format :  #{url}" do 
@@ -38,7 +37,6 @@ describe CasperClient do
       end
       # it "fails, connecting non existing node" do 
       #   client2 = CasperClient.new("12.2.2.2")
-      #   username.should_not be_valid
       # end
       it "passes, peers array is not empty" do 
         expect(peers).not_to be_empty
@@ -94,7 +92,6 @@ describe CasperClient do
     end
   end  
 
-  # **********************************************************************************************
   # Test chain_get_StateRootHash 
   describe "#chain_get_StateRootHash" do
     context "Without a block_hash parameter" do 
@@ -135,7 +132,6 @@ describe CasperClient do
       end
     end
   end  
-# **********************************************************************************************
 
   # Test info_get_deploy(deploy_hash)
   describe "#info_get_deploy" do 
@@ -215,7 +211,7 @@ describe CasperClient do
       end
     end
   end
-  # **********************************************************************************************
+  
   # Test info_get_status()
   describe "#info_get_status" do
     node_status = client.info_get_status
@@ -261,7 +257,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test chain_get_block_transfers(block_hash)
   describe "#chain_get_block_transfers" do 
     block_hash1 = "7aaacec3c4abdbd8766a5f0fc29ee54c18b16a19b0efc2685c44d75e1dff4eed"
@@ -312,7 +307,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test chain_get_block(block_hash)
   describe "#chain_get_block" do  
     block_hash = "7e89d689b1604280e1c4c83c743f58ecef1f2177f5307580313122ab11595f4b"
@@ -389,7 +383,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test chain_get_eraInfo_by_SwitchBlock(block_hash)
   describe "#chain_get_eraInfo_by_SwitchBlock" do 
     context "Returns an EraInfo from the network" do 
@@ -411,7 +404,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test state_get_item(state_root_hash, key, path)
   describe "#state_get_item" do 
     context "Returns a stored value from the network" do 
@@ -459,7 +451,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test state_get_dictionary_item(state_root_hash, item_key, uref)
   describe "#state_get_dictionary_item" do 
     stored_value = client.state_get_dictionary_item("146b860f82359ced6e801cbad31015b5a9f9eb147ab2a449fd5cdb950e961ca8",
@@ -479,7 +470,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test state_get_balance(state_root_hash, balance_uref)
   describe "#state_get_balance" do 
     balance = client.state_get_balance("146b860f82359ced6e801cbad31015b5a9f9eb147ab2a449fd5cdb950e961ca8", "uref-f4d4d840464dd8934fcca9758d64cb514f52285ae0b79d706436f2cfe87e34fd-007")
@@ -489,7 +479,6 @@ describe CasperClient do
     end
   end
 
-  # **********************************************************************************************
   # Test state_get_AuctionInfo
   describe "#state_get_AuctionInfo" do
     auction_state = client.state_get_AuctionInfo  
