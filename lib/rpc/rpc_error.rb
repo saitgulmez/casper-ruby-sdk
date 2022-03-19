@@ -2,21 +2,24 @@
 module Casper
   module RpcError
     class ErrorHandle  
-      # @param [Integer]  RPC Error code
-      # @param [String] RPC Error short message
-      # @param [String]  Full stack RPC error  message
+      # @param [Integer] code
+      # @param [String] message
+      # @param [String] data
       def initialize(code = 0, message = "", data = "") 
         @code = code
         @message = message
         @data = data
       end
 
+      # @return [String]
       def self.invalid_param 
         @code = -32602
         @message = "Invalid params"
-        "Server error -32602: Invalid params"
+        @err = "Server error #{@code}: #{@message}"
       end
 
+      # @param [String] url
+      # @return [String]
       def error_handling(url)
         begin
           response = RestClient.get(url)
@@ -32,19 +35,25 @@ module Casper
         rescue SocketError => e
            e.class.inspect
           # "Socket Error"
+        rescue
+          "Timed out connecting to server"
         end
       end 
 
+      # @return [String]
       def invalid_address
         "getaddrinfo: Name or service not known (SocketError)"
       end
 
+      # @return [String]
       def invalid_parameter
         "Server error -32602: Invalid params"
       end
     end
     
     class ServerError < StandardError
+
+      # @return [String]
       def initialize(code, message)
         super("Server error #{code}: #{message}")
       end
@@ -55,10 +64,12 @@ module Casper
       def initialize  
       end
       
+      # @return [String]
       def self.error
         "Server error -32602: Invalid params"
       end      
 
+      # @return [String]
       def self.argument_error
         "ArgumentError"
       end
