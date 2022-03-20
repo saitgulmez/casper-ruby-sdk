@@ -3,7 +3,7 @@ module Casper
     class DeployApproval 
 
       # @param [String] signer
-      # @parama [String] signature
+      # @param [String] signature
       def initialize(signer, signature)
         @signer = signer
         @signature = signature

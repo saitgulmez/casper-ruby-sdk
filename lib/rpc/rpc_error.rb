@@ -11,7 +11,7 @@ module Casper
         @data = data
       end
 
-      # @return [String]
+      # @return [String] err
       def self.invalid_param 
         @code = -32602
         @message = "Invalid params"

@@ -2,8 +2,9 @@ module Casper
   module Entity
     class Peer
 
-      # @param [String] node_id
-      # @param [String] address 
+      # @param [Hash] peer
+      # @option peer [String] :node_id
+      # @option peer [String] :address 
       def initialize(peer = {})
         @node_id = peer[:node_id]
         @address = peer[:address]

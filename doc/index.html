@@ -64,7 +64,11 @@
 
 <h2 id="label-Requirements">Requirements</h2>
 
-<p>Click href="https://github.com/rbenv/rbenv"></a> or (Steps: 1, 2, 3)</code></strong><a href="https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-20-04"></a> to install dependencies.</p>
+<p>Click <a href="https://github.com/rbenv/rbenv">rbenv</a> or <a href="https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-20-04">here (Steps: 1, 2, 3)</a> to install dependencies.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_ruby'>ruby</span> <span class='op'>-</span><span class='id identifier rubyid_v'>v</span>
+<span class='comment'># ruby 3.0.2
+</span></code></pre>
 
 <pre class="code ruby"><code class="ruby"><span class='comment'># Install bundler
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='id identifier rubyid_install'>install</span> <span class='id identifier rubyid_bundler'>bundler</span>
@@ -126,8 +130,7 @@ rspec -fd spec/mainnet_spec.rb
 
 <pre class="code ruby"><code class="ruby">gem install yard
 # Generate documentation from source code
-yardoc lib/entity/*.rb
-yardoc lib/*.rb
+yardoc lib/**/*.rb lib/*.rb - README.md LICENSE CONTRIBUTING.md SECURITY.md
 # To see the options
 yardoc --help
 </code></pre>
@@ -198,7 +201,7 @@ yardoc --help
 </div></div>
 
       <div id="footer">
-  Generated on Tue Mar  8 13:04:31 2022 by
+  Generated on Sun Mar 20 01:05:54 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.0.2).
 </div>

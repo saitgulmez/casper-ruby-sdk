@@ -2,10 +2,10 @@ module Casper
   module Entity
     class Delegator
       
-      # @parama [String] public_key
-      # @parama [String] staked_amount
-      # @parama [String] bonding_purse
-      # @parama [String] delegatee
+      # @param [String] public_key
+      # @param [String] staked_amount
+      # @param [String] bonding_purse
+      # @param [String] delegatee
       def initialize(public_key, staked_amount, bonding_purse, delegatee)
         @public_key = public_key
         @staked_amount = staked_amount

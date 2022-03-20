@@ -7,7 +7,7 @@ module Casper
         @hash = hash
       end
 
-      # @param [String] hash
+      # @return [String] hash
       def get_hash
         @hash
       end

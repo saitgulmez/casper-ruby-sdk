@@ -2,7 +2,7 @@ module Casper
   module Entity
     class EraSummary
 
-      # @param [String] block_hash
+      # @param [String] block_hash_
       # @param [Integer] era_id_
       # @param [StoredValue] stored_value_
       # @param [String] state_root_hash_

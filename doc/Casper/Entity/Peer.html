@@ -217,27 +217,45 @@
   
     <li>
       
-        <span class='name'>node_id</span>
+        <span class='name'>peer</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Hash</tt>)</span>
       
       
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>address</span>
-      
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
       
       
     </li>
   
 </ul>
+
+  
+    
+    
+    <p class="tag_title">Options Hash (<tt>peer</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:node_id</span>
+          <span class="type">(<tt>String</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+        </li>
+      
+        <li>
+          <span class="name">:address</span>
+          <span class="type">(<tt>String</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
 
 
 </div><table class="source_code">
@@ -246,13 +264,13 @@
       <pre class="lines">
 
 
-7
 8
 9
-10</pre>
+10
+11</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 7</span>
+      <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 8</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_peer'>peer</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@node_id</span> <span class='op'>=</span> <span class='id identifier rubyid_peer'>peer</span><span class='lbracket'>[</span><span class='symbol'>:node_id</span><span class='rbracket'>]</span>
@@ -314,12 +332,12 @@
       <pre class="lines">
 
 
-18
 19
-20</pre>
+20
+21</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_address'>get_address</span>
   <span class='ivar'>@address</span>
@@ -373,12 +391,12 @@
       <pre class="lines">
 
 
-13
 14
-15</pre>
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'lib/entity/peer.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_node_id'>get_node_id</span>
   <span class='ivar'>@node_id</span>
@@ -393,7 +411,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Mar  8 13:04:22 2022 by
+  Generated on Sun Mar 20 01:05:54 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-3.0.2).
 </div>
