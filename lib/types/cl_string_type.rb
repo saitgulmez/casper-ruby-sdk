@@ -1,5 +1,5 @@
-require './cl_type.rb'
-require './constants.rb'
+require_relative './cl_type.rb'
+require_relative './constants.rb'
 
 
 class CLStringType < CLType

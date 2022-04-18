@@ -1,5 +1,5 @@
-require './cl_string_type.rb'
-require './cl_value.rb'
+require_relative './cl_string_type.rb'
+require_relative './cl_value.rb'
 
 
 class CLString < CLValue
@@ -14,7 +14,8 @@ class CLString < CLValue
   end
 
   def get_cl_type
-    @cl_string_type = CLStringType.new("cl-string-type")
+    @cl_string_type = CLStringType.new
+    @cl_string_type.to_string
   end
 
   def get_value

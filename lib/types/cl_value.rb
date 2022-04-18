@@ -1,4 +1,4 @@
-require './cl_type.rb'
+require_relative './cl_type.rb'
 
 class CLValue
 
