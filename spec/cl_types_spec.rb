@@ -1,5 +1,6 @@
 require_relative '../lib/types/cl_string.rb'
 require_relative '../lib/types/cl_bool.rb'
+require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
 describe CLString do  
   cl_string = CLString.new("ABC")
@@ -21,10 +22,14 @@ describe CLString do
     end
   end
 
-  describe "#get_size" do 
+  describe "#cl_string.get_size" do 
     it "should return proper string length" do 
       expect(cl_string.get_size).to eq(3)
     end
+  end
+
+  it "should return \'ABC\'" do  
+    expect(cl_string.from_bytes("03000000414243")).to eql("ABC")
   end
 end
 
