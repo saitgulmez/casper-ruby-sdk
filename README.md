@@ -79,7 +79,7 @@ require 'casper_network'
 
 # In order to interact with casper network we should give a valid ip address to the constructor
 
-# if it does not work, please choose another node ip address from the link1
+# if it does not work, please choose another node ip address from the Testnet
 # IP is taken from "Testnet"
 node_ip_address = "85.114.132.129" 
 # block_Hash taken from Testnet
@@ -93,7 +93,7 @@ switch_block_hash = "9e30104581a492f5c6faad4cdfb098311e3bf0e93897ebbfb47c3df62f5
 
 
 # Uncomment following lines to test on Mainnet 
-# if it does not work, please choose another node ip address from the link2
+# if it does not work, please choose another node ip address from the Mainnet
 # IP is taken from "Mainnet"
 # node_ip_address = "65.108.78.12" 
 # block_Hash taken from MainNet
@@ -150,5 +150,14 @@ else
   puts "Invalid IP address"
 end
 ```
-- [link1](https://testnet.cspr.live/tools/peers),  [link2](https://cspr.live/tools/peers)
+- [Testnet](https://testnet.cspr.live/tools/peers),  [Mainnet](https://cspr.live/tools/peers)
 - [doc](https://www.rubydoc.info/gems/casper_network/0.2.1)
+
+
+## TODO
+- [ ] Ruby version of CLType primitives
+- [ ] Ruby version for Casper domain-specific objects
+- [ ] Serialization of Casper domain-specific objects
+- [ ] ED25519/SECP256K1 key pairs  Wrappers implemented
+- [ ] PutDeploy call implemented and tested
+- [ ] SDK calls will return Casper domain-specific objects
