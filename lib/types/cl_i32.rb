@@ -1,11 +1,14 @@
 require_relative './cl_i32_type.rb'
 require_relative './cl_value.rb'
+require_relative '../serialization/cl_value_bytes_parsers.rb'
 
 
 
-class CLI32 < CLValue  
-
+class CLi32 < CLValue  
+  include CLValueBytesParsers::CLI32BytesParser
+ 
   def initialize(value)
+    raise "error" unless value.instance_of? Integer
     super
     @value =  value
   end
