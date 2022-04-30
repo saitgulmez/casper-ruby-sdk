@@ -48,6 +48,29 @@ module CLValueBytesParsers
         [value].pack("l<*").unpack("C*")
       end
     end
+  end 
+
+  module CLI64BytesParser
+    @@check = 0
+    def from_bytes(byte_array)
+      if @@check < 0
+        @@check = 0
+        bytes = byte_array.map { |b| b.chr }.join
+        bytes.unpack("B*").first.scan(/[01]{8}/)
+        bytes.reverse.unpack("q*").first
+      else
+        byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
+      end
+    end
+
+    def to_bytes(value)
+      if value < 0
+        @@check = value
+        [value].pack("q>*").unpack("C*")
+      else
+        [value].pack("q<*").unpack("C*")
+      end
+    end
   end
   
 end
