@@ -1,7 +1,17 @@
 require_relative '../lib/types/cl_string.rb'
 require_relative '../lib/types/cl_bool.rb'
 require_relative '../lib/types/cl_i32.rb'
+require_relative '../lib/types/cl_i64.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
+
+MIN_U8 = 0
+MAX_U8 = 255
+
+MIN_I32 = -2147483648
+MAX_I32 = 2147483647
+
+MIN_I64 = -9223372036854775808
+MAX_I64 = 9223372036854775807
 
 describe CLString do  
   cl_string = CLString.new("ABC")
@@ -39,7 +49,7 @@ describe CLBool do
   cl_type = my_bool.get_cl_type
   describe "#get_cl_type" do 
     it "Bool should return proper cl_type" do 
-      expect(cl_type).to eq('Bool')
+      expect(cl_type).to eql('Bool')
     end
   end
 
@@ -78,18 +88,57 @@ describe CLi32 do
     expect(third_cli32.from_bytes(byte_array3)).to eql(num3)
   end
 
-  it "should do proper to_bytes and from_bytes when value is -2147483648" do  
-    fourth_cli32 = CLi32.new(-2147483648)
+  it "should do proper to_bytes and from_bytes when value is MIN_I32" do  
+    fourth_cli32 = CLi32.new(MIN_I32)
     min = fourth_cli32.get_value
     byte_array4 = fourth_cli32.to_bytes(min)
     expect(fourth_cli32.from_bytes(byte_array4)).to eq(min)
   end
 
 
-  it "should do proper to_bytes and from_bytes when value is 2147483647" do 
-    fifth_cli32 = CLi32.new(2147483647)
+  it "should do proper to_bytes and from_bytes when value is MAX_I32" do 
+    fifth_cli32 = CLi32.new(MAX_I32)
     max = fifth_cli32.get_value
     byte_array5 = fifth_cli32.to_bytes(max)
     expect(fifth_cli32.from_bytes(byte_array5)).to eq(max)
+  end
+end
+
+
+describe CLi64 do
+  it "should do proper to_bytes and from_bytes when value is -10" do 
+    first_cli64 = CLi64.new(-10)
+    num1 = first_cli64.get_value
+    byte_array1 = first_cli64.to_bytes(num1)
+    expect(first_cli64.from_bytes(byte_array1)).to eql(num1)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is 0" do 
+    second_cli64 = CLi64.new(0)
+    num2 = second_cli64.get_value
+    byte_array2 = second_cli64.to_bytes(num2)
+    expect(second_cli64.from_bytes(byte_array2)).to eql(num2)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is 10" do 
+    third_cli64 = CLi64.new(10)
+    num3 = third_cli64.get_value
+    byte_array3 = third_cli64.to_bytes(num3)
+    expect(third_cli64.from_bytes(byte_array3)).to eql(num3)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is MIN_I64" do  
+    fourth_cli64 = CLi64.new(MIN_I64)
+    min = fourth_cli64.get_value
+    byte_array4 = fourth_cli64.to_bytes(min)
+    expect(fourth_cli64.from_bytes(byte_array4)).to eq(min)
+  end
+
+
+  it "should do proper to_bytes and from_bytes when value is MAX_I64" do 
+    fifth_cli64 = CLi64.new(MAX_I64)
+    max = fifth_cli64.get_value
+    byte_array5 = fifth_cli64.to_bytes(max)
+    expect(fifth_cli64.from_bytes(byte_array5)).to eq(max)
   end
 end
