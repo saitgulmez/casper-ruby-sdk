@@ -1,5 +1,6 @@
 require_relative '../lib/types/cl_string.rb'
 require_relative '../lib/types/cl_bool.rb'
+require_relative '../lib/types/cl_i32.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
 describe CLString do  
@@ -50,5 +51,45 @@ describe CLBool do
       expect(my_bool2.get_value).to eql(true)
     end
   end
+end
 
+describe CLi32 do
+  # before :each do
+  #   cli32 = CLi32.new
+  # end
+  it "should do proper to_bytes and from_bytes when value is -1" do 
+    first_cli32 = CLi32.new(-1)
+    num1 = first_cli32.get_value
+    byte_array1 = first_cli32.to_bytes(num1)
+    expect(first_cli32.from_bytes(byte_array1)).to eql(num1)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is 0" do 
+    second_cli32 = CLi32.new(0)
+    num2 = second_cli32.get_value
+    byte_array2 = second_cli32.to_bytes(num2)
+    expect(second_cli32.from_bytes(byte_array2)).to eql(num2)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is 1" do 
+    third_cli32 = CLi32.new(1)
+    num3 = third_cli32.get_value
+    byte_array3 = third_cli32.to_bytes(num3)
+    expect(third_cli32.from_bytes(byte_array3)).to eql(num3)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is -2147483648" do  
+    fourth_cli32 = CLi32.new(-2147483648)
+    min = fourth_cli32.get_value
+    byte_array4 = fourth_cli32.to_bytes(min)
+    expect(fourth_cli32.from_bytes(byte_array4)).to eq(min)
+  end
+
+
+  it "should do proper to_bytes and from_bytes when value is 2147483647" do 
+    fifth_cli32 = CLi32.new(2147483647)
+    max = fifth_cli32.get_value
+    byte_array5 = fifth_cli32.to_bytes(max)
+    expect(fifth_cli32.from_bytes(byte_array5)).to eq(max)
+  end
 end
