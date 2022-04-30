@@ -1,10 +1,12 @@
 require_relative './cl_string_type.rb'
 require_relative './cl_value.rb'
+require_relative '../serialization/cl_value_bytes_parsers.rb'
 
 
 class CLString < CLValue
   attr_accessor :cl_value
   alias_method :clvalue?, :cl_value
+  include CLValueBytesParsers::CLStringBytesParser
 
   def initialize(value)
     super
