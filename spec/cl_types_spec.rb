@@ -2,16 +2,33 @@ require_relative '../lib/types/cl_string.rb'
 require_relative '../lib/types/cl_bool.rb'
 require_relative '../lib/types/cl_i32.rb'
 require_relative '../lib/types/cl_i64.rb'
+require_relative '../lib/types/cl_u8.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
-MIN_U8 = 0
-MAX_U8 = 255
 
 MIN_I32 = -2147483648
 MAX_I32 = 2147483647
 
 MIN_I64 = -9223372036854775808
 MAX_I64 = 9223372036854775807
+
+MIN_U8 = 0
+MAX_U8 = 255
+
+MIN_U32 = 0
+MAX_U32 = 2.pow(32) - 1
+
+MIN_U64 = 0
+MAX_U64 = 2.pow(64) - 1
+
+MIN_U128 = 0
+MAX_U128 = 2.pow(128) - 1
+
+MIN_U256 = 0
+MAX_U256 = 2.pow(256) - 1
+
+MIN_U512 = 0
+MAX_U512 = 2.pow(512) - 1
 
 describe CLString do  
   cl_string = CLString.new("ABC")
@@ -141,4 +158,29 @@ describe CLi64 do
     byte_array5 = fifth_cli64.to_bytes(max)
     expect(fifth_cli64.from_bytes(byte_array5)).to eq(max)
   end
+end
+
+describe CLu8 do  
+  it "should do proper to_bytes and from_bytes when value is MIN_U8" do 
+    clu8 = CLu8.new(0)
+    num1 = clu8.get_value
+    byte_array1 = clu8.to_bytes(num1)
+    expect(clu8.from_bytes(byte_array1)).to eql(num1)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is MAX_U8" do 
+    clu8 = CLu8.new(MAX_U8)
+    num2 = clu8.get_value
+    byte_array2 = clu8.to_bytes(num2)
+    expect(clu8.from_bytes(byte_array2)).to eql(num2)
+  end
+
+  it "should raise error since parameter is not in range [0, 255]" do 
+    clu8 = CLu8.new(-1)
+    num3 = clu8.get_value
+    err = clu8.to_bytes(num3)
+    expect {raise StandardError, err}.
+        to raise_error(err)
+  end
+
 end
