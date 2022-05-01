@@ -72,6 +72,22 @@ module CLValueBytesParsers
       end
     end
   end
+
+  module CLU8BytesParser
+    def from_bytes(byte_array)
+        byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
+    end
+
+    def to_bytes(value)
+      if value < 0
+        @@check = value
+        # raise "Invalid value, given value should be in range [0, 255]"
+        "Invalid value, given value should be in range [0, 255]"
+      else
+        [value].pack("C").unpack("C")
+      end
+    end
+  end
   
 end
 
