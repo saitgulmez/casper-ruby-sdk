@@ -89,5 +89,20 @@ module CLValueBytesParsers
     end
   end
   
+  module CLU32BytesParser
+    def from_bytes(byte_array)
+        byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
+    end
+
+    def to_bytes(value)
+      if value < 0 || value > 4294967295
+        # raise "Invalid value, given value should be in range [0, 255]"
+        "Invalid value, given value should be in range [0, 4294967295]"
+      else
+        [value].pack("L<*").unpack("C*")
+      end
+    end
+  end
+  
 end
 
