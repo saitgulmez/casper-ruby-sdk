@@ -3,6 +3,7 @@ require_relative '../lib/types/cl_bool.rb'
 require_relative '../lib/types/cl_i32.rb'
 require_relative '../lib/types/cl_i64.rb'
 require_relative '../lib/types/cl_u8.rb'
+require_relative '../lib/types/cl_u32.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
 
@@ -179,6 +180,38 @@ describe CLu8 do
     clu8 = CLu8.new(-1)
     num3 = clu8.get_value
     err = clu8.to_bytes(num3)
+    expect {raise StandardError, err}.
+        to raise_error(err)
+  end
+end
+
+describe CLu32 do  
+  it "should do proper to_bytes and from_bytes when value is MIN_U32" do 
+    clu32 = CLu32.new(0)
+    num1 = clu32.get_value
+    byte_array1 = clu32.to_bytes(num1)
+    expect(clu32.from_bytes(byte_array1)).to eql(num1)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is MAX_U32" do 
+    clu32 = CLu32.new(MAX_U8)
+    num2 = clu32.get_value
+    byte_array2 = clu32.to_bytes(num2)
+    expect(clu32.from_bytes(byte_array2)).to eql(num2)
+  end
+
+  it "should raise error since parameter is not in range [0, 4294967295]" do 
+    clu32 = CLu32.new(-1)
+    num3 = clu32.get_value
+    err = clu32.to_bytes(num3)
+    expect {raise StandardError, err}.
+        to raise_error(err)
+  end 
+
+  it "should raise error since parameter is not in range [0, 4294967295]" do 
+    clu32 = CLu32.new(4294967296)
+    num3 = clu32.get_value
+    err = clu32.to_bytes(num3)
     expect {raise StandardError, err}.
         to raise_error(err)
   end
