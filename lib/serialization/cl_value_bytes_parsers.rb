@@ -1,3 +1,5 @@
+require_relative '../types/constants.rb'
+
 module CLValueBytesParsers
 
   module CLStringBytesParser
@@ -41,11 +43,13 @@ module CLValueBytesParsers
     end
 
     def to_bytes(value)
-      if value < 0
+      if value < 0  && value >= MIN_I32
         @@check = value
         [value].pack("l>*").unpack("C*")
-      else
+      elsif value >= 0 && value <= MAX_I32
         [value].pack("l<*").unpack("C*")
+      else
+        "Parameter value '#{value}' is out of range."
       end
     end
   end 
@@ -64,11 +68,13 @@ module CLValueBytesParsers
     end
 
     def to_bytes(value)
-      if value < 0
+      if value < 0 && value >= MIN_I64
         @@check = value
         [value].pack("q>*").unpack("C*")
-      else
+      elsif value >= 0 && value <= MAX_I64
         [value].pack("q<*").unpack("C*")
+      else
+        "Parameter value '#{value}' is out of range."
       end
     end
   end
@@ -79,10 +85,9 @@ module CLValueBytesParsers
     end
 
     def to_bytes(value)
-      if value < 0
+      if value < 0 || value > MAX_U8
         @@check = value
-        # raise "Invalid value, given value should be in range [0, 255]"
-        "Invalid value, given value should be in range [0, 255]"
+        "Parameter value '#{value}' is out of range."
       else
         [value].pack("C").unpack("C")
       end
@@ -95,14 +100,13 @@ module CLValueBytesParsers
     end
 
     def to_bytes(value)
-      if value < 0 || value > 4294967295
-        # raise "Invalid value, given value should be in range [0, 255]"
-        "Invalid value, given value should be in range [0, 4294967295]"
+      if value < 0 || value > MAX_U32
+        "Parameter value '#{value}' is out of range."
       else
         [value].pack("L<*").unpack("C*")
       end
     end
   end
-  
+
 end
 
