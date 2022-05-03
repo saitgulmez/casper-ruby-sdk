@@ -108,5 +108,19 @@ module CLValueBytesParsers
     end
   end
 
+  module CLU64BytesParser
+    def from_bytes(byte_array)
+        byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
+    end
+
+    def to_bytes(value)
+      if value < 0 || value > MAX_U64
+        "Parameter value '#{value}' is out of range."
+      else
+        [value].pack("Q<*").unpack("C*")
+      end
+    end
+  end
+
 end
 
