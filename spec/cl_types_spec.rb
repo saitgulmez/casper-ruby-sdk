@@ -4,32 +4,9 @@ require_relative '../lib/types/cl_i32.rb'
 require_relative '../lib/types/cl_i64.rb'
 require_relative '../lib/types/cl_u8.rb'
 require_relative '../lib/types/cl_u32.rb'
+require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
-
-MIN_I32 = -2147483648
-MAX_I32 = 2147483647
-
-MIN_I64 = -9223372036854775808
-MAX_I64 = 9223372036854775807
-
-MIN_U8 = 0
-MAX_U8 = 255
-
-MIN_U32 = 0
-MAX_U32 = 2.pow(32) - 1
-
-MIN_U64 = 0
-MAX_U64 = 2.pow(64) - 1
-
-MIN_U128 = 0
-MAX_U128 = 2.pow(128) - 1
-
-MIN_U256 = 0
-MAX_U256 = 2.pow(256) - 1
-
-MIN_U512 = 0
-MAX_U512 = 2.pow(512) - 1
 
 describe CLString do  
   cl_string = CLString.new("ABC")
