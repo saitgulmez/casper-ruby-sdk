@@ -6,6 +6,7 @@ require_relative '../lib/types/cl_u8.rb'
 require_relative '../lib/types/cl_u32.rb'
 require_relative '../lib/types/cl_u64.rb'
 require_relative '../lib/types/cl_u128.rb'
+require_relative '../lib/types/cl_u256.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
@@ -256,6 +257,37 @@ describe CLu128 do
     clu128 = CLu128.new(MAX_U128 + 1)
     num3 = clu128.get_value
     err = clu128.to_bytes(num3)
+    expect {raise StandardError, err}.to raise_error(err)
+  end
+end
+
+
+describe CLu256 do  
+  it "should do proper to_bytes and from_bytes when value is MIN_U256" do 
+    clu256 = CLu256.new(0)
+    num1 = clu256.get_value
+    byte_array1 = clu256.to_bytes(num1)
+    expect(clu256.from_bytes(byte_array1)).to eql(num1)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is MAX_U256" do 
+    clu256 = CLu256.new(MAX_U256)
+    num2 = clu256.get_value
+    byte_array2 = clu256.to_bytes(num2)
+    expect(clu256.from_bytes(byte_array2)).to eql(num2)
+  end
+
+  it "should raise error. Parameter value  '-1' is out of range [0, MAX_U256]" do 
+    clu256 = CLu256.new(-1)
+    num3 = clu256.get_value
+    err = clu256.to_bytes(num3)
+    expect {raise StandardError, err}.to raise_error(err)
+  end 
+
+  it "should raise error. Parameter value '#{MAX_U256 + 1}' is out of range [0, MAX_U256]" do 
+    clu256 = CLu256.new(MAX_U256 + 1)
+    num3 = clu256.get_value
+    err = clu256.to_bytes(num3)
     expect {raise StandardError, err}.to raise_error(err)
   end
 end
