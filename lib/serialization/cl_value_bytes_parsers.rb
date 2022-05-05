@@ -122,5 +122,21 @@ module CLValueBytesParsers
     end
   end
 
+  module CLU128BytesParser
+    def from_bytes(byte_array)
+        byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
+    end
+
+    def to_bytes(value)
+      if value < 0 || value > MAX_U128
+        "Parameter value '#{value}' is out of range."
+      else
+        str = value.to_s(16)
+        arr = str.scan(/[0-9a-f]{4}/).map { |x| x.to_i(16) }
+        packed = arr.pack("n*").unpack("C*").reverse()
+      end
+    end
+  end
+
 end
 
