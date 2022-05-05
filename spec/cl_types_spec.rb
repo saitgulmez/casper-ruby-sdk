@@ -5,6 +5,7 @@ require_relative '../lib/types/cl_i64.rb'
 require_relative '../lib/types/cl_u8.rb'
 require_relative '../lib/types/cl_u32.rb'
 require_relative '../lib/types/cl_u64.rb'
+require_relative '../lib/types/cl_u128.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
@@ -225,5 +226,36 @@ describe CLu64 do
     err = clu64.to_bytes(num3)
     expect {raise StandardError, err}.
         to raise_error(err)
+  end
+end
+
+
+describe CLu128 do  
+  it "should do proper to_bytes and from_bytes when value is MIN_U128" do 
+    clu128 = CLu128.new(0)
+    num1 = clu128.get_value
+    byte_array1 = clu128.to_bytes(num1)
+    expect(clu128.from_bytes(byte_array1)).to eql(num1)
+  end
+
+  it "should do proper to_bytes and from_bytes when value is MAX_U128" do 
+    clu128 = CLu128.new(MAX_U128)
+    num2 = clu128.get_value
+    byte_array2 = clu128.to_bytes(num2)
+    expect(clu128.from_bytes(byte_array2)).to eql(num2)
+  end
+
+  it "should raise error. Parameter value  '-1' is out of range [0, MAX_U128]" do 
+    clu128 = CLu128.new(-1)
+    num3 = clu128.get_value
+    err = clu128.to_bytes(num3)
+    expect {raise StandardError, err}.to raise_error(err)
+  end 
+
+  it "should raise error. Parameter value '#{MAX_U128 + 1}' is out of range [0, MAX_U128]" do 
+    clu128 = CLu128.new(MAX_U128 + 1)
+    num3 = clu128.get_value
+    err = clu128.to_bytes(num3)
+    expect {raise StandardError, err}.to raise_error(err)
   end
 end
