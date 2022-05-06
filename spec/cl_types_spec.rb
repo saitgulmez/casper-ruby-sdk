@@ -8,6 +8,7 @@ require_relative '../lib/types/cl_u64.rb'
 require_relative '../lib/types/cl_u128.rb'
 require_relative '../lib/types/cl_u256.rb'
 require_relative '../lib/types/cl_u512.rb'
+require_relative '../lib/types/cl_unit.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 
@@ -322,4 +323,17 @@ describe CLu512 do
     err = clu512.to_bytes(num3)
     expect {raise StandardError, err}.to raise_error(err)
   end
+end
+
+describe CLUnit do  
+  it "should return proper type" do 
+    cl = CLUnit.new()
+    expect(cl.get_cl_type).to eql("Unit")
+  end
+
+  it "should return proper value" do  
+    cl = CLUnit.new()
+    expect(cl.get_value).to eql(nil)
+  end
+
 end
