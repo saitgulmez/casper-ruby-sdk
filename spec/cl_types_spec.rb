@@ -11,7 +11,7 @@ require_relative '../lib/types/cl_u512.rb'
 require_relative '../lib/types/cl_unit.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
-
+require 'json'
 
 describe CLString do  
   cl_string = CLString.new("ABC")
@@ -336,4 +336,11 @@ describe CLUnit do
     expect(cl.get_value).to eql(nil)
   end
 
+  it "to_json / from_json" do  
+    cl = CLUnit.new()
+    json = cl.to_json
+    expected_json = '{"bytes":"","cl_type":"Unit"}'
+    expect(json).to eql(expected_json)
+    expect(cl.from_json(json)).to eql(cl.get_hash)
+  end
 end
