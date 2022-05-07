@@ -11,6 +11,7 @@ class CLUnit < CLValue
     raise "error"  unless value.nil?
     super
     @value =  nil
+    @h = {}
   end
 
   def get_cl_type
@@ -19,16 +20,19 @@ class CLUnit < CLValue
   end
 
   def get_value
-    @value  
+    @value
   end
 
   def to_json
-    @hash = {"bytes": "", "cl_type": get_cl_type}
-    @hash.to_json
+    {"bytes": "", "cl_type": get_cl_type}.to_json
   end
 
   def from_json(json)
-    @hash = JSON.parse(json)
+    JSON.parse(json)
+  end
+
+  def get_hash
+    @h = {"bytes"=> "", "cl_type"=>get_cl_type}
   end
 end
 
