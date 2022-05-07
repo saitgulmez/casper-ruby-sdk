@@ -169,5 +169,21 @@ module CLValueBytesParsers
       end
     end
   end
+
+  module CLUnitBytesParser
+    def from_bytes(byte_array)
+      if byte_array.empty?
+        [].pack("")
+      else
+        "byte_array should be empty!"
+      end
+    end
+    
+    def to_bytes
+      "".bytes
+    end
+
+
+  end
 end
 
