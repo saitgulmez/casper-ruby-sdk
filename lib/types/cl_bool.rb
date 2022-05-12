@@ -9,6 +9,7 @@ class FalseClass; include Boolean; end
 
 class CLBool < CLValue  
   include Boolean
+  include CLValueBytesParsers::CLBoolBytesParser
   def initialize(value)
     super
     raise "error" unless value.is_a?(Boolean)
