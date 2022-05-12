@@ -13,6 +13,46 @@ require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 require 'json'
 
+describe CLBool do 
+  my_bool = CLBool.new(false)
+  cl_type = my_bool.get_cl_type
+  describe "#get_cl_type" do 
+    it "Bool should return proper cl_type" do 
+      expect(cl_type).to eql('Bool')
+    end
+  end
+
+  describe "#get_value" do
+    it "should return proper value by calling get_value" do  
+      my_bool1 = CLBool.new(false)
+      my_bool2 = CLBool.new(true)
+      expect(my_bool1.get_value).to eql(false)
+      expect(my_bool2.get_value).to eql(true)
+    end
+  end
+
+  it "toBytes() / fromBytes() do proper bytes serialization" do 
+    bool1 = CLBool.new(false)
+    bool2 = CLBool.new(true)
+
+    bool1_bytes = CLValueBytesParsers::CLBoolBytesParser.to_bytes(bool1)
+    expect(bool1_bytes).to eql([0])
+
+    bool2_bytes = CLValueBytesParsers::CLBoolBytesParser.to_bytes(bool2)
+    expect(bool2_bytes).to eql([1])
+
+    from_bytes1 = CLValueBytesParsers::CLBoolBytesParser.from_bytes(bool1_bytes)
+
+    expect(from_bytes1.get_value).to eql(bool1.get_value)
+    expect(from_bytes1.get_cl_type).to eql(bool1.get_cl_type)
+    
+    from_bytes2 = CLValueBytesParsers::CLBoolBytesParser.from_bytes(bool2_bytes)
+
+    expect(from_bytes2.get_value).to eql(bool2.get_value)
+    expect(from_bytes2.get_cl_type).to eql(bool2.get_cl_type)
+  end
+end
+
 describe CLString do  
   cl_string = CLString.new("ABC")
   describe "#get_value" do
@@ -44,24 +84,6 @@ describe CLString do
   end
 end
 
-describe CLBool do 
-  my_bool = CLBool.new(false)
-  cl_type = my_bool.get_cl_type
-  describe "#get_cl_type" do 
-    it "Bool should return proper cl_type" do 
-      expect(cl_type).to eql('Bool')
-    end
-  end
-
-  describe "#get_value" do
-    it "should return proper value by calling get_value" do  
-      my_bool1 = CLBool.new(false)
-      my_bool2 = CLBool.new(true)
-      expect(my_bool1.get_value).to eql(false)
-      expect(my_bool2.get_value).to eql(true)
-    end
-  end
-end
 
 describe CLi32 do
   # before :each do
