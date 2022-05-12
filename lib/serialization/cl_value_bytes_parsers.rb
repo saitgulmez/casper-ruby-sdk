@@ -1,6 +1,30 @@
 require_relative '../types/constants.rb'
+require_relative '../types/error.rb'
+
+class FalseClass; def to_i; 0 end end
+class TrueClass; def to_i; 1 end end
 
 module CLValueBytesParsers
+
+  module CLBoolBytesParser
+    extend self
+    def to_bytes(clbool)
+      value = clbool.get_value
+      if value == true || value == false
+        [value.to_i].pack("C").unpack("C")
+      else
+        "CLValue TypeError"
+      end
+    end
+
+    def from_bytes(bytes)
+      if bytes.first == 1
+        CLBool.new(true) 
+      else
+        CLBool.new(false) 
+      end
+    end
+  end
 
   module CLStringBytesParser
     def from_bytes(raw_bytes)
@@ -182,8 +206,7 @@ module CLValueBytesParsers
     def to_bytes
       "".bytes
     end
-
-
   end
+
 end
 
