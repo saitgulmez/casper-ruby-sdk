@@ -10,7 +10,7 @@ class CLI32Type < CLType
 
   def to_string
     # I32_ID
-    TAGS.key(4).to_s
+    TAGS.key(1).to_s
   end
 
   def get_value 
