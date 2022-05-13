@@ -26,13 +26,13 @@ class CLTuple < CLValue
   def get_cl_type
     if @size == 1 && @data.size == 1
       @cl_type = CLTuple1Type.new
-      @cl_type.to_string
+      @cl_type.to_string + " (" + @data[0].get_cl_type + ")"
     elsif @size == 2 && @data.size == 2
       @cl_type = CLTuple2Type.new
-      @cl_type.to_string
+      @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ")"
     elsif @size == 3 && @data.size == 3
       @cl_type = CLTuple3Type.new
-      @cl_type.to_string
+      @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ", " + @data[2].get_cl_type + ")"
     else
       Error.new("Invalid Type")
     end
@@ -91,10 +91,10 @@ class CLTuple2 < CLTuple
     super(2, data)
   end
 
-  def get_cl_type
-    @cl_tuple_type = CLTuple2Type.new
-    @cl_tuple_type.to_string
-  end
+  # def get_cl_type
+  #   @cl_tuple_type = CLTuple2Type.new
+  #   @cl_tuple_type.to_string
+  # end
 end
 
 class CLTuple3 < CLTuple
@@ -103,8 +103,8 @@ class CLTuple3 < CLTuple
     super(3, data)
   end
 
-  def get_cl_type
-    @cl_tuple_type = CLTuple3Type.new
-    @cl_tuple_type.to_string
-  end
+  # def get_cl_type
+  #   @cl_tuple_type = CLTuple3Type.new
+  #   @cl_tuple_type.to_string
+  # end
 end
