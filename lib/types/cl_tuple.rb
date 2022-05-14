@@ -12,14 +12,17 @@ class CLTuple < CLValue
     super()
     @size = 0
     @data = []
-    if data.size > size
+    @all_members_are_clvalues = data.all? { |item| item.is_a?(CLValue)}
+
+    if data.size > size && @all_members_are_clvalues
       begin
         raise Error.new("Too many elements!")
       rescue => e
         e.err
       end
     end
-    if data.all? { |item| item.is_a?(CLValue)}
+   
+    if @all_members_are_clvalues && data.size == size
       @size = size
       @data = data
     else
@@ -32,15 +35,31 @@ class CLTuple < CLValue
   end
 
   def get_cl_type
-    if @size == 1 && @data.size == 1
-      @cl_type = CLTuple1Type.new
-      @cl_type.to_string + " (" + @data[0].get_cl_type + ")"
-    elsif @size == 2 && @data.size == 2
-      @cl_type = CLTuple2Type.new
-      @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ")"
-    elsif @size == 3 && @data.size == 3
-      @cl_type = CLTuple3Type.new
-      @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ", " + @data[2].get_cl_type + ")"
+    if @all_members_are_clvalues
+      if @data.size == @size
+        if @data.size == 1
+          @cl_type = CLTuple1Type.new
+          @cl_type.to_string + " (" + @data[0].get_cl_type + ")"
+        elsif @data.size == 2
+          @cl_type = CLTuple2Type.new
+          @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ")"
+        elsif @data.size == 3
+          @cl_type = CLTuple3Type.new
+          @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ", " + @data[2].get_cl_type + ")"
+        else
+          begin
+            raise Error.new("Tuple is not defined!")
+          rescue => e
+            e.err
+          end
+        end          
+      elsif @data.size > size
+        begin
+          raise Error.new("Too many elements!")
+        rescue => e
+          e.err
+        end
+      end
     else
       begin
         raise Error.new("Invalid data type(s) provided.")
@@ -113,6 +132,7 @@ class CLTuple3 < CLTuple
   
   def initialize(data)
     super(3, data)
+    # puts data
   end
 
   # def get_cl_type
