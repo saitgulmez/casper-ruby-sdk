@@ -9,6 +9,7 @@ require_relative '../lib/types/cl_u128.rb'
 require_relative '../lib/types/cl_u256.rb'
 require_relative '../lib/types/cl_u512.rb'
 require_relative '../lib/types/cl_unit.rb'
+require_relative '../lib/types/cl_tuple.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 require 'json'
@@ -364,5 +365,67 @@ describe CLUnit do
     expected_json = '{"bytes":"","cl_type":"Unit"}'
     expect(json).to eql(expected_json)
     expect(cl.from_json(json)).to eql(cl.get_hash)
+  end
+end
+
+describe CLTuple do 
+  describe CLTuple1 do  
+    it "should return proper CLType" do 
+      bool = CLBool.new(true)
+      t1 = CLTuple1.new([bool])
+      expect(t1.get_cl_type).to eql("Tuple1 (Bool)")
+
+      str = CLString.new("ABC")
+      t2 = CLTuple1.new([str])
+      expect(t2.get_cl_type).to eql("Tuple1 (String)")
+
+      i32 = CLi32.new(99)
+      t3 = CLTuple1.new([i32])
+      expect(t3.get_cl_type).to eql("Tuple1 (I32)")
+    end
+
+    it "should throw an error when tuple elements are not in a correct format" do 
+      # tuple = CLTuple1.new([CLBool.new(true), CLBool.new(false)])
+      tuple = CLTuple1.new(['a'])
+      err = tuple.get_cl_type
+      expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
+    end
+  end
+
+  describe CLTuple2 do  
+    it "should return proper CLType" do 
+      bool = CLBool.new(true)
+      str = CLString.new("ABC")
+      t1 = CLTuple2.new([bool, str])
+      expect(t1.get_cl_type).to eql("Tuple2 (Bool, String)")
+
+
+      str2 = CLString.new("XYZ")
+      u512 = CLu512.new(MAX_U512)
+      t2 = CLTuple2.new([str,u512])
+      expect(t2.get_cl_type).to eql("Tuple2 (String, U512)")
+    end
+
+    it "should throw an error when tuple elements are not in a correct format" do 
+      tuple = CLTuple2.new(['a', 10])
+      err = tuple.get_cl_type
+      expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
+    end
+  end
+
+  describe CLTuple3 do  
+    it "should return proper CLType" do 
+      bool = CLBool.new(true)
+      str = CLString.new("ABC")
+      u512 = CLu512.new(MAX_U512)
+      t1 = CLTuple3.new([bool, str, u512])
+      expect(t1.get_cl_type).to eql("Tuple3 (Bool, String, U512)")
+    end
+
+    it "should throw an error when tuple elements are not in a correct format" do 
+      tuple = CLTuple2.new(['a', 10, true])
+      err = tuple.get_cl_type
+      expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
+    end
   end
 end
