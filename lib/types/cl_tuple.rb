@@ -6,20 +6,28 @@ require_relative '../serialization/cl_value_bytes_parsers.rb'
 
 
 class CLTuple < CLValue  
-  # include CLValueBytesParsers::CLTupleBytesParser
+  include CLValueBytesParsers::CLTupleBytesParser
   attr_accessor :size, :data
   def initialize(size, data)
     super()
     @size = 0
     @data = []
     if data.size > size
-      raise "Too many elements!" 
+      begin
+        raise Error.new("Too many elements!")
+      rescue => e
+        e.err
+      end
     end
     if data.all? { |item| item.is_a?(CLValue)}
       @size = size
       @data = data
     else
-      Error.new("Invalid data type(s) provided.")
+      begin
+        raise Error.new("Invalid data type(s) provided.")
+      rescue => e
+        e.err
+      end
     end
   end
 
@@ -34,7 +42,11 @@ class CLTuple < CLValue
       @cl_type = CLTuple3Type.new
       @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ", " + @data[2].get_cl_type + ")"
     else
-      Error.new("Invalid Type")
+      begin
+        raise Error.new("Invalid data type(s) provided.")
+      rescue => e
+        e.err
+      end
     end
   end
 
@@ -79,10 +91,10 @@ class CLTuple1 < CLTuple
     super(1, data)
   end
 
-  def get_cl_type
-    @cl_tuple_type = CLTuple1Type.new
-    @cl_tuple_type.to_string
-  end
+  # def get_cl_type
+  #   @cl_tuple_type = CLTuple1Type.new
+  #   @cl_tuple_type.to_string
+  # end
 end
 
 class CLTuple2 < CLTuple
