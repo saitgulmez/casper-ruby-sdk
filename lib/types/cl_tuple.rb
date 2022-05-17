@@ -10,8 +10,8 @@ class CLTuple < CLValue
   attr_accessor :size, :data
   def initialize(size, data)
     super()
-    @size = 0
-    @data = []
+    @size = size
+    @data = data
     @all_members_are_clvalues = data.all? { |item| item.is_a?(CLValue)}
 
     if data.size > size && @all_members_are_clvalues

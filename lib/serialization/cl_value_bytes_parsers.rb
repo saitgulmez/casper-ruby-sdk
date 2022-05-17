@@ -60,7 +60,7 @@ module CLValueBytesParsers
         @@check = 0
         bytes = byte_array.map { |b| b.chr }.join
         bytes.unpack("B*").first.scan(/[01]{8}/)
-        bytes.reverse.unpack("l*").first
+        bytes.unpack("l*").first
       else
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
       end
@@ -69,7 +69,7 @@ module CLValueBytesParsers
     def to_bytes(value)
       if value < 0  && value >= MIN_I32
         @@check = value
-        [value].pack("l>*").unpack("C*")
+        [value].pack("l<*").unpack("C*")
       elsif value >= 0 && value <= MAX_I32
         [value].pack("l<*").unpack("C*")
       else
