@@ -91,39 +91,34 @@ describe CLi32 do
   #   cli32 = CLi32.new
   # end
   it "should do proper to_bytes and from_bytes when value is -1" do 
-    first_cli32 = CLi32.new(-1)
-    num1 = first_cli32.get_value
-    byte_array1 = first_cli32.to_bytes(num1)
-    expect(first_cli32.from_bytes(byte_array1)).to eql(num1)
+    num1 = CLi32.new(-1)
+    byte_array = CLValueBytesParsers::CLI32BytesParser.to_bytes(num1)
+    expect(CLValueBytesParsers::CLI32BytesParser.from_bytes(byte_array)).to eql(num1.get_value)
   end
 
   it "should do proper to_bytes and from_bytes when value is 0" do 
-    second_cli32 = CLi32.new(0)
-    num2 = second_cli32.get_value
-    byte_array2 = second_cli32.to_bytes(num2)
-    expect(second_cli32.from_bytes(byte_array2)).to eql(num2)
+    num2 = CLi32.new(0)
+    byte_array = CLValueBytesParsers::CLI32BytesParser.to_bytes(num2)
+    expect(CLValueBytesParsers::CLI32BytesParser.from_bytes(byte_array)).to eql(num2.get_value)
   end
 
   it "should do proper to_bytes and from_bytes when value is 1" do 
-    third_cli32 = CLi32.new(1)
-    num3 = third_cli32.get_value
-    byte_array3 = third_cli32.to_bytes(num3)
-    expect(third_cli32.from_bytes(byte_array3)).to eql(num3)
+    num3 = CLi32.new(1)
+    byte_array = CLValueBytesParsers::CLI32BytesParser.to_bytes(num3)
+    expect(CLValueBytesParsers::CLI32BytesParser.from_bytes(byte_array)).to eql(num3.get_value)
   end
 
   it "should do proper to_bytes and from_bytes when value is MIN_I32" do  
-    fourth_cli32 = CLi32.new(MIN_I32)
-    min = fourth_cli32.get_value
-    byte_array4 = fourth_cli32.to_bytes(min)
-    expect(fourth_cli32.from_bytes(byte_array4)).to eq(min)
+    num4 = CLi32.new(MIN_I32)
+    byte_array = CLValueBytesParsers::CLI32BytesParser.to_bytes(num4)
+    expect(CLValueBytesParsers::CLI32BytesParser.from_bytes(byte_array)).to eql(num4.get_value)
   end
 
 
   it "should do proper to_bytes and from_bytes when value is MAX_I32" do 
-    fifth_cli32 = CLi32.new(MAX_I32)
-    max = fifth_cli32.get_value
-    byte_array5 = fifth_cli32.to_bytes(max)
-    expect(fifth_cli32.from_bytes(byte_array5)).to eq(max)
+    num5 = CLi32.new(MAX_I32)
+    byte_array = CLValueBytesParsers::CLI32BytesParser.to_bytes(num5)
+    expect(CLValueBytesParsers::CLI32BytesParser.from_bytes(byte_array)).to eql(num5.get_value)
   end
 end
 
