@@ -54,6 +54,7 @@ module CLValueBytesParsers
 
 
   module CLI32BytesParser
+    extend self
     @@check = 0
     def from_bytes(byte_array)
       if @@check < 0
@@ -79,6 +80,7 @@ module CLValueBytesParsers
   end 
 
   module CLI64BytesParser
+    extend self
     @@check = 0
     def from_bytes(byte_array)
       if @@check < 0
@@ -104,6 +106,7 @@ module CLValueBytesParsers
   end
 
   module CLU8BytesParser
+    extend self
     def from_bytes(byte_array)
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
     end
@@ -119,6 +122,7 @@ module CLValueBytesParsers
   end
   
   module CLU32BytesParser
+    extend self
     def from_bytes(byte_array)
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
     end
@@ -133,6 +137,7 @@ module CLValueBytesParsers
   end
 
   module CLU64BytesParser
+    extend self
     def from_bytes(byte_array)
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
     end
@@ -147,6 +152,7 @@ module CLValueBytesParsers
   end
 
   module CLU128BytesParser
+    extend self
     def from_bytes(byte_array)
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
     end
@@ -163,6 +169,7 @@ module CLValueBytesParsers
   end
 
   module CLU256BytesParser
+    extend self
     def from_bytes(byte_array)
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
     end
@@ -179,6 +186,7 @@ module CLValueBytesParsers
   end
   
   module CLU512BytesParser
+    extend self
     def from_bytes(byte_array)
         byte_array.reverse.inject(0) {|m, b| (m << 8) + b }
     end
@@ -195,6 +203,7 @@ module CLValueBytesParsers
   end
 
   module CLUnitBytesParser
+    extend self
     def from_bytes(byte_array)
       if byte_array.empty?
         [].pack("")
@@ -209,6 +218,7 @@ module CLValueBytesParsers
   end
 
   module CLTupleBytesParser
+    extend self
     def to_bytes(tuple)
 
     end
