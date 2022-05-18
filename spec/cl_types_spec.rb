@@ -390,6 +390,12 @@ describe CLTuple do
       err = tuple.get_cl_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
     end
+    it "should return error when tuple is not correctly built" do 
+      bool = CLBool.new(false)
+      tuple1 = CLTuple1.new([bool, bool])
+      err = tuple1.get_cl_type
+      expect {raise err}.to raise_error(StandardError, "Too many elements!")
+    end
   end
 
   describe CLTuple2 do  
@@ -411,6 +417,12 @@ describe CLTuple do
       err = tuple.get_cl_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
     end
+    it "should return error when tuple is not correctly built" do 
+      bool = CLBool.new(false)
+      tuple2 = CLTuple2.new([bool, bool, bool])
+      err = tuple2.get_cl_type
+      expect {raise err}.to raise_error(StandardError, "Too many elements!")
+    end
   end
 
   describe CLTuple3 do  
@@ -423,9 +435,16 @@ describe CLTuple do
     end
 
     it "should throw an error when tuple elements are not in a correct format" do 
-      tuple = CLTuple2.new(['a', 10, true])
+      tuple = CLTuple3.new(['a', 10, true])
       err = tuple.get_cl_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
+    end
+
+    it "should return error when tuple is not correctly built" do 
+      bool = CLBool.new(false)
+      tuple3 = CLTuple3.new([bool, bool, bool, bool])
+      err = tuple3.get_cl_type
+      expect {raise err}.to raise_error(StandardError, "Too many elements!")
     end
   end
 end
