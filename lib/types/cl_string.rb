@@ -9,7 +9,7 @@ class CLString < CLValue
   include CLValueBytesParsers::CLStringBytesParser
 
   def initialize(value)
-    super
+    super()
     # raise "error" unless value.is_a?(String)
     raise "error" unless value.instance_of? String
     @value =  value
