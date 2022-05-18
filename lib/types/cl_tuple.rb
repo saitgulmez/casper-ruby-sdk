@@ -13,7 +13,7 @@ class CLTuple < CLValue
     @size = size
     @data = data
     @all_members_are_clvalues = data.all? { |item| item.is_a?(CLValue)}
-
+    @tuple_name = ""
     if data.size > size && @all_members_are_clvalues
       begin
         raise Error.new("Too many elements!")
@@ -32,6 +32,7 @@ class CLTuple < CLValue
         e.err
       end
     end
+    get_cl_type
   end
 
   def get_cl_type
@@ -39,12 +40,15 @@ class CLTuple < CLValue
       if @data.size == @size
         if @data.size == 1
           @cl_type = CLTuple1Type.new
+          @tuple_name =  @cl_type.to_string
           @cl_type.to_string + " (" + @data[0].get_cl_type + ")"
         elsif @data.size == 2
           @cl_type = CLTuple2Type.new
+          @tuple_name =  @cl_type.to_string
           @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ")"
         elsif @data.size == 3
           @cl_type = CLTuple3Type.new
+          @tuple_name =  @cl_type.to_string
           @cl_type.to_string + " (" + @data[0].get_cl_type + ", " + @data[1].get_cl_type + ", " + @data[2].get_cl_type + ")"
         else
           begin
@@ -67,6 +71,10 @@ class CLTuple < CLValue
         e.err
       end
     end
+  end
+
+  def get_tuple_name
+    @tuple_name
   end
 
   def get_value
