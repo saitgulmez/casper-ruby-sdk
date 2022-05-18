@@ -208,5 +208,14 @@ module CLValueBytesParsers
     end
   end
 
+  module CLTupleBytesParser
+    def to_bytes(tuple)
+
+    end
+
+    def from_bytes
+
+    end 
+  end
 end
 
