@@ -67,7 +67,8 @@ module CLValueBytesParsers
       end
     end
 
-    def to_bytes(value)
+    def to_bytes(clvalue)
+      value = clvalue.get_value
       if value < 0  && value >= MIN_I32
         @@check = value
         [value].pack("l<*").unpack("C*")
