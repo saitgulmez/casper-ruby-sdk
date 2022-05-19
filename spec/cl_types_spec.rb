@@ -391,6 +391,23 @@ describe CLTuple do
       err = tuple1.get_cl_type
       expect {raise err}.to raise_error(StandardError, "Too many elements!")
     end
+
+    it "should do proper to_bytes and from_bytes for Tuple1" do
+      bool1 = CLBool.new(false)
+      tuple = CLTuple1.new([bool1])
+
+      bool_bytes = CLValueBytesParsers::CLTupleBytesParser.to_bytes(tuple)
+      bool2 = CLValueBytesParsers::CLTupleBytesParser.from_bytes([bool1.get_cl_type], bool_bytes)
+      
+      expect(bool2.get_value).to eql(bool1.get_value)
+     
+      i32 = CLi32.new(10)
+      tuple = CLTuple1.new([i32])
+      
+      i32_bytes = CLValueBytesParsers::CLTupleBytesParser.to_bytes(tuple)
+      i32_value = CLValueBytesParsers::CLTupleBytesParser.from_bytes([i32.get_cl_type], i32_bytes)
+      expect(i32_value).to eql(i32.get_value)
+    end
   end
 
   describe CLTuple2 do  
@@ -412,11 +429,19 @@ describe CLTuple do
       err = tuple.get_cl_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
     end
+
     it "should return error when tuple is not correctly built" do 
       bool = CLBool.new(false)
       tuple2 = CLTuple2.new([bool, bool, bool])
       err = tuple2.get_cl_type
       expect {raise err}.to raise_error(StandardError, "Too many elements!")
+    end
+    
+    it "should do proper to_bytes and from_bytes for Tuple2" do
+      bool1 = CLBool.new(true)
+      bool2 = CLBool.new(false)
+      tuple = CLTuple2.new([bool1, bool2])
+      tuple_bytes = CLValueBytesParsers::CLTupleBytesParser.to_bytes(tuple)
     end
   end
 
