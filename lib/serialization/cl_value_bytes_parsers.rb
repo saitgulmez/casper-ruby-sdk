@@ -221,12 +221,122 @@ module CLValueBytesParsers
   module CLTupleBytesParser
     extend self
     def to_bytes(tuple)
-
+      # tuple_name can be Tuple1 or Tuple2 or Tuple3
+      tuple_name = tuple.get_tuple_name
+      size = tuple.get_size
+      data = tuple.get_value
+      if size == 1
+        type = data[0].get_cl_type
+        value = data[0]
+        convert_to_bytes(type, value)
+      elsif size == 2
+        # puts data[0]
+        # puts data[1]
+        clvalue1 = data[0]
+        type_of_clvalue1 = clvalue1.get_cl_type
+        clvalue2 = data[1]
+        type_of_clvalue2 = clvalue2.get_cl_type
+        convert_to_bytes(type_of_clvalue1, clvalue1) + convert_to_bytes(type_of_clvalue2, clvalue2)
+      # elsif size == 3
+      else
+        raise "error"
+      end
     end
 
-    def from_bytes
-
+    def from_bytes(types, byte_array)
+      size = types.size
+      if size == 1
+        type = types[0]
+        convert_from_bytes(type, byte_array)
+      elsif size == 2
+        type_of_clvalue1 = types[0]
+        type_of_clvalue2 = types[1]
+      else
+        raise "error"
+      end
     end 
   end
 end
 
+def convert_to_bytes(type, value)
+  case type 
+  when "Bool"
+    CLValueBytesParsers::CLBoolBytesParser.to_bytes(value)
+  when "I32"
+    CLValueBytesParsers::CLI32BytesParser.to_bytes(value)
+  when "I64"
+    CLValueBytesParsers::CLI64BytesParser.to_bytes(value)
+  when "U8"
+    CLValueBytesParsers::CLU8BytesParser.to_bytes(value)
+  when "U32"
+    CLValueBytesParsers::CLU32BytesParser.to_bytes(value)
+  when "U64"
+    CLValueBytesParsers::CLU64BytesParser.to_bytes(value)
+  when "U128"
+    CLValueBytesParsers::CLU128BytesParser.to_bytes(value)
+  when "U256"
+    CLValueBytesParsers::CLU256BytesParser.to_bytes(value)
+  when "U512"
+    CLValueBytesParsers::CLU512BytesParser.to_bytes(value)
+  when "Unit"
+    CLValueBytesParsers::CLUnitBytesParser.to_bytes(value)
+  when "String"
+    CLValueBytesParsers::CLStringBytesParser.to_bytes(value)
+  # when "Key"
+  # when "URef"
+  # when "Option"
+  # when "List"
+  # when "ByteArray"
+  # when "Result"
+  # when "Map"
+  # when "Tuple1"
+  # when "Tuple2"
+  # when "Tuple3"
+  # when "Any"
+  # when "PublicKey"
+  else
+    "Unknown"
+  end
+end
+
+def convert_from_bytes(type, byte_array)
+  # p type
+  case type 
+  when "Bool"
+    CLValueBytesParsers::CLBoolBytesParser.from_bytes(byte_array)
+  when "I32"
+    CLValueBytesParsers::CLI32BytesParser.from_bytes(byte_array)
+  when "I64"
+    CLValueBytesParsers::CLI64BytesParser.to_bytes(value)
+  when "U8"
+    CLValueBytesParsers::CLU8BytesParser.to_bytes(value)
+  when "U32"
+    CLValueBytesParsers::CLU32BytesParser.to_bytes(value)
+  when "U64"
+    CLValueBytesParsers::CLU64BytesParser.to_bytes(value)
+  when "U128"
+    CLValueBytesParsers::CLU128BytesParser.to_bytes(value)
+  when "U256"
+    CLValueBytesParsers::CLU256BytesParser.to_bytes(value)
+  when "U512"
+    CLValueBytesParsers::CLU512BytesParser.to_bytes(value)
+  when "Unit"
+    CLValueBytesParsers::CLUnitBytesParser.to_bytes(value)
+  when "String"
+    CLValueBytesParsers::CLUnitBytesParser.to_bytes(value)
+  # when "Key"
+  # when "URef"
+  # when "Option"
+  # when "List"
+  # when "ByteArray"
+  # when "Result"
+  # when "Map"
+  # when "Tuple1"
+  # when "Tuple2"
+  # when "Tuple3"
+  # when "Any"
+  # when "PublicKey"
+  else
+    "Unknown"
+  end
+end
