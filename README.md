@@ -53,6 +53,8 @@ git checkout main
 rspec spec/testnet_spec.rb
 # To see the test results in detail
 rspec -fd spec/testnet_spec.rb
+# Test for cltypes
+rspec -fd spec/cl_types_spec.rb
 ```
 
 ## Mainnet Tests
