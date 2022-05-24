@@ -256,6 +256,18 @@ module CLValueBytesParsers
       end
     end 
   end
+
+  module CLURefBytesParser
+    extend self
+
+    # @param [String] str
+    # @return [Array<Integer>] decoded
+    def decode_base_16(str)
+      decoded = [str].pack('H*').unpack("C*")
+    end
+    
+    
+  end
 end
 
 def convert_to_bytes(type, value)
