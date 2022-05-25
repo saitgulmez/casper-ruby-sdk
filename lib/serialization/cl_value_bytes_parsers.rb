@@ -266,7 +266,23 @@ module CLValueBytesParsers
       decoded = [str].pack('H*').unpack("C*")
     end
     
-    
+    # @param [CLURef] clvalue
+    # @return [Array<Integer>] value
+    def to_bytes(clvalue)
+      value = clvalue.get_value
+      access_rights = clvalue.get_access_rights
+      value = value.dup
+      value.push(access_rights)
+    end
+
+    # @param [Array<Integer>] byte_array
+    # @return [CLURef] uref
+    def from_bytes(byte_array)
+      get_access_rights = byte_array.last
+      byte_array = byte_array[0..byte_array.size-2]
+      # p byte_array
+      uref = CLURef.new(byte_array, get_access_rights)
+    end
   end
 end
 
