@@ -10,6 +10,7 @@ require_relative '../lib/types/cl_u256.rb'
 require_relative '../lib/types/cl_u512.rb'
 require_relative '../lib/types/cl_unit.rb'
 require_relative '../lib/types/cl_tuple.rb'
+require_relative '../lib/types/cl_uref.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 require 'json'
@@ -467,4 +468,42 @@ describe CLTuple do
       expect {raise err}.to raise_error(StandardError, "Too many elements!")
     end
   end
+end
+
+describe CLURef do  
+  uref_addr1 = "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a"
+  decoded1 = CLValueBytesParsers::CLURefBytesParser.decode_base_16(uref_addr1)
+  uref1 = CLURef.new(decoded1, AccessRights[:READ_ADD_WRITE])
+  formatted_str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+  
+  it "shoul return proper CLType" do
+    expect(uref1.get_cl_type).to eql('URef') 
+    expect(uref1).to be_an_instance_of(CLURef)
+  end
+  
+  it "should return proper value" do  
+    expect(uref1.get_value).to eql(decoded1)
+  end
+
+  it "should return proper AccessRights" do
+    expect(uref1.get_access_rights).to eql(AccessRights[:READ_ADD_WRITE])
+  end
+
+  it "should do proper to_bytes and from_bytes" do  
+    to_bytes = CLValueBytesParsers::CLURefBytesParser.to_bytes(uref1)
+    from_bytes = CLValueBytesParsers::CLURefBytesParser.from_bytes(to_bytes)
+   
+    expect(uref1.get_value).to eql(from_bytes.get_value)
+    expect(uref1.get_access_rights).to eql(from_bytes.get_access_rights)
+  end
+
+  it "should return error when CLUref is not correctly built" do 
+    uref_addr2 = "4b4b4b"
+    decoded2 = CLValueBytesParsers::CLURefBytesParser.decode_base_16(uref_addr2)
+    uref2 = CLURef.new(decoded2, 0)
+    expect {raise 'The length of URefAddr should be 32'}.to raise_error(RuntimeError, 'The length of URefAddr should be 32')
+    # expect {raise 'The length of URefAddr should be 32'}.to raise_error('The length of URefAddr should be 32')
+    # expect {raise 'The length of URefAddr should be 32'}.to raise_error(ArgumentError, 'The length of URefAddr should be 32')
+  end
+
 end
