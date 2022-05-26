@@ -265,6 +265,10 @@ module CLValueBytesParsers
     def decode_base_16(str)
       decoded = [str].pack('H*').unpack("C*")
     end
+
+    def encode_base_16(byte_array)
+      encoded = byte_array.pack("C*").unpack("H*").first
+    end
     
     # @param [CLURef] clvalue
     # @return [Array<Integer>] value
