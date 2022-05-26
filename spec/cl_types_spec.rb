@@ -473,8 +473,9 @@ end
 describe CLURef do  
   uref_addr1 = "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a"
   decoded1 = CLValueBytesParsers::CLURefBytesParser.decode_base_16(uref_addr1)
+  encoded1 = CLValueBytesParsers::CLURefBytesParser.encode_base_16(decoded1)
   uref1 = CLURef.new(decoded1, AccessRights[:READ_ADD_WRITE])
-  formatted_str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+  str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
   
   it "shoul return proper CLType" do
     expect(uref1.get_cl_type).to eql('URef') 
@@ -491,8 +492,9 @@ describe CLURef do
 
   it "should do proper to_bytes and from_bytes" do  
     to_bytes = CLValueBytesParsers::CLURefBytesParser.to_bytes(uref1)
+    # p to_bytes
     from_bytes = CLValueBytesParsers::CLURefBytesParser.from_bytes(to_bytes)
-   
+   # p from_bytes
     expect(uref1.get_value).to eql(from_bytes.get_value)
     expect(uref1.get_access_rights).to eql(from_bytes.get_access_rights)
   end
@@ -504,6 +506,39 @@ describe CLURef do
     expect {raise 'The length of URefAddr should be 32'}.to raise_error(RuntimeError, 'The length of URefAddr should be 32')
     # expect {raise 'The length of URefAddr should be 32'}.to raise_error('The length of URefAddr should be 32')
     # expect {raise 'The length of URefAddr should be 32'}.to raise_error(ArgumentError, 'The length of URefAddr should be 32')
+  end
+
+  describe "#parse_uref_address" do 
+  #   str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+    it "should raise an error when string does not begin with \'uref-\'" do 
+      bad_formatted_str = "xxx-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+      expect {CLURef.parse_uref_address(bad_formatted_str)}.to raise_error(ArgumentError)
+    end
+
+    it "should raise an error when string does not begin with prefix: \'uref-\'" do 
+      bad_formatted_str = "ureffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+      expect {CLURef.parse_uref_address(bad_formatted_str)}.to raise_error(ArgumentError)
+    end
+   
+    it "should raise an error when uref bytes length is not equal to 32" do 
+      bad_formatted_str = "uref-fff-007"
+      expect {CLURef.parse_uref_address("uref-fff-007")}.to raise_error(ArgumentError)
+    end
+    
+    it "should raise an error when given parameter has lack of suffix which represents AccessRights" do 
+      bad_formatted_str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      expect {CLURef.parse_uref_address(bad_formatted_str)}.to raise_error(ArgumentError)
+    end
+
+    it "should raise an error when AccessRights is not within a range [0, 7]" do
+      bad_formatted_str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-008"
+      expect {CLURef.parse_uref_address(bad_formatted_str)}.to raise_error(ArgumentError)
+    end
+    it "should convert to_json and from_json properly" do
+      # correct_formatted_str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+      expect(CLURef.to_json(uref1)).to eql('{"bytes":"2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a07","cl_type":"URef"}')
+      # puts CLURef.to_json(uref1)  
+    end
   end
 
 end
