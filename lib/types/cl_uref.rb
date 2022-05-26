@@ -82,4 +82,14 @@ class CLURef < CLValue
     CLURef.new(decoded_addr, access_rights)
   end
 
+  def self.to_json(uref)
+    decoded_addr = uref.get_value
+    # p decoded_addr
+    access_rights = uref.get_access_rights
+    decoded_addr_with_access_rights = CLValueBytesParsers::CLURefBytesParser.to_bytes(uref)
+    # p decoded_addr_with_access_rights
+    encoded_addr_with_access_rights = CLValueBytesParsers::CLURefBytesParser.encode_base_16(decoded_addr_with_access_rights)
+    # p encoded_addr_with_access_rights
+    json = {"bytes": encoded_addr_with_access_rights, "cl_type": uref.get_cl_type}.to_json
+  end
 end
