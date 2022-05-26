@@ -266,6 +266,8 @@ module CLValueBytesParsers
       decoded = [str].pack('H*').unpack("C*")
     end
 
+    # @param [Array<Integer>] byte_array
+    # @return [String] encoded
     def encode_base_16(byte_array)
       encoded = byte_array.pack("C*").unpack("H*").first
     end
