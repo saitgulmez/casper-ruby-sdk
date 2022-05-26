@@ -3,6 +3,7 @@ require_relative './cl_value.rb'
 require_relative '../serialization/cl_value_bytes_parsers.rb'
 require 'json'
 
+
 #  Access Rights
 # https://docs.casperlabs.io/design/serialization-standard/#clvalue-uref
 
@@ -91,5 +92,13 @@ class CLURef < CLValue
     encoded_addr_with_access_rights = CLValueBytesParsers::CLURefBytesParser.encode_base_16(decoded_addr_with_access_rights)
     # p encoded_addr_with_access_rights
     json = {"bytes": encoded_addr_with_access_rights, "cl_type": uref.get_cl_type}.to_json
+  end
+
+  def self.from_json(json)
+    parsed = JSON.parse(json).deep_symbolize_keys
+    bytes = CLValueBytesParsers::CLURefBytesParser.decode_base_16(parsed[:bytes])
+    decoded = bytes[0...-1]
+    access_rights = bytes.pop
+    CLURef.new(decoded, access_rights)
   end
 end
