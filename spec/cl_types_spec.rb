@@ -535,9 +535,16 @@ describe CLURef do
       expect {CLURef.parse_uref_address(bad_formatted_str)}.to raise_error(ArgumentError)
     end
     it "should convert to_json and from_json properly" do
-      # correct_formatted_str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
+      uref_addr1 = "2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a"
+      decoded1 = CLValueBytesParsers::CLURefBytesParser.decode_base_16(uref_addr1)
+      uref1 = CLURef.new(decoded1, 7)
+      
       expect(CLURef.to_json(uref1)).to eql('{"bytes":"2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a07","cl_type":"URef"}')
-      # puts CLURef.to_json(uref1)  
+      
+      json = '{"bytes":"2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a07","cl_type":"URef"}'
+
+      expect(CLURef.from_json(json).get_value).to eql(uref1.get_value)
+      expect(CLURef.from_json(json).get_access_rights).to eql(uref1.get_access_rights)
     end
   end
 
