@@ -291,7 +291,24 @@ module CLValueBytesParsers
       uref = CLURef.new(byte_array, get_access_rights)
     end
   end
+ 
+  module CLPublicKeyBytesParser
+    extend self
+      # @param [String] str
+      # @return [Array<Integer>] decoded
+      def decode_base_16(str)
+        decoded = [str].pack('H*').unpack("C*")
+      end
+
+      # @param [Array<Integer>] byte_array
+      # @return [String] encoded
+      def encode_base_16(byte_array)
+        encoded = byte_array.pack("C*").unpack("H*").first
+      end
+
+  end
 end
+
 
 def convert_to_bytes(type, value)
   case type 
