@@ -11,6 +11,7 @@ require_relative '../lib/types/cl_u512.rb'
 require_relative '../lib/types/cl_unit.rb'
 require_relative '../lib/types/cl_tuple.rb'
 require_relative '../lib/types/cl_uref.rb'
+require_relative '../lib/types/cl_public_key.rb'
 require_relative '../lib/types/constants.rb'
 require_relative '../lib/serialization/cl_value_bytes_parsers.rb'
 require 'json'
@@ -477,7 +478,7 @@ describe CLURef do
   uref1 = CLURef.new(decoded1, AccessRights[:READ_ADD_WRITE])
   str = "uref-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff-007"
   
-  it "shoul return proper CLType" do
+  it "should return proper CLType" do
     expect(uref1.get_cl_type).to eql('URef') 
     expect(uref1).to be_an_instance_of(CLURef)
   end
@@ -546,6 +547,45 @@ describe CLURef do
       expect(CLURef.from_json(json).get_value).to eql(uref1.get_value)
       expect(CLURef.from_json(json).get_access_rights).to eql(uref1.get_access_rights)
     end
+  end
+
+end
+
+
+describe CLPublicKey do 
+  pub_key_hex_ed25519 = "010af5a943bacd2a8e91792eb4e9a25e32d536ab103372f57f89ebcadfc59820d1"
+  pub_key_hex_secp256K1 = "024ae7d5b66b2fd0f66fb0efcceecb673b3762595b30ae1cac48ae8f09d34c952ee4"
+  pub_raw_ed25519 = [ 
+    10, 245, 169, 67, 186, 205, 42, 142, 
+    145, 121, 46, 180, 233, 162, 94, 50, 
+    213, 54, 171, 16, 51, 114, 245, 127, 
+    137, 235, 202, 223, 197, 152, 32, 209 
+  ]
+  pub_raw_secp256K1 = [
+    74, 231, 213, 182, 107, 47, 208, 246, 
+    111, 176, 239, 204, 238, 203, 103, 59, 
+    55, 98, 89, 91, 48, 174, 28, 172, 72, 
+    174, 143, 9, 211, 76, 149, 46, 228
+  ]
+  it "should return error when CLPublicKey is not correctly built" do
+    public_key_ed25519 = CLPublicKey.new(pub_raw_ed25519, CLPublicKeyTag[:ED25519])
+    public_key_secp256K1 = CLPublicKey.new(pub_raw_secp256K1, CLPublicKeyTag[:SECP256K1])
+    
+    expect(public_key_ed25519).to be_an_instance_of(CLPublicKey)
+    expect(public_key_secp256K1).to be_an_instance_of(CLPublicKey)
+  end
+
+  it "should raise error when CLPublicKey is not properly constructed" do  
+    expect {CLPublicKey.new(pub_raw_ed25519, 3)}.to raise_error(ArgumentError)
+    expect {CLPublicKey.new(pub_raw_secp256K1, 3)}.to raise_error(ArgumentError)
+  end
+
+  it "should return proper CLType" do 
+    public_key1 = CLPublicKey.new(pub_raw_ed25519, 1)
+    public_key2 = CLPublicKey.new(pub_raw_secp256K1, 2)
+    
+    expect(public_key1.get_cl_type).to eql("PublicKey")
+    expect(public_key2.get_cl_type).to eql("PublicKey")
   end
 
 end
