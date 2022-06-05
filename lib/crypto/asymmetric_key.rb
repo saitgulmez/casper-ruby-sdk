@@ -1,3 +1,4 @@
+require_relative '../utils/base_16.rb'
 
 CLPublicKeyTag = {
   ED25519: 1,
@@ -12,9 +13,9 @@ SignatureAlgorithm = {
 class AsymmetricKey
   attr_reader :public_key, :private_key, :signature_algorithm
 
-  # @param [String] public_key
-  # @param [String] private_key
-  # @param [Integer] signature_algorithm
+  # @param [CLPublicKey] public_key
+  # @param [Array] private_key
+  # @param [SignatureAlgorithm] signature_algorithm
   def initialize(public_key, private_key, signature_algorithm)
     @public_key = public_key
     @private_key = private_key
@@ -29,9 +30,7 @@ class AsymmetricKey
   #
   # @return [String]
   def get_public_key
-    @public_key
+    Utils::Base16.encode16(@public_key)
   end
-
-  def 
 
 end
