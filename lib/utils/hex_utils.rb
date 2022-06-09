@@ -1,6 +1,7 @@
 module Utils
   module HexUtils
-
+    module_function
+   
     # @param [String] public_key_hex
     # @return [Boolean]
     def valid_public_key_format?(public_key_hex)
