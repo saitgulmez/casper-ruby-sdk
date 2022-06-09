@@ -306,6 +306,25 @@ module CLValueBytesParsers
         encoded = byte_array.pack("C*").unpack("H*").first
       end
 
+      def to_bytes(cl_public_key)
+        tag = cl_public_key.get_cl_public_key_tag
+        raw_public_key = cl_public_key.get_value
+        [tag] + raw_public_key
+      end
+
+      def from_bytes(byte_array)
+        byte_array
+        # tag = byte_array[0]
+        tag = 0
+        if byte_array[0] == 1 && byte_array.size == 33
+          tag = 1
+        elsif byte_array[0] == 2 && byte_array.size == 34
+          tag = 2
+        else
+          raise ArgumentError.new("Invalid parameter")
+        end
+        CLPublicKey.new(byte_array[1..], tag)
+      end
   end
 end
 
