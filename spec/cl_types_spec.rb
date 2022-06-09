@@ -588,4 +588,118 @@ describe CLPublicKey do
     expect(public_key2.get_cl_type).to eql("PublicKey")
   end
 
+  it "to_hex / from_hex work properly for ed25519" do  
+    pub_raw_ed25519 = [
+      10, 245, 169, 67, 186, 205, 42, 142, 
+      145, 121, 46, 180, 233, 162, 94, 50, 
+      213, 54, 171, 16, 51, 114, 245, 127, 
+      137, 235, 202, 223, 197, 152, 32, 209
+    ]
+    public_key = CLPublicKey.new(pub_raw_ed25519, 1)
+    expected_hex_result = "010af5a943bacd2a8e91792eb4e9a25e32d536ab103372f57f89ebcadfc59820d1"
+    expect(public_key.to_hex).to eql(expected_hex_result)
+
+    hex_value = public_key.to_hex
+    result_public_key = public_key.from_hex(hex_value)
+
+    expect(result_public_key.get_value).to eql([10, 245, 169, 67, 186, 205, 42, 142, 145, 121, 46, 
+      180, 233, 162, 94, 50, 213, 54, 171, 16, 51, 114, 245, 127, 137, 235, 202, 223, 197, 152, 32, 209])
+    expect(result_public_key.get_cl_public_key_tag).to eql(1)
+    expect(result_public_key.ed25519?).to eql(true)
+    expect(result_public_key.get_signature_algorithm).to eql("ed25519")
+  end
+
+  it "to_hex / from_hex work properly for secp256K1" do  
+    pub_raw_secp256K1 = [74, 231, 213, 182, 107, 47, 208, 246, 111, 176, 239, 204, 238, 203, 103, 59, 55, 
+      98, 89, 91, 48, 174, 28, 172, 72, 174, 143, 9, 211, 76, 149, 46, 228]
+    public_key = CLPublicKey.new(pub_raw_secp256K1, 2)
+    expected_hex_result = "024ae7d5b66b2fd0f66fb0efcceecb673b3762595b30ae1cac48ae8f09d34c952ee4"
+    expect(public_key.to_hex).to eql(expected_hex_result)
+
+    hex_value = public_key.to_hex
+    result_public_key = public_key.from_hex(hex_value)
+
+    expect(result_public_key.get_value).to eql([74, 231, 213, 182, 107, 47, 208, 246, 111, 176, 239, 204, 
+      238, 203, 103, 59, 55, 98, 89, 91, 48, 174, 28, 172, 72, 174, 143, 9, 211, 76, 149, 46, 228])
+    expect(result_public_key.get_cl_public_key_tag).to eql(2)
+    expect(result_public_key.secp256k1?).to eql(true)
+    expect(result_public_key.get_signature_algorithm).to eql("secp256k1")
+  end
+
+  it "to_account_hash_byte_array works properly" do  
+    account_key = "01e23d200eb0f3c8a3dacc8453644e6fcf4462585a68234ebb1c3d6cc8971148c2"
+    public_key = CLPublicKey.from_hex(account_key)
+    # puts account_key
+    # puts public_key.to_hex
+    # puts public_key.get_value.inspect
+    # puts public_key.get_cl_public_key_tag
+    expected_result = [217, 84, 5, 56, 40, 230, 253, 7, 122, 223, 214, 81, 224, 24, 172, 125, 
+      213, 28, 170, 162, 61, 8, 23, 104, 77, 183, 110, 48, 67, 209, 9, 3]
+    expect(public_key.to_account_hash_byte_array).to eql(expected_result)
+  end
+
+  it "to_account_hash_hex works properly" do  
+    account_key = "01e23d200eb0f3c8a3dacc8453644e6fcf4462585a68234ebb1c3d6cc8971148c2"
+    public_key = CLPublicKey.from_hex(account_key)
+    expected_hex_result = "account-hash-d954053828e6fd077adfd651e018ac7dd51caaa23d0817684db76e3043d10903"
+    expect(public_key.to_account_hash_hex).to eql(expected_hex_result)
+  end
+
+  it "should do proper to_bytes and from_bytes serialization for CLPublicKey" do  
+    public_key1 = CLPublicKey.from_ed25519(Array.new(32, 50))
+    expected_ed25519_result = [
+      1, 50, 50, 50, 50, 50, 50, 50, 50, 
+      50, 50, 50, 50, 50, 50, 50, 50, 
+      50, 50, 50, 50, 50, 50, 50, 50, 
+      50, 50, 50, 50, 50, 50, 50, 50
+    ]
+
+    bytes = CLValueBytesParsers::CLPublicKeyBytesParser.to_bytes(public_key1)
+    expect(bytes).to eql(expected_ed25519_result)
+    
+    expected_raw_public_key1 = Array.new(32, 50)
+
+    expect(CLValueBytesParsers::CLPublicKeyBytesParser.from_bytes(bytes).get_value).to eql(expected_raw_public_key1)
+    expect(CLValueBytesParsers::CLPublicKeyBytesParser.from_bytes(bytes).get_cl_public_key_tag).to eql(1)
+
+    public_key2 = CLPublicKey.from_secp256k1(Array.new(33, 100))
+    expected_secp256k1_result = [
+      2, 100, 100, 100, 100, 100, 100, 100, 100, 
+      100, 100, 100, 100, 100, 100, 100, 100, 100, 
+      100, 100, 100, 100, 100, 100, 100, 100, 
+      100, 100, 100, 100, 100, 100, 100, 100
+    ]
+    
+    bytes = CLValueBytesParsers::CLPublicKeyBytesParser.to_bytes(public_key2)
+    expect(bytes).to eql(expected_secp256k1_result)
+    
+    expected_raw_public_key2 = Array.new(33, 100)
+
+    expect(CLValueBytesParsers::CLPublicKeyBytesParser.from_bytes(bytes).get_value).to eql(expected_raw_public_key2)
+    expect(CLValueBytesParsers::CLPublicKeyBytesParser.from_bytes(bytes).get_cl_public_key_tag).to eql(2)
+  end
+
+  it "to_json / from_json for CLPublicKey" do 
+    public_key_hex1 = "01e23d200eb0f3c8a3dacc8453644e6fcf4462585a68234ebb1c3d6cc8971148c2"
+    # account_hash_hex = "14b94d33a1be1a2741ddefa7ae68a28cd1956e3801730bea617bf529d50f8aea"
+
+    public_key1 = CLPublicKey.from_hex(public_key_hex1)
+    raw_public_key1 = public_key1.get_value
+    tag1 = public_key1.get_cl_public_key_tag
+
+    expect(CLPublicKey.to_json(public_key1)).to eql('{"bytes":"01e23d200eb0f3c8a3dacc8453644e6fcf4462585a68234ebb1c3d6cc8971148c2","cl_type":"PublicKey"}')
+
+    json = CLPublicKey.to_json(public_key1)
+
+    public_key2 = CLPublicKey.from_json(json)
+    
+    raw_public_key2 = public_key2.get_value
+    tag2 = public_key2.get_cl_public_key_tag
+    public_key_hex2 = public_key2.to_hex
+    
+    expect(raw_public_key2).to eql(raw_public_key1)
+    expect(tag2).to eql(tag1)
+    expect(public_key_hex2).to eql(public_key_hex1)
+  end
 end
+
