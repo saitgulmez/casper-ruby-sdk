@@ -137,4 +137,16 @@ class CLPublicKey < CLValue
     CLPublicKey.new(public_key_hex_bytes.drop(1), public_key_hex_bytes[0])
   end
 
+  def self.to_json(public_key)
+    json = {"bytes": public_key.to_hex, "cl_type": public_key.get_cl_type}.to_json
+  end
+
+  def self.from_json(json)
+    parsed = JSON.parse(json).deep_symbolize_keys
+    bytes = Utils::Base16.decode16(parsed[:bytes])
+    tag = bytes[0]
+    raw_public_key = bytes[1..]
+    CLPublicKey.new(raw_public_key, tag)
+  end
+
 end
