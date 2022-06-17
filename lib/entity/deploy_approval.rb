@@ -1,9 +1,10 @@
 module Casper
   module Entity
     class DeployApproval 
-
-      # @param [String] signer
-      # @param [String] signature
+     
+      # @param [Hash] approval
+      # @option approval [String] :signer
+      # @option approval [String] :signature
       def initialize(approval = {})
         @signer = approval[:signer]
         @signature = approval[:signature]
