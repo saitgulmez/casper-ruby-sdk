@@ -2,22 +2,24 @@ module Casper
   module Entity
     class DeployHeader 
      
-      # @param [String] account
-      # @param [Integer] timestamp
-      # @param [Integer] ttl
-      # @param [Integer] gas_price
-      # @param [String] body_hash
-      # @param [Array] dependencies
-      # @param [String] chain_name
-      def initialize(account, timestamp, ttl, gas_price, body_hash, dependencies, chain_name)
-        @account = account
-        @timestamp = timestamp
-        @ttl = ttl
-        @gas_price = gas_price
-        @body_hash = body_hash
-        @dependencies = dependencies
-        @chain_name = chain_name
+      # @param [Hash] header
+      # @option header [String] :account
+      # @option header [Integer] :timestamp
+      # @option header [Integer] :ttl
+      # @option header [Integer] :gas_price
+      # @option header [String] :body_hash
+      # @option header [Array] :dependencies
+      # @option header [String] :chain_name
+      def initialize(header = {})
+        @account = header[:account]
+        @timestamp = header[:timestamp]
+        @ttl = header[:ttl]
+        @gas_price = header[:gas_price]
+        @body_hash = header[:body_hash]
+        @dependencies = header[:dependencies]
+        @chain_name = header[:chain_name]
       end
+
 
       # @return [String] account
       def get_account
