@@ -4,9 +4,9 @@ module Casper
 
       # @param [String] signer
       # @param [String] signature
-      def initialize(signer, signature)
-        @signer = signer
-        @signature = signature
+      def initialize(approval = {})
+        @signer = approval[:signer]
+        @signature = approval[:signature]
       end
 
       # @return [String] signer
