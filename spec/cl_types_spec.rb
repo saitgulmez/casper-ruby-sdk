@@ -85,6 +85,16 @@ describe CLString do
   it "should return \'ABC\'" do  
     expect(cl_string.from_bytes("03000000414243")).to eql("ABC")
   end
+
+  it "should do to_bytes / from_bytes string serialization" do
+    string = CLString.new("Hello, World!")
+    value = string.get_value
+    bytes = string.to_bytes(value)
+    result_string = string.from_bytes(bytes)
+    expect(value).to eql("Hello, World!")
+    expect(bytes).to eql("0d00000048656c6c6f2c20576f726c6421")
+    expect(value).to eql(result_string)
+  end
 end
 
 
