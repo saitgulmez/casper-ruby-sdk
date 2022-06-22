@@ -42,8 +42,9 @@ module CLValueBytesParsers
 
     def to_bytes(value)
       len = value.length
-      hex_of_value = value.unpack("H*")
-      # hex_of_len = [len].
+      hex1 = len.to_s(16).rjust(8, '0').scan(/../).reverse.join('')
+      hex2 = value.unpack("H*").first
+      hex1 + hex2
     end
 
     def to_json 
