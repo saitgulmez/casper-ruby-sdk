@@ -3,45 +3,61 @@ module Utils
     extend self
 
     # @param [String] string
-    # @return [String] hex_string
+    # @return [String] 
     def string_to_hex(str)
-      str.unpack1("H*")
+      # str.unpack1("H*")
+      str.unpack("H*").first
     end
 
-    # @param [String] hex_string
-    # @return [String] string
-    def hex_to_string(hex_string)
-      [hex_string].pack("H*")
+    # @param [String] hex_str
+    # @return [String]
+    def hex_to_string(hex_str)
+      [hex_str].pack("H*")
     end
 
-    # @param [String] hex_string
-    # @return [Array] byte_array
-    def hex_to_byte_array(hex_string)
-      [hex_string].pack("H*").unpack("C*")
+    # @param [String] hex_str
+    # @return [Array]
+    def hex_to_byte_array(hex_str)
+      [hex_str].pack("H*").unpack("C*")
     end
    
     # @param [Array] byte_array
-    # @return [String] string
+    # @return [String]
     def byte_array_to_hex(byte_array)
-      byte_array.pack("C*").unpack1("H*")
+      # byte_array.pack("C*").unpack1("H*")
+      byte_array.pack("C*").unpack("H*").first
     end
 
     # @param [String] string
-    # @return [Array] byte_array
+    # @return [Array]
     def string_to_byte_array(str)
       str.unpack("C*")
     end
 
     # @param [Array] byte_array
-    # @return [String] string
+    # @return [String]
     def byte_array_to_string(byte_array)
       byte_array.pack("C*")
     end 
 
-    # @param [String] string
-    # @param [Array<int>] bytes
-    def string_to_bytes_u32(str)
+    # @param [Integer] n
+    # @return [String]
+    def integer_to_hex(n)
+      [n].pack("l<*").unpack("H*").first
+    end
 
+    # @param [String] hex_str
+    # @return [Integer] 
+    def hex_to_integer(hex_str)
+      [hex_str].pack("H*").unpack("l").first
+    end
+
+
+    # @param [String] hex_str
+    # @param [String] 
+    def hex_from_little_endian_to_big_endian(hex_str)
+      # [hex_str].pack("H*").unpack('N*').pack('V*').unpack1('H*')
+      [hex_str].pack("H*").unpack('N*').pack('V*').unpack('H*').first
     end
   end
 end
