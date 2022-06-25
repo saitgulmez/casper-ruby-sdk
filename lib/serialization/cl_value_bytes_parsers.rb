@@ -28,6 +28,8 @@ module CLValueBytesParsers
   end
 
   module CLStringBytesParser
+    extend self
+    # @param [String] raw_bytes
     def from_bytes(raw_bytes)
       first_4_bytes = raw_bytes[0..7]
       string_length = [first_4_bytes].pack("H*").unpack("l").first
@@ -40,6 +42,7 @@ module CLValueBytesParsers
       end
     end
 
+    # @param [String] value 
     def to_bytes(value)
       len = value.length
       hex1 = len.to_s(16).rjust(8, '0').scan(/../).reverse.join('')
