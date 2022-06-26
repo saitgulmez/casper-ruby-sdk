@@ -52,6 +52,11 @@ module Utils
       [hex_str].pack("H*").unpack("l").first
     end
 
+    # @param [Integer] n
+    # @return [String]
+    def to_u64(n)
+      [n].pack("Q<*").unpack("H*").first
+    end
 
     # @param [String] hex_str
     # @param [String] 
