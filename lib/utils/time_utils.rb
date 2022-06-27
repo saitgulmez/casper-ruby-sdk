@@ -10,12 +10,14 @@ module Utils
     # @param [String] timestamp
     # @return [Integer]
     def to_epoc_ms(timestamp)
-      DateTime.parse("2020-11-17T00:39:24.072Z").strftime("%Q")
+      DateTime.parse( ).strftime("%Q")
       DateTime.parse(timestamp).strftime("%Q").to_i
     end
 
     # Converts milliseconds to timestamp 
-    def to_iso_string(epoch_time_millisecond)
+    def to_iso_string(milliseconds)
+      milliseconds -= 3 * 60 * 60 * 1000
+      Time.at(milliseconds/1000.0).strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
     end
 
     # Convert TTL into milliseconds
@@ -32,6 +34,9 @@ module Utils
     def millisecond_to_ttl(n)
 
     end
+
+
+
   end
 end
 
