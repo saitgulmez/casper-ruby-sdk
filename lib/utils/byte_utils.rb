@@ -52,6 +52,16 @@ module Utils
       [hex_str].pack("H*").unpack("l").first
     end
 
+    def to_i32(n)
+      # [value].pack("l<*").unpack("C*")
+      [n].pack("l<*").unpack("H*").first
+      # [n].pack("l<*").unpack1("H*")
+    end
+
+    def to_u32(n)
+      [n].pack("L<*").unpack("H*").first
+      # [n].pack("L<*").unpack1("H*")
+    end
     # @param [Integer] n
     # @return [String]
     def to_u64(n)
