@@ -16,7 +16,7 @@ module Casper
         @protocol_version_major
       end
 
-      # @param [Integer] contract_version
+      # @return [Integer] contract_version
       def get_contract_version
         @contract_version
       end
