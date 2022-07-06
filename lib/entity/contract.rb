@@ -9,7 +9,7 @@ module Casper
       # @param [Array] entry_points
       # @param [Array] named_keys
       # @param [String] protocol_version
-      def initialize(contract_package_hash, contract_wasm_hash, entry_points, named_keys, protocol_version)
+      def initialize(contract_package_hash, contract_wasm_hash, named_keys, entry_points, protocol_version)
         @contract_package_hash = contract_package_hash
         @contract_wasm_hash = contract_wasm_hash
         @entry_points = entry_points
