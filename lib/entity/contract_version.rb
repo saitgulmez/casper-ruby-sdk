@@ -30,3 +30,4 @@ module Casper
 
     end    
   end
+end
