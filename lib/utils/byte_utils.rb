@@ -58,6 +58,9 @@ module Utils
       # [n].pack("l<*").unpack1("H*")
     end
 
+    def to_u8(n)
+      [n].pack("C").unpack1("H*")
+    end
     def to_u32(n)
       [n].pack("L<*").unpack("H*").first
       # [n].pack("L<*").unpack1("H*")
