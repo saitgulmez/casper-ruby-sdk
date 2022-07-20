@@ -295,6 +295,15 @@ module CLValueBytesParsers
       uref = CLURef.new(byte_array, get_access_rights)
     end
   end
+
+  module CLOptionBytesParser
+    extend self
+
+    # @param [CLOption]
+    def to_bytes(cl_option)
+      
+    end
+  end
  
   module CLPublicKeyBytesParser
     extend self
