@@ -21,6 +21,10 @@ class CLBool < CLValue
     @cl_bool_type.to_string
   end
 
+  def get_cl_tag
+    CLBoolType.get_tag
+  end
+
   def get_value
     @value  
   end
