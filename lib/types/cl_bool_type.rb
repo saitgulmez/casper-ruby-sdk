@@ -14,11 +14,18 @@ class CLBoolType  < CLType
     TAGS.key(0).to_s
   end
 
-  def get_value 
-    @value
-  end
+  # def get_value 
+  #   @value
+  # end
 
   def to_json 
     to_string
+  end
+
+  def self.get_tag
+    TAGS[:Bool]
+  end
+  def get_tag
+    TAGS[:Bool]
   end
 end
