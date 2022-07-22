@@ -67,13 +67,14 @@ class CLType
 
   end
 
-  def get_tag   
-
+  def get_cl_type_tag(key)   
+    TAGS[key]
   end
 
+  # @param [Integer]
   # @return [String] 
-  def get_tag_name
-    TAGS.key(@value).to_s
+  def get_tag_key(value)
+    TAGS.key(value).to_s
   end
 
   # @return [Integer] tag_value
