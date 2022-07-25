@@ -33,7 +33,10 @@ class CLOptionType < CLType
     @inner
   end
 
-
+  def to_bytes
+    arr = []
+    arr << @tag << @inner.get_tag
+  end
 end
 
 
