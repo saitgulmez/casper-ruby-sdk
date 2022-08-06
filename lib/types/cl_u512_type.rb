@@ -20,4 +20,8 @@ class CLU512Type < CLType
   def to_json 
     to_string
   end
+
+  def to_bytes
+    [8].pack("C*").unpack1("H*")
+  end
 end

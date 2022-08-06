@@ -29,6 +29,10 @@ class CLOptionType < CLType
     # h
   end
 
+  def get_type
+    TAGS.key(13).to_s
+  end
+
   def get_inner_type
     @inner
   end
@@ -40,5 +44,9 @@ class CLOptionType < CLType
 
   def self.to_string
     TAGS.key(13).to_s
+  end
+
+  def to_bytes
+    [13].pack("C*").unpack1("H*")
   end
 end

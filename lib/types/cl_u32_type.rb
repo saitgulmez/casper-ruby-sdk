@@ -20,4 +20,8 @@ class CLU32Type < CLType
   def to_json 
     to_string
   end
+
+  def to_bytes
+    [4].pack("C*").unpack1("H*")
+  end
 end

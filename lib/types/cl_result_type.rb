@@ -19,4 +19,8 @@ class CLResultType < CLType
   def to_json 
     to_string
   end
+
+  def to_bytes
+    [16].pack("C*").unpack1("H*")
+  end
 end

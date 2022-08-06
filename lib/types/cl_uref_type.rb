@@ -20,6 +20,10 @@ class CLURefType < CLType
   def to_json 
     to_string
   end
+
+  def to_bytes
+    [12].pack("C*").unpack1("H*")
+  end
 end
 
 AccessRights = {

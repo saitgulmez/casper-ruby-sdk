@@ -19,4 +19,9 @@ class CLKeyType < CLType
   def to_json 
     to_string
   end
+
+  def to_bytes
+    [11].pack("C*").unpack1("H*")
+  end
+
 end

@@ -19,4 +19,8 @@ class CLMapType < CLType
   def to_json 
     to_string
   end
+
+  def to_bytes
+    [17].pack("C*").unpack1("H*")
+  end
 end

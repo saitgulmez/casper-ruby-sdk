@@ -16,5 +16,8 @@ class CLUnitType < CLType
   def get_value 
     @value
   end
-
+  
+  def to_bytes
+    [9].pack("C*").unpack1("H*")
+  end
 end

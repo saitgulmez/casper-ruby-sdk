@@ -35,6 +35,7 @@ end
 
 class CLTuple1Type < CLTupleType
   def initialize(value = nil)  
+    super(value)
     @value = value
   end
 
@@ -50,10 +51,15 @@ class CLTuple1Type < CLTupleType
   def to_json 
     to_string
   end 
+
+  def to_bytes
+    [18].pack("C*").unpack1("H*")
+  end
 end
 
 class CLTuple2Type < CLTupleType
   def initialize(value = nil)  
+    super(value)
     @value = value
   end
 
@@ -68,11 +74,16 @@ class CLTuple2Type < CLTupleType
 
   def to_json 
     to_string
-  end 
+  end
+
+  def to_bytes
+    [19].pack("C*").unpack1("H*")
+  end
 end
 
 class CLTuple3Type < CLTupleType
   def initialize(value = nil)  
+    super(value)
     @value = value
   end
 
@@ -87,7 +98,11 @@ class CLTuple3Type < CLTupleType
 
   def to_json 
     to_string
-  end 
+  end
+
+  def to_bytes
+    [20].pack("C*").unpack1("H*")
+  end
 end
 
 

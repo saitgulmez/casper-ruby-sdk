@@ -25,7 +25,12 @@ class CLBoolType  < CLType
   def self.get_tag
     TAGS[:Bool]
   end
+  
   def get_tag
     TAGS[:Bool]
+  end
+
+  def to_bytes
+    [0].pack("C*").unpack1("H*")
   end
 end
