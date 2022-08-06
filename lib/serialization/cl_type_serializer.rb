@@ -1,4 +1,5 @@
 require_relative '../types/cl_bool_type.rb'
+require_relative '../types/cl_bool.rb'
 require_relative '../types/cl_i32_type.rb'
 require_relative '../types/cl_i64_type.rb'
 require_relative '../types/cl_u8_type.rb'
@@ -49,7 +50,7 @@ class CLTypeSerizalizer
     elsif cl_type.to_string == "URef"
       [12].pack("C*").unpack1("H*")
     elsif cl_type.to_string == "Option"
-      [13].pack("C*").unpack1("H*")
+      [13].pack("C*").unpack1("H*") + serialize_cl_type(cl_type.get_inner_type)
     elsif cl_type.to_string == "List"
       [14].pack("C*").unpack1("H*")
     elsif cl_type.to_string == "ByteArray"
@@ -59,11 +60,11 @@ class CLTypeSerizalizer
     elsif cl_type.to_string == "Map"
       [17].pack("C*").unpack1("H*")
     elsif cl_type.to_string == "Tuple1"
-      [18].pack("C*").unpack1("H*")
+      [18].pack("C*").unpack1("H*") + cl_type.get_data[0].to_bytes
     elsif cl_type.to_string == "Tuple2"
-      [19].pack("C*").unpack1("H*")
+      [19].pack("C*").unpack1("H*") + cl_type.get_data[0].to_bytes + cl_type.get_data[1].to_bytes
     elsif cl_type.to_string == "Tuple3"
-      [20].pack("C*").unpack1("H*")
+      [20].pack("C*").unpack1("H*") + cl_type.get_data[0].to_bytes + cl_type.get_data[1].to_bytes + cl_type.get_data[2].to_bytes
     elsif cl_type.to_string == "Any"
       [21].pack("C*").unpack1("H*")
     elsif cl_type.to_string == "PublicKey"
