@@ -2,11 +2,11 @@ require_relative '../serialization/cl_value_bytes_parsers.rb'
 
 def find_byte_parser_by_cl_type(type, value)
   if type == "Bool"
-    CLValueBytesParsers::CLStringBytesParser.to_bytes(value)
+    CLValueBytesParsers::CLBoolBytesParser.to_bytes(value)
   elsif type == "I32"
     CLValueBytesParsers::CLI32BytesParser.to_bytes(value)
   elsif type == "I64"
-    CLValueBytesParsers::CLI32BytesParser.to_bytes(value)
+    CLValueBytesParsers::CLI64BytesParser.to_bytes(value)
   elsif type == "U8"
     CLValueBytesParsers::CLU8BytesParser.to_bytes(value)
   elsif type == "U32"
