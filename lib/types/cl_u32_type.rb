@@ -9,8 +9,7 @@ class CLU32Type < CLType
   end
 
   def to_string
-    # I32_ID
-    TAGS.key(5).to_s
+    TAGS.key(4).to_s
   end
 
   def get_value 
