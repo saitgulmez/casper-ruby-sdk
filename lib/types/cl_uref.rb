@@ -13,7 +13,7 @@ class CLURef < CLValue
   attr_accessor :err
   # @param [Array<Integer>]
   # value is an uint8array
-  def initialize(value, access_rights)
+  def initialize(value = nil, access_rights = nil)
     super()
     # raise ArgumentError.new('The length of URefAddr should be 32') unless value.length == 32
     # rescue ArgumentError => e
@@ -74,13 +74,28 @@ class CLURef < CLValue
     uref_addr = arr[1]
     suffix = arr[2]
     uref_byte_length = uref_addr.length / 2
-
     decoded_addr = CLValueBytesParsers::CLURefBytesParser.decode_base_16(uref_addr)
     access_rights = suffix.to_i(8)
     # puts decoded_addr.inspect
     # puts access_rights
     raise ArgumentError.new("The value of \'access_rights\' is out of range. It must be >= 0 and <= 7. Received #{access_rights}") unless suffix.to_i(10).between?(0, 7)
     CLURef.new(decoded_addr, access_rights)
+  end
+
+  # Example: str = "uref-000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f-007";
+  def to_bytes(str)
+    raise ArgumentError.new("Expected a string value of \'uref-\' ") unless str.start_with?("uref-")
+    raise ArgumentError.new("Expected a value of 3") unless str[0..str.length-1].split('-', 3).size == 3
+    raise ArgumentError.new("Expected a value of 32") unless str[0..str.length-1].split('-', 3)[1].length/2 == 32
+
+    arr = str[0..str.length-1].split('-', 3)
+    prefix = arr[0]
+    uref_addr = arr[1]
+    suffix = arr[2]
+    uref_byte_length = uref_addr.length / 2
+    access_rights = suffix.to_i(8)
+    raise ArgumentError.new("The value of \'access_rights\' is out of range. It must be >= 0 and <= 7. Received #{access_rights}") unless suffix.to_i(10).between?(0, 7)
+    uref_addr + [access_rights].pack("C*").unpack1("H*")
   end
 
   def self.to_json(uref)
