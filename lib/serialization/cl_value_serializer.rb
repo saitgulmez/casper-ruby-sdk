@@ -35,6 +35,30 @@ class CLValueSerializer
     elsif type == "String"
       length = CLValueBytesParsers::CLStringBytesParser.to_bytes(value).length
       [length/2].pack("L<*").unpack1("H*") + CLValueBytesParsers::CLStringBytesParser.to_bytes(value) + [tag].pack("C*").unpack1("H*")
+    elsif type == "Key"
+      [11].pack("C*").unpack1("H*")
+    elsif type == "URef"
+      uref = clvalue.get_value
+      size = clvalue.to_bytes(uref).length/2
+      [size].pack("L<*").unpack1("H*") + clvalue.to_bytes(uref) + [tag].pack("C*").unpack1("H*")
+    elsif type == "Option"
+      [0].pack("L<*").unpack1("H*")
+    elsif type == "List"
+      [0].pack("L<*").unpack1("H*")
+    elsif type == "ByteArray"
+      [0].pack("L<*").unpack1("H*")
+    elsif type == "Result"
+      [0].pack("L<*").unpack1("H*")
+    elsif type == "Map"
+      [0].pack("L<*").unpack1("H*")
+    elsif type == "Tuple1"
+      [18].pack("C*").unpack1("H*") + cl_type.get_data[0].to_bytes
+    elsif type == "Tuple2"
+      [19].pack("C*").unpack1("H*") + cl_type.get_data[0].to_bytes + cl_type.get_data[1].to_bytes
+    elsif type == "Tuple3"
+      [20].pack("C*").unpack1("H*") + cl_type.get_data[0].to_bytes + cl_type.get_data[1].to_bytes + cl_type.get_data[2].to_bytes
+    elsif type == "Any"
+      [0].pack("L<*").unpack1("H*")
     elsif type == "PublicKey"
       [clvalue.to_hex.length/2].pack("L<*").unpack1("H*") + clvalue.to_hex + [tag].pack("C*").unpack1("H*")
     else
