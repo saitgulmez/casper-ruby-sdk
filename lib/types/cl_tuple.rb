@@ -118,10 +118,10 @@ class CLTuple1 < CLTuple
     super(1, data)
   end
 
-  # def get_cl_type
-  #   @cl_tuple_type = CLTuple1Type.new
-  #   @cl_tuple_type.to_string
-  # end
+  def get_cl_type
+    @cl_tuple_type = CLTuple1Type.new
+    @cl_tuple_type.to_string
+  end
 end
 
 class CLTuple2 < CLTuple
@@ -130,10 +130,10 @@ class CLTuple2 < CLTuple
     super(2, data)
   end
 
-  # def get_cl_type
-  #   @cl_tuple_type = CLTuple2Type.new
-  #   @cl_tuple_type.to_string
-  # end
+  def get_cl_type
+    @cl_tuple_type = CLTuple2Type.new
+    @cl_tuple_type.to_string
+  end
 end
 
 class CLTuple3 < CLTuple
@@ -143,8 +143,8 @@ class CLTuple3 < CLTuple
     # puts data
   end
 
-  # def get_cl_type
-  #   @cl_tuple_type = CLTuple3Type.new
-  #   @cl_tuple_type.to_string
-  # end
+  def get_cl_type
+    @cl_tuple_type = CLTuple3Type.new
+    @cl_tuple_type.to_string
+  end
 end
