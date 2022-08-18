@@ -9,7 +9,6 @@ class CLU8Type < CLType
   end
 
   def to_string
-    # I32_ID
     TAGS.key(3).to_s
   end
 

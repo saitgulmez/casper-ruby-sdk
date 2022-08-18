@@ -9,7 +9,6 @@ class CLUnitType < CLType
   end
 
   def to_string
-    # UNIT_ID
     TAGS.key(9).to_s
   end
 

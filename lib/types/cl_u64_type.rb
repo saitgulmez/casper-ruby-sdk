@@ -9,7 +9,6 @@ class CLU64Type < CLType
   end
 
   def to_string
-    # U64_ID
     TAGS.key(5).to_s
   end
 

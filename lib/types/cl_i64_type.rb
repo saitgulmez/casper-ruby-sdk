@@ -9,7 +9,6 @@ class CLI64Type < CLType
   end
 
   def to_string
-    # I32_ID
     TAGS.key(2).to_s
   end
 

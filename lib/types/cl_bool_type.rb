@@ -10,7 +10,6 @@ class CLBoolType  < CLType
   end
 
   def to_string
-    # BOOL_ID
     TAGS.key(0).to_s
   end
 

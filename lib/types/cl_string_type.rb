@@ -10,7 +10,6 @@ class CLStringType < CLType
   end
 
   def to_string
-    # STRING_ID
     TAGS.key(10).to_s
   end
 

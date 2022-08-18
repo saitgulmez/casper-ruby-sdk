@@ -9,7 +9,6 @@ class CLU512Type < CLType
   end
 
   def to_string
-    # U512_ID
     TAGS.key(8).to_s
   end
 

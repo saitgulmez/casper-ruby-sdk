@@ -9,7 +9,6 @@ class CLU256Type < CLType
   end
 
   def to_string
-    # U256_ID
     TAGS.key(7).to_s
   end
 
