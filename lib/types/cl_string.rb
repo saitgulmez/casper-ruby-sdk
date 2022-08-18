@@ -27,5 +27,13 @@ class CLString < CLValue
   def get_size
     @value.length
   end
+
+  def self.to_bytes(clvalue)
+    value = clvalue.get_value
+    len = value.length
+    hex1 = len.to_s(16).rjust(8, '0').scan(/../).reverse.join('')
+    hex2 = value.unpack("H*").first
+    hex1 + hex2
+    end
 end
 
