@@ -135,7 +135,7 @@ describe CLValueSerializer do
     
     describe CLTuple2 do
         let (:tuples) { [CLTuple2.new([u32_1, u32_2]), CLTuple2.new([u32_2, str])] }
-      it "should serialize CLTuple1" do
+      it "should serialize CLTuple2" do
         expect(serializer.to_bytes(tuples[0])).to eq("08000000110000007f000000130404")
         expect(serializer.to_bytes(tuples[1])).to eq("0d0000007f00000005000000414243444513040a")
       end
@@ -143,7 +143,7 @@ describe CLValueSerializer do
     
     describe CLTuple3 do
         let (:tuples) { [CLTuple3.new([u32_1, u32_2, u32_1]), CLTuple3.new([u32_2, str, u32_2])] }
-      it "should serialize CLTuple1" do
+      it "should serialize CLTuple3" do
         expect(serializer.to_bytes(tuples[0])).to eq("0c000000110000007f0000001100000014040404")
         expect(serializer.to_bytes(tuples[1])).to eq("110000007f0000000500000041424344457f00000014040a04")
       end
