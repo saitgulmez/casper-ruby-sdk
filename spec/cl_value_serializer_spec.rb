@@ -115,4 +115,38 @@ describe CLValueSerializer do
       expect(serializer.to_bytes(clvalue)).to eq("21000000010af5a943bacd2a8e91792eb4e9a25e32d536ab103372f57f89ebcadfc59820d116")
     end
   end
+
+  describe CLTuple do
+    let (:bool)  { CLBool.new(true) }
+    let (:u32_1) { CLu32.new(17) }
+    let (:u32_2) { CLu32.new(127) }
+    let (:str)   { CLString.new("ABCDE") }
+
+    describe CLTuple1 do
+        let (:tuple1) { CLTuple1.new([bool]) }
+        let (:tuples) { [CLTuple1.new([bool]), CLTuple1.new([u32_1]), CLTuple1.new([str])] }
+      it "should serialize CLTuple1" do
+        expect(serializer.to_bytes(tuple1)).to eq("01000000011200")
+        expect(serializer.to_bytes(tuples[0])).to eq("01000000011200")
+        expect(serializer.to_bytes(tuples[1])).to eq("04000000110000001204")
+        expect(serializer.to_bytes(tuples[2])).to eq("09000000050000004142434445120a")
+      end
+    end
+    
+    describe CLTuple2 do
+        let (:tuples) { [CLTuple2.new([u32_1, u32_2]), CLTuple2.new([u32_2, str])] }
+      it "should serialize CLTuple1" do
+        expect(serializer.to_bytes(tuples[0])).to eq("08000000110000007f000000130404")
+        expect(serializer.to_bytes(tuples[1])).to eq("0d0000007f00000005000000414243444513040a")
+      end
+    end
+    
+    describe CLTuple3 do
+        let (:tuples) { [CLTuple3.new([u32_1, u32_2, u32_1]), CLTuple3.new([u32_2, str, u32_2])] }
+      it "should serialize CLTuple1" do
+        expect(serializer.to_bytes(tuples[0])).to eq("0c000000110000007f0000001100000014040404")
+        expect(serializer.to_bytes(tuples[1])).to eq("110000007f0000000500000041424344457f00000014040a04")
+      end
+    end
+  end
 end
