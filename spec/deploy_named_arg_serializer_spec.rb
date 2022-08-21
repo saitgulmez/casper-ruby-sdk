@@ -10,7 +10,7 @@ describe DeployNamedArgSerializer do
     context "when DeployNamedArg has CLu32 value" do
       let (:arg)  { Casper::Entity::DeployNamedArgument.new("casper-testnet", CLu32.new(17)) }
       
-      it "should serialize DeployNamedArg with CLString value" do
+      it "should serialize DeployNamedArg with CLu32 value" do
         expect(serializer.to_bytes(arg)).to eq("0e0000006361737065722d746573746e6574040000001100000004")
       end
     end
