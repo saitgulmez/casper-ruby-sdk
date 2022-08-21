@@ -1,4 +1,23 @@
 require_relative '../types/cl_type.rb'
+require_relative '../types/cl_bool.rb'
+require_relative '../types/cl_i32.rb'
+require_relative '../types/cl_i64.rb'
+require_relative '../types/cl_u8.rb'
+require_relative '../types/cl_u32.rb'
+require_relative '../types/cl_u64.rb'
+require_relative '../types/cl_u128.rb'
+require_relative '../types/cl_u256.rb'
+require_relative '../types/cl_u512.rb'
+require_relative '../types/cl_unit.rb'
+require_relative '../types/cl_tuple.rb'
+require_relative '../types/cl_uref.rb'
+require_relative '../types/cl_option.rb'
+require_relative '../types/cl_string.rb'
+# require_relative '../types/cl_key.rb'
+require_relative '../types/cl_uref.rb'
+require_relative '../types/cl_tuple.rb'
+require_relative '../types/cl_public_key.rb'
+require_relative '../types/constants.rb'
 require_relative '../serialization/cl_value_bytes_parsers.rb'
 
 class CLValueSerializer
@@ -10,7 +29,7 @@ class CLValueSerializer
     # puts type
     # puts value
     # puts CLType::TAGS[type.to_sym]
-    puts tag
+    # puts tag
     [1].pack("L<*").unpack1("H*")
     serialized = ""
     if type == "Bool"
