@@ -1,8 +1,10 @@
+require_relative './deploy_named_argument.rb'
+
 module Casper
   module Entity
     class DeployExecutableItemInternal
-
-      def initialize(deploy_named_args)
+      attr_accessor :args
+      def initialize(deploy_named_args = [])
         @args = deploy_named_args
       end
 
@@ -16,6 +18,9 @@ module Casper
         @args.include?(arg) == true ? arg : nil
       end
 
+      def set_arg(deploy_named_arg)
+        @args << [deploy_named_arg]
+      end
     end
   end
 end
