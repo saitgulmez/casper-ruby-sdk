@@ -2,6 +2,9 @@ module Casper
   module Entity
     class StoredContractByName < DeployExecutableItemInternal
    
+      # @param [String] name
+      # @param [String] entry_point
+      # @param [Array<Array<DeployNamedArgument>>] args
       def initialize(name, entry_point, args)
         @tag = 2
         @name = name

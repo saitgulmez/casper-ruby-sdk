@@ -2,6 +2,8 @@ module Casper
   module Entity
     class StoredContractByHash < DeployExecutableItemInternal
       
+      # @param [String] name
+      # @param [String] entry_point
       def initialize(hash, entry_point)
         @tag = 1
         @hash = hash

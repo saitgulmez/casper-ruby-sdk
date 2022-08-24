@@ -2,6 +2,10 @@ module Casper
   module Entity
     class StoredVersionedContractByHash < DeployExecutableItemInternal
    
+      # @param [String] hash
+      # @param [Integer] version
+      # @param [String] entry_point
+      # @param [Array<Array<DeployNamedArgument>>] args
       def initialize(hash, version, entry_point, args)
         @tag = 3
         @hash = hash
