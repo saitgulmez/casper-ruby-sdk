@@ -4,7 +4,7 @@ module Casper
 
       # @param [String] module_bytes
       # @param [Array<Array<DeployNamedArgument>>] args
-      def initialize(module_bytes, args)
+      def initialize(module_bytes=nil, args = [])
         @tag = 0
         @module_bytes = module_bytes
         @args = args
@@ -20,6 +20,10 @@ module Casper
 
       def get_args
         @args
+      end
+
+      def set_arg(deploy_named_arg)
+        @args << [deploy_named_arg]
       end
     end
   end
