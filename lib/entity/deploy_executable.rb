@@ -40,6 +40,14 @@ module Casper
         @transfer = DeployExecutableTransfer.new([])
         @transfer.set_arg(arg1)
         @transfer.set_arg(arg2)
+        # @transfer
+
+        if source_purse != nil
+          @transfer.set_arg(DeployNamedArgument.new("source", source_purse))
+          # @transfer
+        end
+        @transfer.set_arg(DeployNamedArgument.new("target", @target))
+        @transfer.set_arg(DeployNamedArgument.new("id", CLu64.new(id)))
         @transfer
       end
     end
