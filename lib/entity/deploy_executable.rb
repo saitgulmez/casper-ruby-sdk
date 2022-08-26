@@ -5,7 +5,8 @@ require_relative './deploy_executable_transfer.rb'
 module Casper
   module Entity
     class DeployExecutable 
-
+      attr_accessor :module_bytes, :transfer, :stored_contract_by_hash, :stored_contract_by_name,
+      :stored_versioned_contract_by_hash, :stored_versioned_contract_by_name
       def initialize
         @module_bytes = nil
         @stored_contract_by_hash = nil
@@ -50,6 +51,91 @@ module Casper
         @transfer.set_arg(DeployNamedArgument.new("id", CLu64.new(id)))
         @transfer
       end
+
+      def set_module_bytes(module_bytes)
+        @module_bytes = module_bytes
+      end
+
+      # @return [ModuleBytes] module_bytes
+      def get_module_bytes
+        @module_bytes
+      end
+
+      # @return [Boolean]
+      def module_bytes?
+        @module_bytes != nil
+      end
+
+      # @param [DeployExecutableTransfer] transfer
+      def set_transfer(transfer)
+        @transfer = transfer
+      end
+
+      def get_transfer
+        @transfer
+      end
+
+      # @return [Boolean]
+      def transfer?
+        @transfer != nil
+      end
+
+      # @param [StoredContractByHash] transfer
+      def set_stored_contract_by_hash(stored_contract_by_hash)
+        @stored_contract_by_hash = stored_contract_by_hash
+      end
+
+      def get_stored_contract_by_hash
+        @stored_contract_by_hash
+      end
+
+      # @return [Boolean]
+      def stored_contract_by_hash?
+        @stored_contract_by_hash != nil
+      end
+
+      # @param [StoredContractByName] stored_contract_by_name
+      def set_stored_contract_by_name(stored_contract_by_name)
+        @stored_contract_by_name = stored_contract_by_name
+      end
+
+      def get_stored_contract_by_name
+        @stored_contract_by_name
+      end
+
+      # @return [Boolean]
+      def stored_contract_by_name?
+        @stored_contract_by_name != nil
+      end
+
+      # @param [StoredVersionedContractByHash] stored_contract_by_name
+      def set_stored_versioned_contract_by_hash(stored_versioned_contract_by_hash)
+        @stored_versioned_contract_by_hash = stored_versioned_contract_by_hash
+      end
+
+      def get_stored_versioned_contract_by_hash
+        @stored_versioned_contract_by_hash
+      end
+
+      # @return [Boolean]
+      def stored_versioned_contract_by_hash?
+        @stored_versioned_contract_by_hash != nil
+      end
+
+      # @param [StoredVersionedContractByName] stored_contract_by_name
+      def set_stored_versioned_contract_by_name(stored_versioned_contract_by_name)
+        @stored_versioned_contract_by_name = stored_versioned_contract_by_name
+      end
+
+      def get_stored_versioned_contract_by_name
+        @stored_versioned_contract_by_name
+      end
+
+      # @return [Boolean]
+      def stored_versioned_contract_by_name?
+        @stored_versioned_contract_by_name != nil
+      end
+
     end
   end
 end
