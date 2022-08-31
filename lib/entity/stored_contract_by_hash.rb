@@ -4,10 +4,16 @@ module Casper
       
       # @param [String] name
       # @param [String] entry_point
-      def initialize(hash, entry_point)
+      # @param [Array<Array<DeployNamedArgument>>] args
+      def initialize(hash, entry_point, args)
         @tag = 1
         @hash = hash
         @entry_point = entry_point
+        @args = args
+      end
+
+      def get_tag
+        @tag
       end
 
       def get_hash
@@ -18,8 +24,8 @@ module Casper
         @entry_point
       end
 
-      def get_tag
-        @tag
+      def get_args
+        @args
       end
     end
   end
