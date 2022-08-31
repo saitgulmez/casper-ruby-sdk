@@ -27,7 +27,22 @@ module Casper
       def get_args
         @args
       end
-      
+
+    
+      def to_bytes
+        serializer = DeployNamedArgSerializer.new
+        num_of_args = @args.length
+        bytes = Utils::ByteUtils.to_u8(@tag) 
+        bytes += CLValueBytesParsers::CLStringBytesParser.to_bytes(@name)
+        bytes += CLValueBytesParsers::CLStringBytesParser.to_bytes(@entry_point)
+        bytes += Utils::ByteUtils.to_u32(num_of_args)
+        @args.each do |arg|
+          arg.each do |item|
+            bytes += serializer.to_bytes(item)
+          end
+        end
+        bytes
+      end
     end
   end
 end
