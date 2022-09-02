@@ -41,7 +41,7 @@ module Casper
             bytes += serializer.to_bytes(item)
           end
         end
-        bytes
+        Utils::ByteUtils.hex_to_byte_array(bytes)
       end
     end
   end
