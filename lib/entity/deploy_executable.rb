@@ -38,7 +38,7 @@ module Casper
         end
         arg1 = DeployNamedArgument.new("amount", CLu512.new(amount))
         # arg2 = DeployNamedArgument.new("target", @target)
-        # @transfer = DeployExecutableTransfer.new([])
+        @transfer = DeployExecutableTransfer.new([])
         # @transfer.set_arg(DeployNamedArgument.new("target", @target))
         # @transfer.set_arg(arg1)
         # @transfer.set_arg(arg2)
@@ -155,7 +155,7 @@ module Casper
         elsif transfer?
           @transfer.to_bytes
         end
-        raise "failed to serialize ExecutableDeployItemJsonWrapper
+        raise "failed to serialize ExecutableDeployItemJsonWrapper"
       end
     end
   end
