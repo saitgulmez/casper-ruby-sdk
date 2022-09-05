@@ -37,10 +37,11 @@ module Casper
           raise ArgumentError.new("Please specify target")
         end
         arg1 = DeployNamedArgument.new("amount", CLu512.new(amount))
-        arg2 = DeployNamedArgument.new("target", @target)
-        @transfer = DeployExecutableTransfer.new([])
-        @transfer.set_arg(arg1)
-        @transfer.set_arg(arg2)
+        # arg2 = DeployNamedArgument.new("target", @target)
+        # @transfer = DeployExecutableTransfer.new([])
+        # @transfer.set_arg(DeployNamedArgument.new("target", @target))
+        # @transfer.set_arg(arg1)
+        # @transfer.set_arg(arg2)
         # @transfer
 
         if source_purse != nil
@@ -136,6 +137,26 @@ module Casper
         @stored_versioned_contract_by_name != nil
       end
 
+      def to_bytes
+        if module_bytes?
+          @module_bytes.to_bytes
+        elsif stored_contract_by_name?
+          @stored_contract_by_name.to_bytes
+        elsif stored_contract_by_hash?
+          @stored_contract_by_hash.to_bytes
+        elsif stored_contract_by_name?
+          @stored_contract_by_name.to_bytes
+        elsif stored_versioned_contract_by_hash?
+          @stored_versioned_contract_by_hash.to_bytes
+        elsif stored_versioned_contract_by_name?
+          @stored_versioned_contract_by_name.to_bytes
+        elsif stored_versioned_contract_by_hash?
+          @stored_versioned_contract_by_hash.to_bytes
+        elsif transfer?
+          @transfer.to_bytes
+        end
+        raise "failed to serialize ExecutableDeployItemJsonWrapper
+      end
     end
   end
 end
