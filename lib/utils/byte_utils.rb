@@ -57,6 +57,12 @@ module Utils
       [n].pack("l<*").unpack("H*").first
       # [n].pack("l<*").unpack1("H*")
     end
+    
+    def to_i64(n)
+      # [value].pack("l<*").unpack("C*")
+      [n].pack("q<*").unpack("H*").first
+      # [n].pack("l<*").unpack1("H*")
+    end
 
     def to_u8(n)
       [n].pack("C").unpack1("H*")
@@ -76,6 +82,26 @@ module Utils
     def hex_from_little_endian_to_big_endian(hex_str)
       # [hex_str].pack("H*").unpack('N*').pack('V*').unpack1('H*')
       [hex_str].pack("H*").unpack('N*').pack('V*').unpack('H*').first
+    end
+
+    def hex_to_i32_value(hex_str)
+      [hex_str].pack("H*").unpack("l*").first
+    end
+
+    def hex_to_i64_value(hex_str)
+      [hex_str].pack("H*").unpack("q*").first
+    end
+
+    def hex_to_u8_value(hex_str)
+      [hex_str].pack("H*").unpack("C*").first
+    end
+
+    def hex_to_u32_value(hex_str)
+      [hex_str].pack("H*").unpack("L*").first
+    end
+
+    def hex_to_u64_value(hex_str)
+      [hex_str].pack("H*").unpack("Q*").first
     end
   end
 end
