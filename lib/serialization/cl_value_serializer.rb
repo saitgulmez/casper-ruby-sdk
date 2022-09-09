@@ -51,7 +51,7 @@ class CLValueSerializer
     elsif type == "U512"
       [8].pack("L<*").unpack1("H*")
     elsif type == "Unit"
-      [9].pack("C*").unpack1("H*")
+      [0].pack("L<*").unpack1("H*") + [tag].pack("C*").unpack1("H*")
     elsif type == "String"
       length = CLValueBytesParsers::CLStringBytesParser.to_bytes(value).length
       [length/2].pack("L<*").unpack1("H*") + CLValueBytesParsers::CLStringBytesParser.to_bytes(value) + [tag].pack("C*").unpack1("H*")
