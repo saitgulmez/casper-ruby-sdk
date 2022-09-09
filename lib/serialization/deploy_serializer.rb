@@ -18,15 +18,31 @@ class DeploySerializer
     session = deploy.get_session
     key1 = payment.keys[0]
     # args = []
-    if payment.keys[0] == :StoredContractByName
+    if payment.keys[0] == :StoredContractByHash
+
+      temp_args = []
+      hash = payment[:StoredContractByHash][:hash]
+      entry_point = payment[:StoredContractByHash][:entry_point]
+      args = payment[:StoredContractByHash][:args]
+      stored_contract_by_hash = Casper::Entity::StoredContractByHash.new(hash, entry_point, args)
+      
+      args.each do |arg|
+        name1 = arg[0] # => "quantity"
+        clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
+        clvalue = build_cl_value(arg[1])
+        # puts clvalue
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByHash.new(name, entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+    elsif payment.keys[0] == :StoredContractByName
       temp_args = []
       name = payment[:StoredContractByName][:name]
       entry_point = payment[:StoredContractByName][:entry_point]
       args = payment[:StoredContractByName][:args]
-      num_of_args = args.size
 
       stored_contract_by_name = Casper::Entity::StoredContractByName.new(name, entry_point, args)
-      args[0]
       args.each do |arg|
         name1 = arg[0] # => "quantity"
         clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
@@ -67,15 +83,43 @@ class DeploySerializer
     result
   end
 
-  def build_cl_value_from_hash(h = {})
+  def build_cl_value(h = {})
     cl_type = h[:cl_type]
     bytes = h[:bytes]
     parsed = h[:parsed]
-
-    if cl_type == "I32"
+    if cl_type == "Bool"
+      CLValueBytesParsers::CLBoolBytesParser.from_bytes([bytes])
+    elsif cl_type == "I32"
       value = Utils::ByteUtils.hex_to_integer(bytes)
       CLi32.new(value)
+    elsif cl_type == "I64"
+      value = Utils::ByteUtils.hex_to_i64_value(bytes)
+      CLi64.new(value)
+    elsif cl_type == "U8"
+      value = Utils::ByteUtils.hex_to_u8_value(bytes)
+      CLu8.new(value)
+    elsif cl_type == "U32"
+      value = Utils::ByteUtils.hex_to_u32_value(bytes)
+      CLu32.new(value)
+    elsif cl_type == "U64"
+      value = Utils::ByteUtils.hex_to_u64_value(bytes)
+      CLu32.new(value)
+    elsif cl_type == "Unit"
+      # value = CLValueBytesParsers::CLUnitBytesParser.from_bytes(bytes)
+      if bytes == ""
+        value = nil
+        CLUnit.new(value)
+      end
+    elsif cl_type == "String"
+      value = CLValueBytesParsers::CLStringBytesParser.from_bytes(bytes)
+      CLString.new(value)
+    elsif cl_type == "URef"
+      value = Utils::ByteUtils.hex_to_byte_array(bytes)
+      CLValueBytesParsers::CLURefBytesParser.from_bytes(value)
+    elsif cl_type == "PublicKey"
+      CLPublicKey.from_hex(bytes)
     end
+
 
   end
 end
