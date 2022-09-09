@@ -46,8 +46,8 @@ describe CLValueSerializer do
 
   describe "CLu32 Value Serializer" do 
     
-    MAX_U32 = 2.pow(32) - 1
-    MIN_U32 = 0 
+    # MAX_U32 = 2.pow(32) - 1
+    # MIN_U32 = 0 
     let (:u32_1) { CLu32.new(MAX_U32) } 
     let (:u32_2) { CLu32.new(MIN_U32) }
 
@@ -58,8 +58,8 @@ describe CLValueSerializer do
   end
 
   describe "CLu64 Value Serializer" do 
-    MAX_U64 = 2.pow(64) - 1
-    MIN_U64 = 0
+    # MAX_U64 = 2.pow(64) - 1
+    # MIN_U64 = 0
     let (:u64_1) { CLu64.new(MAX_U64) }
     let (:u64_2) { CLu64.new(1) }
 
@@ -127,6 +127,14 @@ describe CLValueSerializer do
         expect(serializer.to_bytes(tuples[0])).to eq("0c000000110000007f0000001100000014040404")
         expect(serializer.to_bytes(tuples[1])).to eq("110000007f0000000500000041424344457f00000014040a04")
       end
+    end
+  end
+
+  describe "CLUnit Value Serializer" do  
+    let(:unit)  {CLUnit.new()}
+    it "should serialize CLUnit values" do  
+      puts serializer.to_bytes(unit)
+      expect(serializer.to_bytes(unit)).to eql("0000000009")
     end
   end
 end
