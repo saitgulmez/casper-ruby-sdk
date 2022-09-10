@@ -16,10 +16,9 @@ class DeploySerializer
         
     payment = deploy.get_payment
     session = deploy.get_session
-    key1 = payment.keys[0]
-    # args = []
-    if payment.keys[0] == :StoredContractByHash
-
+    if payment.keys[0] == :ModuleBytes
+      result += ""
+    elsif payment.keys[0] == :StoredContractByHash
       temp_args = []
       hash = payment[:StoredContractByHash][:hash]
       entry_point = payment[:StoredContractByHash][:entry_point]
@@ -47,15 +46,133 @@ class DeploySerializer
         name1 = arg[0] # => "quantity"
         clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
         clvalue = build_cl_value(arg[1])
-        # puts clvalue
         temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByName.new(name, entry_point, temp_args).to_bytes)
       result += temp
       temp = nil
+    elsif payment.keys[0] == :StoredVersionedContractByHash
+      temp_args = []
+      hash = payment[:StoredVersionedContractByHash][:name]
+      version = payment[:StoredVersionedContractByHash][:version]
+      entry_point = payment[:StoredVersionedContractByHash][:entry_point]
+      args = payment[:StoredVersionedContractByHash][:args]
+
+      stored_versioned_contract_by_hash = Casper::Entity::StoredVersionedContractByHash.new(hash, version, entry_point, args)
+      args.each do |arg|
+        name1 = arg[0] 
+        clvalue_hash = arg[1] 
+        clvalue = build_cl_value(arg[1])
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByHash.new(name, version,entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+    elsif payment.keys[0] == :StoredVersionedContractByName
+      temp_args = []
+      name = payment[:StoredVersionedContractByName][:name]
+      version = payment[:StoredVersionedContractByName][:version]
+      entry_point = payment[:StoredVersionedContractByName][:entry_point]
+      args = payment[:StoredVersionedContractByName][:args]
+
+      stored_versioned_contract_by_name = Casper::Entity::StoredVersionedContractByName.new(name, version, entry_point, args)
+      args.each do |arg|
+        name1 = arg[0] 
+        clvalue_hash = arg[1] 
+        clvalue = build_cl_value(arg[1])
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByName.new(name, version,entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+    elsif payment.keys[0] == :Transfer
+      temp_args = []
+      args = payment[:Transfer][:args]
+
+      transfer = Casper::Entity::DeployExecutableTransfer.new(args)
+      args.each do |arg|
+        name1 = arg[0] # => "amount"
+        clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
+        clvalue = build_cl_value(arg[1])
+        # puts clvalue
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::DeployExecutableTransfer.new(temp_args).to_bytes)
+      result += temp
+      temp = nil
     end
 
-    if session.keys[0] == :Transfer
+    if session.keys[0] == :ModuleBytes
+      result += ""
+    elsif session.keys[0] == :StoredContractByHash
+      temp_args = []
+      hash = session[:StoredContractByHash][:hash]
+      entry_point = session[:StoredContractByHash][:entry_point]
+      args = session[:StoredContractByHash][:args]
+      stored_contract_by_hash = Casper::Entity::StoredContractByHash.new(hash, entry_point, args)
+      
+      args.each do |arg|
+        name1 = arg[0] # => "quantity"
+        clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
+        clvalue = build_cl_value(arg[1])
+        # puts clvalue
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByHash.new(name, entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+    elsif session.keys[0] == :StoredContractByName
+      temp_args = []
+      name = session[:StoredContractByName][:name]
+      entry_point = session[:StoredContractByName][:entry_point]
+      args = session[:StoredContractByName][:args]
+
+      stored_contract_by_name = Casper::Entity::StoredContractByName.new(name, entry_point, args)
+      args.each do |arg|
+        name1 = arg[0] # => "quantity"
+        clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
+        clvalue = build_cl_value(arg[1])
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByName.new(name, entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+    elsif session.keys[0] == :StoredVersionedContractByHash
+      temp_args = []
+      hash = session[:StoredVersionedContractByHash][:name]
+      version = session[:StoredVersionedContractByHash][:version]
+      entry_point = session[:StoredVersionedContractByHash][:entry_point]
+      args = session[:StoredVersionedContractByHash][:args]
+
+      stored_versioned_contract_by_hash = Casper::Entity::StoredVersionedContractByHash.new(hash, version, entry_point, args)
+      args.each do |arg|
+        name1 = arg[0] 
+        clvalue_hash = arg[1] 
+        clvalue = build_cl_value(arg[1])
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByHash.new(name, version,entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+    elsif session.keys[0] == :StoredVersionedContractByName
+      temp_args = []
+      name = session[:StoredVersionedContractByName][:name]
+      version = session[:StoredVersionedContractByName][:version]
+      entry_point = session[:StoredVersionedContractByName][:entry_point]
+      args = session[:StoredVersionedContractByName][:args]
+
+      stored_versioned_contract_by_name = Casper::Entity::StoredVersionedContractByName.new(name, version, entry_point, args)
+      args.each do |arg|
+        name1 = arg[0] 
+        clvalue_hash = arg[1] 
+        clvalue = build_cl_value(arg[1])
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByName.new(name, version,entry_point, temp_args).to_bytes)
+      result += temp
+      temp = nil
+
+    elsif session.keys[0] == :Transfer
       temp_args = []
       args = session[:Transfer][:args]
 
