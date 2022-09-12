@@ -16,8 +16,21 @@ class DeploySerializer
         
     payment = deploy.get_payment
     session = deploy.get_session
-    if payment.keys[0] == :ModuleBytes
-      result += ""
+    if payment.keys[0] == :ModuleBytes 
+      temp_args = []
+      module_bytes = payment[:ModuleBytes][:module_bytes]
+      args = payment[:ModuleBytes][:args]
+      module_bytes = Casper::Entity::ModuleBytes.new(module_bytes, args)
+      args.each do |arg|
+        name1 = arg[0]
+        clvalue_hash = arg[1]
+        clvalue = build_cl_value(arg[1])
+        # puts clvalue
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::ModuleBytes.new(module_bytes, temp_args).to_bytes)
+      result += temp
+      temp = nil
     elsif payment.keys[0] == :StoredContractByHash
       temp_args = []
       hash = payment[:StoredContractByHash][:hash]
@@ -103,7 +116,19 @@ class DeploySerializer
     end
 
     if session.keys[0] == :ModuleBytes
-      result += ""
+      temp_args = []
+      module_bytes = session[:ModuleBytes][:module_bytes]
+      args = session[:ModuleBytes][:args]
+      module_bytes = Casper::Entity::ModuleBytes.new(module_bytes, args)
+      args.each do |arg|
+        name1 = arg[0]
+        clvalue_hash = arg[1]
+        clvalue = build_cl_value(arg[1])
+        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      end
+      temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::ModuleBytes.new(module_bytes, temp_args).to_bytes)
+      result += temp
+      temp = nil
     elsif session.keys[0] == :StoredContractByHash
       temp_args = []
       hash = session[:StoredContractByHash][:hash]
