@@ -25,6 +25,24 @@ module Casper
       def set_arg(deploy_named_arg)
         @args << [deploy_named_arg]
       end
+
+      def to_bytes
+        bytes = ""
+        serializer = DeployNamedArgSerializer.new
+        num_of_args = @args.length
+        bytes += Utils::ByteUtils.to_u8(@tag)
+
+        if @module_bytes == ""
+          bytes += Utils::ByteUtils.to_u32(0)
+        end
+        bytes += Utils::ByteUtils.to_u32(num_of_args)
+        @args.each do |arg|
+          arg.each do |item|
+            bytes += serializer.to_bytes(item)
+          end
+        end
+        Utils::ByteUtils.hex_to_byte_array(bytes)
+      end
     end
   end
 end 
