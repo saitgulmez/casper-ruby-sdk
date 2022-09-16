@@ -222,7 +222,8 @@ class DeploySerializer
       deploy_approval = Casper::Entity::DeployApproval.new(approval)
       result += deploy_approval_serializer.to_bytes(deploy_approval)
     end
-    result
+    # result
+    Utils::ByteUtils.hex_to_byte_array(result)
   end
 
   def build_cl_value(h = {})
