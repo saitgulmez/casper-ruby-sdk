@@ -380,27 +380,27 @@ describe CLTuple do
     it "should return proper CLType" do 
       bool = CLBool.new(true)
       t1 = CLTuple1.new([bool])
-      expect(t1.get_cl_type).to eql("Tuple1 (Bool)")
+      expect(t1.get_full_type).to eql("Tuple1 (Bool)")
 
       str = CLString.new("ABC")
       t2 = CLTuple1.new([str])
-      expect(t2.get_cl_type).to eql("Tuple1 (String)")
+      expect(t2.get_full_type).to eql("Tuple1 (String)")
 
       i32 = CLi32.new(99)
       t3 = CLTuple1.new([i32])
-      expect(t3.get_cl_type).to eql("Tuple1 (I32)")
+      expect(t3.get_full_type).to eql("Tuple1 (I32)")
     end
 
     it "should throw an error when tuple elements are not in a correct format" do 
       # tuple = CLTuple1.new([CLBool.new(true), CLBool.new(false)])
       tuple = CLTuple1.new(['a'])
-      err = tuple.get_cl_type
+      err = tuple.get_full_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
     end
     it "should return error when tuple is not correctly built" do 
       bool = CLBool.new(false)
       tuple1 = CLTuple1.new([bool, bool])
-      err = tuple1.get_cl_type
+      err = tuple1.get_full_type
       expect {raise err}.to raise_error(StandardError, "Too many elements!")
     end
 
@@ -427,25 +427,25 @@ describe CLTuple do
       bool = CLBool.new(true)
       str = CLString.new("ABC")
       t1 = CLTuple2.new([bool, str])
-      expect(t1.get_cl_type).to eql("Tuple2 (Bool, String)")
+      expect(t1.get_full_type).to eql("Tuple2 (Bool, String)")
 
 
       str2 = CLString.new("XYZ")
       u512 = CLu512.new(MAX_U512)
       t2 = CLTuple2.new([str,u512])
-      expect(t2.get_cl_type).to eql("Tuple2 (String, U512)")
+      expect(t2.get_full_type).to eql("Tuple2 (String, U512)")
     end
 
     it "should throw an error when tuple elements are not in a correct format" do 
       tuple = CLTuple2.new(['a', 10])
-      err = tuple.get_cl_type
+      err = tuple.get_full_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
     end
 
     it "should return error when tuple is not correctly built" do 
       bool = CLBool.new(false)
       tuple2 = CLTuple2.new([bool, bool, bool])
-      err = tuple2.get_cl_type
+      err = tuple2.get_full_type
       expect {raise err}.to raise_error(StandardError, "Too many elements!")
     end
     
@@ -463,19 +463,19 @@ describe CLTuple do
       str = CLString.new("ABC")
       u512 = CLu512.new(MAX_U512)
       t1 = CLTuple3.new([bool, str, u512])
-      expect(t1.get_cl_type).to eql("Tuple3 (Bool, String, U512)")
+      expect(t1.get_full_type).to eql("Tuple3 (Bool, String, U512)")
     end
 
     it "should throw an error when tuple elements are not in a correct format" do 
       tuple = CLTuple3.new(['a', 10, true])
-      err = tuple.get_cl_type
+      err = tuple.get_full_type
       expect {raise err }.to raise_error(StandardError, "Invalid data type(s) provided.")
     end
 
     it "should return error when tuple is not correctly built" do 
       bool = CLBool.new(false)
       tuple3 = CLTuple3.new([bool, bool, bool, bool])
-      err = tuple3.get_cl_type
+      err = tuple3.get_full_type
       expect {raise err}.to raise_error(StandardError, "Too many elements!")
     end
   end
