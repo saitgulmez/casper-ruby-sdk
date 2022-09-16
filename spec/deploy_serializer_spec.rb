@@ -72,6 +72,6 @@ describe DeploySerializer do
     }
     deploy = Casper::Entity::Deploy.new(json_deploy[:hash], json_deploy[:header], json_deploy[:payment], json_deploy[:session], json_deploy[:approvals])
     # puts Utils::ByteUtils.hex_to_byte_array(serializer.to_bytes(deploy))
-    expect(serializer.to_bytes(deploy)).to eql(serialized_deploy)
+    expect(Utils::ByteUtils.byte_array_to_hex(serializer.to_bytes(deploy))).to eql(serialized_deploy)
   end
 end
