@@ -8,6 +8,7 @@ require_relative '../serialization/cl_value_bytes_parsers.rb'
 class CLTuple < CLValue  
   include CLValueBytesParsers::CLTupleBytesParser
   attr_accessor :size, :data
+  # before_filter: get_cl_type
   def initialize(size, data)
     super()
     @size = size
@@ -32,10 +33,10 @@ class CLTuple < CLValue
         e.err
       end
     end
-    get_cl_type
+    get_full_type
   end
 
-  def get_cl_type
+  def get_full_type
     if @all_members_are_clvalues
       if @data.size == @size
         if @data.size == 1
