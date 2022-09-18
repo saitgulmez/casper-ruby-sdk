@@ -9,7 +9,14 @@ require 'timeout'
 require 'net/http'
 # require "./rpc/rpc.rb"
 require_relative './rpc/rpc_error.rb'
+require_relative './rpc/rpc_client.rb'
+
+# Dir["./entity/*.rb"].each {|file|  require  file }
+# Dir["./serialization/*.rb"].each {|file|  require file }
+# Dir["./types/*.rb"].each {|file|  require file }
+require_relative './include.rb'
 # Class for interacting with the network via RPC
+# puts "Hello"
 module Casper
   class CasperClient 
     attr_accessor :ip_address, :port, :url, :state_root_hash
@@ -33,6 +40,8 @@ module Casper
       @rpc_error = Casper::RpcError::ErrorHandle.new
       @err = @rpc_error.error_handling(@url)
 
+      @pr = []
+
     end
 
     def get_error 
@@ -40,11 +49,28 @@ module Casper
     end
 
     # @return [Array<Hash>] peers array
+    # def info_get_peers
+    #     begin
+    #       client = Jimson::Client.new(@url)
+    #       response = client.info_get_peers
+    #       @peer_array = response["peers"]
+    #     rescue
+    #       @rpc_error = Casper::RpcError::ErrorHandle.new
+    #       @error = @rpc_error.error_handling(@url)
+    #     end
+    # end
+
+    # @return [Array<Hash>] peers array
     def info_get_peers
         begin
           client = Jimson::Client.new(@url)
           response = client.info_get_peers
-          @peer_array = response["peers"]
+          @peers = response["peers"]
+          # @peers.map! do |peer|
+          #   peer.symbolize_keys
+          # end
+          @peers.map { |item| @pr << Casper::Entity::Peer.new(item.symbolize_keys) }
+          @pr
         rescue
           @rpc_error = Casper::RpcError::ErrorHandle.new
           @error = @rpc_error.error_handling(@url)
@@ -68,19 +94,40 @@ module Casper
     # Get information about a single deploy by hash.
     # @param [String] deploy_hash
     # @return [Hash] Deploy
+    # def info_get_deploy(deploy_hash)
+    #   begin
+    #     status = Timeout::timeout(10) {
+    #       client = Jimson::Client.new(@url)
+    #       response = client.info_get_deploy({"deploy_hash"=> deploy_hash })
+    #       if (deploy_hash == "" || deploy_hash == nil)
+    #         Casper::RpcError::InvalidParameter.error
+    #       end
+    #       @deploy = response["deploy"]
+    #       # @deploy.keys.each do |key|  
+    #       #     @deploy[(key.to_sym rescue key) || key] = @deploy.delete(key)
+    #       # end
+    #       @deploy
+    #     }
+    #   rescue
+    #     Casper::RpcError::InvalidParameter.error 
+    #   end
+    # end
     def info_get_deploy(deploy_hash)
+      @dep = nil
       begin
-        status = Timeout::timeout(10) {
+        status = Timeout::timeout(60) {
           client = Jimson::Client.new(@url)
           response = client.info_get_deploy({"deploy_hash"=> deploy_hash })
           if (deploy_hash == "" || deploy_hash == nil)
             Casper::RpcError::InvalidParameter.error
           end
-          @deploy = response["deploy"]
           # @deploy.keys.each do |key|  
           #     @deploy[(key.to_sym rescue key) || key] = @deploy.delete(key)
           # end
-          @deploy
+          temp = []
+          @deploy = response["deploy"]
+          @deploy.deep_symbolize_keys!
+          Casper::Entity::Deploy.new(@deploy[:hash], @deploy[:header], @deploy[:payment], @deploy[:session], @deploy[:approvals])
         }
       rescue
         Casper::RpcError::InvalidParameter.error 
@@ -111,8 +158,8 @@ module Casper
           response = client.chain_get_block_transfers({
             "block_identifier" => {"Hash" => block_hash}
           })
-          @block_transfers = response["transfers"]
-          @block_transfers
+          @transfers = response["transfers"]
+          @transfers.map { |transfer| Casper::Entity::Transfer.new(transfer.deep_symbolize_keys!)}
         }
       rescue
         Casper::RpcError::InvalidParameter.error
@@ -230,5 +277,13 @@ module Casper
         @error = @rpc_error.error_handling(@url)
       end
     end
+    
+    def put_deploy(deploy)
+      client = Jimson::Client.new(url)
+      response = client.account_put_deploy(deploy)
+      response['deploy_hash']
+    end
+  
   end
+
 end
