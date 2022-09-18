@@ -13,10 +13,10 @@ KEY_TYPE_ACCOUNT = 0
 KEY_TYPE_HASH    = 1
 KEY_TYPE_UREF    = 2
 
-ACCOUNT_HASH_ID = 'AccountHash'
+# ACCOUNT_HASH_ID = 'AccountHash'
 ACCOUNT_HASH_LENGTH = 32
 
-UREF_ID = 'URef'
+# UREF_ID = 'URef'
 
 class CLKey < CLValue  
   include CLValueBytesParsers::CLKeyBytesParser
