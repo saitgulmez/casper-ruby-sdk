@@ -261,6 +261,18 @@ module CLValueBytesParsers
       end
     end 
   end
+ 
+  module CLKeyBytesParser
+    extend self
+
+    def to_bytes(cl_list)
+
+    end
+
+    def from_bytes(byte_array)
+
+    end
+  end
 
   module CLURefBytesParser
     extend self
@@ -304,7 +316,67 @@ module CLValueBytesParsers
       
     end
   end
- 
+
+  module CLListBytesParser
+    extend self
+
+    def to_bytes(cl_list)
+
+    end
+
+    def from_bytes(byte_array)
+
+    end
+  end
+  
+  module CLByteArrayBytesParser
+    extend self
+
+    def to_bytes(cl_byte_array)
+
+    end
+
+    def from_bytes(byte_array)
+      
+    end
+  end
+  
+  module CLResultBytesParser
+    extend self
+
+    def to_bytes(cl_result)
+
+    end
+
+    def from_bytes(byte_array)
+      
+    end
+  end
+  
+  module CLMapBytesParser
+    extend self
+
+    def to_bytes(cl_map)
+
+    end
+
+    def from_bytes(byte_array)
+      
+    end
+  end
+  
+  module CLAnyBytesParser
+    extend self
+
+      def to_bytes(cl_any)
+
+      end
+
+      def from_bytes(byte_array)
+
+      end
+  end
+
   module CLPublicKeyBytesParser
     extend self
       # @param [String] str
