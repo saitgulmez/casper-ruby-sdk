@@ -1,3 +1,5 @@
+require_relative './deploy_executable_item_internal.rb'
+
 module Casper
   module Entity
     class StoredContractByName < DeployExecutableItemInternal
