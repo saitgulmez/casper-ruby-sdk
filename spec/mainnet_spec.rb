@@ -1,9 +1,9 @@
 # mainnet_spec.rb
-require './lib/casper_network.rb'
+require './lib/rpc/rpc_client.rb'
 
 # Ip Address taken from Mainnet
-# client = Casper::CasperClient.new("5.161.68.4")
-client = Casper::CasperClient.new("65.108.78.120")
+# client = Casper::RpcClient.new("5.161.68.4")
+client = Casper::RpcClient.new("65.108.78.120")
 # block_Hash taken from MainNet
 block_hash = "5fdbdf3fa70d37821aa2d1752743e9653befc15e65e40c2655e1ce93a807260f"
 # deploy_Hash taken from MainNet
@@ -11,14 +11,14 @@ deploy_hash = "52a40996a88523c475c12e5370ff90b0ae4ec051cfaa57cd048c136b1a83319d"
 state_root_hash = "7b605ad991c949832fd966495afc3f97a2b8122a1a6afc2610b545a8c07e3456"
 item_key = "f870e3cadfde21d7d7686fdf3d1a8413838274d363ca7b27ae71fc9125eb6743"
 uref = "uref-0d689e987db7ee5be246282c3a7badf0411e34baeeab8e9d73c1223ae4ad02e5-007"
-describe Casper::CasperClient do
+describe Casper::RpcClient do
   url = "65.21.0.X" 
-  client2 = Casper::CasperClient.new(url)   
+  client2 = Casper::RpcClient.new(url)   
   it "fails, wrong ip format :  #{url}" do  
     expect(client2.get_error).to eql("SocketError") 
   end 
   url = "65.21.0.0"  
-  client3 = Casper::CasperClient.new(url)  
+  client3 = Casper::RpcClient.new(url)  
   it "fails, #{url} is not available in network" do  
     expect(client3.get_error).to eql("Errno::ECONNREFUSED") 
   end
@@ -36,7 +36,7 @@ describe Casper::CasperClient do
      
       # it "passes, size of both peer arrays are equal" do
       #   # Check the length of the peers array 
-      #   client2 = Casper::CasperClient.new("34.192.231.34")
+      #   client2 = Casper::RpcClient.new("34.192.231.34")
       #   other_peers = client2.info_get_peers
       #   expect(peers.size).to eql(other_peers.size)
       # end
@@ -76,7 +76,7 @@ describe Casper::CasperClient do
       end
     end
     context "When called info_get_peers with invalid ip address" do   
-      client4 = Casper::CasperClient.new("65.21.227.X") 
+      client4 = Casper::RpcClient.new("65.21.227.X") 
       # puts client4.info_get_peers 
       it "fails,  \"#{client4.info_get_peers}\"" do   
         expect(client4.info_get_peers).to eql("SocketError")  

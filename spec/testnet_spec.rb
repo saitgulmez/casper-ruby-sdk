@@ -1,12 +1,12 @@
 # mainnet_spec.rb
-require './lib/casper_network.rb'
+require './lib/rpc/rpc_client.rb'
 
 # Ip Address taken from Testnet
-# client = Casper::CasperClient.new("138.201.54.44")
+# client = Casper::RpcClient.new("138.201.54.44")
 # Ip Address taken from Testnet
-# client = Casper::CasperClient.new("65.21.227.101")  # IP is taken from "TestNet"
-# client = Casper::CasperClient.new("138.201.54.44")  # IP is taken from "TestNet"
-client = Casper::CasperClient.new("5.9.23.55")        # IP is taken from "TestNet"
+# client = Casper::RpcClient.new("65.21.227.101")  # IP is taken from "TestNet"
+# client = Casper::RpcClient.new("138.201.54.44")  # IP is taken from "TestNet"
+client = Casper::RpcClient.new("5.9.23.55")        # IP is taken from "TestNet"
 
 # block_Hash taken from Testnet
 block_hash = "71e19e2e9629c716dc9578066cfeceace559d32fe51b08245ddd4d218f8c18da"
@@ -15,15 +15,15 @@ deploy_hash = "d3e0a1bd85ee74916e096cf4b18df391ada414d0915aeb865eff0ba75f04c3d8"
 state_root_hash = "2a62440a1e1e57bff71344aac8a7de169f6dd08d29cffe83b2fb5d6648971855"
 item_key = "f870e3cadfde21d7d7686fdf3d1a8413838274d363ca7b27ae71fc9125eb6743"
 uref = "uref-9199d08ff4ca4d52cd7a05ba0d2694204b7ebff963fec1c216f81bf654e0e59f-007"
-describe Casper::CasperClient do
+describe Casper::RpcClient do
   url = "65.21.0.X"
-  client2 = Casper::CasperClient.new(url) 
+  client2 = Casper::RpcClient.new(url) 
   it "fails, wrong ip format :  #{url}" do 
     expect(client2.get_error).to eql("SocketError")
   end
 
   url2 = "65.21.0.0"
-  client3 = Casper::CasperClient.new(url2) 
+  client3 = Casper::RpcClient.new(url2) 
   it "fails, #{url2} is not available in network" do 
     expect(client3.get_error).to eql("Errno::ECONNREFUSED")
   end
@@ -36,7 +36,7 @@ describe Casper::CasperClient do
         expect(peers).to be_truthy
       end
       # it "fails, connecting non existing node" do 
-      #   client2 = Casper::CasperClient.new("12.2.2.2")
+      #   client2 = Casper::RpcClient.new("12.2.2.2")
       # end
       it "passes, peers array is not empty" do 
         expect(peers).not_to be_empty
@@ -44,7 +44,7 @@ describe Casper::CasperClient do
      
       # it "passes, size of both peer arrays are equal" do
       #   # Check the length of the peers array 
-      #   client2 = Casper::CasperClient.new("34.192.231.34")
+      #   client2 = Casper::RpcClient.new("34.192.231.34")
       #   other_peers = client2.info_get_peers
       #   expect(peers.size).to eql(other_peers.size)
       # end
@@ -84,7 +84,7 @@ describe Casper::CasperClient do
       end
     end
     context "When called info_get_peers with invalid ip address" do  
-      client4 = Casper::CasperClient.new("65.21.227.X")
+      client4 = Casper::RpcClient.new("65.21.227.X")
       # puts client4.info_get_peers
       it "fails,  \"#{client4.info_get_peers}\"" do 
         expect(client4.info_get_peers).to eql("SocketError")
