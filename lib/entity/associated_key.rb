@@ -1,6 +1,6 @@
 module Casper
   module Entity
-
+    # A key granted limited permissions to an Account, for purposes such as multisig.
     class AssociatedKey
 
       # @param [CLAccountHash] account_hash

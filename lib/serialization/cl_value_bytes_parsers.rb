@@ -311,7 +311,7 @@ module CLValueBytesParsers
   module CLOptionBytesParser
     extend self
 
-    # @param [CLOption]
+    # @param [CLOption] cl_option
     def to_bytes(cl_option)
       
     end

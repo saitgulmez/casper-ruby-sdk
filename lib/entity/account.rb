@@ -5,7 +5,7 @@ module Casper
      
       # @param [CLAccountHash] account_hash
       # @param [Array] named_keys
-      # @param [CLUref] main_purse, The account's main purse URef
+      # @param [CLUref] main_purse  The account's main purse URef
       # @param [Array] associated_keys
       # @param [Array<ActionThresHolds>] action_thresholds
       def initialize(account_hash, named_keys, main_purse, associated_keys, action_thresholds)

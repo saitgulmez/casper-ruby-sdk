@@ -6,7 +6,7 @@ require_relative '../utils/byte_utils.rb'
 
 class DeployHeaderSerializer 
 
-  # @param [DeployerHeader] header
+  # @param [DeployerHeader] deploy_header
   # @return [String] serialized_header
   def to_bytes(deploy_header)
     @serialized_header = ""

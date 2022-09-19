@@ -2,7 +2,7 @@ module Utils
   module ByteUtils
     extend self
 
-    # @param [String] string
+    # @param [String] str
     # @return [String] 
     def string_to_hex(str)
       # str.unpack1("H*")
@@ -28,7 +28,7 @@ module Utils
       byte_array.pack("C*").unpack("H*").first
     end
 
-    # @param [String] string
+    # @param [String] str
     # @return [Array]
     def string_to_byte_array(str)
       str.unpack("C*")
@@ -78,7 +78,7 @@ module Utils
     end
 
     # @param [String] hex_str
-    # @param [String] 
+    # @return [String] 
     def hex_from_little_endian_to_big_endian(hex_str)
       # [hex_str].pack("H*").unpack('N*').pack('V*').unpack1('H*')
       [hex_str].pack("H*").unpack('N*').pack('V*').unpack('H*').first

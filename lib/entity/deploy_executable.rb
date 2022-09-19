@@ -81,7 +81,7 @@ module Casper
         @transfer != nil
       end
 
-      # @param [StoredContractByHash] transfer
+      # @param [StoredContractByHash] stored_contract_by_hash
       def set_stored_contract_by_hash(stored_contract_by_hash)
         @stored_contract_by_hash = stored_contract_by_hash
       end
@@ -109,7 +109,7 @@ module Casper
         @stored_contract_by_name != nil
       end
 
-      # @param [StoredVersionedContractByHash] stored_contract_by_name
+      # @param [StoredVersionedContractByHash] stored_versioned_contract_by_hash
       def set_stored_versioned_contract_by_hash(stored_versioned_contract_by_hash)
         @stored_versioned_contract_by_hash = stored_versioned_contract_by_hash
       end
@@ -123,7 +123,7 @@ module Casper
         @stored_versioned_contract_by_hash != nil
       end
 
-      # @param [StoredVersionedContractByName] stored_contract_by_name
+      # @param [StoredVersionedContractByName] stored_versioned_contract_by_name
       def set_stored_versioned_contract_by_name(stored_versioned_contract_by_name)
         @stored_versioned_contract_by_name = stored_versioned_contract_by_name
       end

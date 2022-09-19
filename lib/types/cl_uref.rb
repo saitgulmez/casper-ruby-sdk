@@ -11,7 +11,8 @@ require 'json'
 class CLURef < CLValue  
   include CLValueBytesParsers::CLURefBytesParser
   attr_accessor :err
-  # @param [Array<Integer>]
+  # @param [Array<Integer>] value
+  # @param [AccessRights] access_rights
   # value is an uint8array
   def initialize(value = nil, access_rights = nil)
     super()

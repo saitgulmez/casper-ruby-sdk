@@ -71,7 +71,7 @@ class CLType
     TAGS[key]
   end
 
-  # @param [Integer]
+  # @param [Integer] value
   # @return [String] 
   def get_tag_key(value)
     TAGS.key(value).to_s
@@ -86,8 +86,8 @@ class CLType
     TAGS
   end
 
-  # @param [Integer] tag_value
-  # @return [Boolean] true or false
+  # @param [Integer] value
+  # @return [Boolean] 
   def tag_value_isvalid(value)
     TAGS.has_value?(value)
   end

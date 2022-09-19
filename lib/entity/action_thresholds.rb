@@ -4,8 +4,8 @@ module Casper
     # @note The minimum weight thresholds that have to be met when executing an action of a certain type. 
     class ActionThresholds
 
-      # @param [Integer] deployment, threshold required to perform deployment actions.
-      # @param [Integer] key_management, threshold required to perform key management actions.
+      # @param [Integer] deployment  Threshold required to perform deployment actions.
+      # @param [Integer] key_management  Threshold required to perform key management actions.
       def initialize(deployment, key_management)
         @deployment = deployment
         @key_management = key_management
