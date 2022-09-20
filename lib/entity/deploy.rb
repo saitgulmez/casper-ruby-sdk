@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Deploy, an item containing a smart contract along with the requester's signature(s).
     class Deploy
     
       # @param [String] hash

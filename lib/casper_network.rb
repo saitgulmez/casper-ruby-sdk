@@ -15,9 +15,8 @@ require_relative './rpc/rpc_client.rb'
 # Dir["./serialization/*.rb"].each {|file|  require file }
 # Dir["./types/*.rb"].each {|file|  require file }
 require_relative './include.rb'
-# Class for interacting with the network via RPC
-# puts "Hello"
 module Casper
+   # Interacting with the network
   class CasperClient 
     attr_accessor :ip_address, :port, :url, :state_root_hash
 

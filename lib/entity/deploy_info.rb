@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Information relating to the given Deploy.
     class DeployInfo
     
       # @param [String] hash

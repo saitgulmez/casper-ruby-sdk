@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Data structure summarizing auction contract data.
     class AuctionState
       # @param [String] state_root_hash
       # @param [Integer] block_height

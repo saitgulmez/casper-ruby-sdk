@@ -1,6 +1,7 @@
 
 module Casper
   module RpcError
+    # Exception handling
     class ErrorHandle  
       # @param [Integer] code
       # @param [String] message

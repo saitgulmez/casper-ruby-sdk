@@ -8,8 +8,8 @@ require 'active_support/core_ext/hash/keys'
 require 'timeout'
 require 'net/http'
 require_relative './rpc_error.rb'
-# Class for interacting with the network via RPC
 module Casper
+  # Interacting with the network via RPC
   class RpcClient 
     attr_accessor :ip_address, :port, :url, :state_root_hash
 

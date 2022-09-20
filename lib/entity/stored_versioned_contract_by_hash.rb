@@ -2,6 +2,8 @@ require_relative './deploy_executable_item_internal.rb'
 
 module Casper
   module Entity
+    # Stored versioned contract referenced by its ContractPackageHash, 
+    #  entry point and an instance of RuntimeArgs.
     class StoredVersionedContractByHash < DeployExecutableItemInternal
    
       # @param [String] hash

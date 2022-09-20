@@ -2,6 +2,7 @@ require_relative './deploy_named_argument.rb'
 
 module Casper
   module Entity
+    # DeployExecutableItemInternal
     class DeployExecutableItemInternal
       attr_accessor :args
       def initialize(deploy_named_args = [])

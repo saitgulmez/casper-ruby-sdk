@@ -1,12 +1,13 @@
 require_relative '../entity/deploy_executable.rb'
 
-
+# Byte serializer for DeployExecutable object
 class DeployExecutableSerializer
 
   def initialize 
-    # @deploy_executable = Casper::Entity::DeployExecutable.new
+    @deploy_executable = Casper::Entity::DeployExecutable.new
   end
 
+  # @param [DeployExecutable] deploy_executable
   def to_bytes(deploy_executable)
     if deploy_executable.module_bytes?
       deploy_executable.get_module_bytes.to_bytes

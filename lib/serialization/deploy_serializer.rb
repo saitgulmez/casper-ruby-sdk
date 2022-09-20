@@ -4,6 +4,7 @@ require_relative './deploy_executable_serializer'
 require_relative './deploy_named_arg_serializer'
 require_relative '../utils/byte_utils.rb'
 
+# Byte serializer for Deploy object
 class DeploySerializer
 
   def to_bytes(deploy)

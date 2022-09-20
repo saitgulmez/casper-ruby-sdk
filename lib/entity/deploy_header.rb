@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Header information of a Deploy.
     class DeployHeader 
      
       # @param [Hash] header

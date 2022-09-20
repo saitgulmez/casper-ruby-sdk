@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Hex-encoded Deploy hash.
     class DeployHash
 
       # @param [String] hash

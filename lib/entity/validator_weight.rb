@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # A validator's weight.
     class ValidatorWeight
 
       # @param [String] public_key

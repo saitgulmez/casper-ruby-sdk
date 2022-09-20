@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Represents a transfer from one purse to another
     class Transfer
     
       # @param [Hash] transfer

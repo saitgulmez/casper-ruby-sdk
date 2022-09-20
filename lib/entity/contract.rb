@@ -1,7 +1,7 @@
 module Casper
   module Entity
 
-    # Contract entity class
+    # Information, entry points and named keys belonging to a Contract
     class Contract 
       
       # @param [String] contract_package_hash

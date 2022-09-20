@@ -17,6 +17,7 @@ require_relative './deploy_executable_item_internal.rb'
 =end     
 module Casper
   module Entity
+    # A native transfer which does not contain or reference a Wasm code.
     class DeployExecutableTransfer < DeployExecutableItemInternal
    
       # @param [Array<Array<DeployNamedArgument>>] args

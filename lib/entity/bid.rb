@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # An entry in the validator map.
     class Bid
 
       # @param [String] public_key

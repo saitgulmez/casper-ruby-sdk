@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Signature and Public Key of the signer.
     class DeployApproval 
      
       # @param [Hash] approval

@@ -2,6 +2,7 @@ require_relative './deploy_executable_item_internal.rb'
 
 module Casper
   module Entity
+    # Executable specified as raw bytes that represent Wasm code and an instance of RuntimeArgs.
     class ModuleBytes < DeployExecutableItemInternal
 
       # @param [String] module_bytes

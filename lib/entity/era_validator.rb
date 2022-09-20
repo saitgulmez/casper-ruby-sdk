@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # Validator and weights for an Era.
     class EraValidator
 
       # @param [Integer] era_id

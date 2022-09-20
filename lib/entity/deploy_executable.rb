@@ -4,6 +4,7 @@ require_relative './deploy_executable_transfer.rb'
 
 module Casper
   module Entity
+    # DeployExecutable
     class DeployExecutable 
       attr_accessor :module_bytes, :transfer, :stored_contract_by_hash, :stored_contract_by_name,
       :stored_versioned_contract_by_hash, :stored_versioned_contract_by_name

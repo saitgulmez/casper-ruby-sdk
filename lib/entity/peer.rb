@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # A node in the network.
     class Peer
 
       # @param [Hash] peer

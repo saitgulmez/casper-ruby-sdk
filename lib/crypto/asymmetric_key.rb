@@ -56,7 +56,7 @@ class AsymmetricKey
     bytes = prefix + @public_key.get_value
     result_array = Utils::HashUtils.byte_hash(bytes)
     @public_key.get_value.length == 0 ? [] : result_array
-    # @public_key.to_account_hash_byte_array
+    #*** @public_key.to_account_hash_byte_array
   end
  
   # @param [String] path_to_private_key

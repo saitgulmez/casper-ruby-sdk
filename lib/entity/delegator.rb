@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # A delegator associated with the given validator.
     class Delegator
       
       # @param [String] public_key

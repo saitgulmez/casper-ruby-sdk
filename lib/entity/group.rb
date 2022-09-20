@@ -1,7 +1,7 @@
 module Casper
   module Entity
-
-    class Group
+    # Group
+    class Group 
 
       # @param [String] group
       # @param [Array<CLURef>] keys

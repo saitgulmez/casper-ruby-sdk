@@ -20,6 +20,7 @@ require_relative '../types/cl_public_key.rb'
 require_relative '../types/constants.rb'
 require_relative '../serialization/cl_value_bytes_parsers.rb'
 
+# Byte serializer for CLValue
 class CLValueSerializer
 
   def to_bytes(clvalue)

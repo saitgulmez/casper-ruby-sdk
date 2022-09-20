@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # BidInfo
     class BidInfo  
 
       # @param [String] bonding_purse

@@ -1,5 +1,6 @@
 module Casper
   module Entity
+    # The summary of an era.
     class EraSummary
 
       # @param [String] block_hash_

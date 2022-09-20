@@ -20,6 +20,7 @@ require_relative '../types/cl_tuple_type.rb'
 require_relative '../types/cl_any_type.rb'
 require_relative '../types/cl_public_key_type.rb'
 
+# Byte serializer for CLType
 class CLTypeSerizalizer
 
   def self.serialize_cl_type(cl_type)
