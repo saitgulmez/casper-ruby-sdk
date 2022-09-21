@@ -1,8 +1,8 @@
 # client_spec.rb
-require './lib/casper_network.rb'
+require './lib/rpc/rpc_client.rb'
 
-describe CasperClient do
-  client1 = CasperClient.new("185.246.84.43")
+describe Casper::RpcClient do
+  client1 = Casper::RpcClient.new("185.246.84.43")
   # Test info_get_peers()
   describe "#info_get_peers" do
     it "returns peers array." do
