@@ -42,28 +42,24 @@ gem build casper_network.gemspec
 # Install RSpec
 gem install rspec
 # Run the test
-rspec spec/testnet_spec.rb
-rspec spec/mainnet_spec.rb
+bundle exec rspec
+# To see the test results in detail
+bundle exec rspec -fd
 ```
 
-## Testnet Tests
+## How run each test file individually 
 ```bash
 git checkout main
 # Run the test
-rspec spec/testnet_spec.rb
+rspec spec/file_name.rb
 # To see the test results in detail
+rspec -fd spec/file_name.rb
+# Example:
+rspec spec/testnet_spec.rb
+# To see results in details
 rspec -fd spec/testnet_spec.rb
-# Test for cltypes
-rspec -fd spec/cl_types_spec.rb
 ```
 
-## Mainnet Tests
-```bash
-# Run the test
-rspec spec/mainnet_spec.rb
-# To see the test results in detail
-rspec -fd spec/mainnet_spec.rb
-```
 
 ## How to generate docs
 ```bash
@@ -73,6 +69,22 @@ yardoc lib/**/*.rb lib/*.rb - README.md LICENSE CONTRIBUTING.md SECURITY.md
 # To see the options
 yardoc --help 
 ```
+
+## Documentation:
+### Casper-Ruby-Sdk RPC
+* [info_get_peers](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#info_get_peers)
+* [chain_get_StateRootHash](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-state_root_hash)
+* [info_get_deploy](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-deploy)
+* [info_get_status](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-status)
+* [chain_get_block_transfers](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-block-transfers)
+* [chain_get_block](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-block-by-hash)
+* [chain_get_eraInfo_by_SwitchBlock](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-era-summary-by-switch-block-hash)
+* [state_get_item](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get--state-item)
+* [state_get_dictionary_item](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-dictionary-item)
+* [state_get_balance](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-account-balance)
+* [state_get_AuctionInfo](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#get-auction-state)
+* [put_deploy](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#put-deploy)
+
 
 ## Usage examples
 ### Get 5 peer IP addresses randomly
