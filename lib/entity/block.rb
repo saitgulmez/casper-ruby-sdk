@@ -9,27 +9,28 @@ module Casper
       # @param [Array<Hash>] proofs
       def initialize(hash, header = {}, body = {}, proofs = [])
         @hash = hash
-        @header = header
-        @body = body
-        @proofs = proofs
+        @header = Casper::Entity::BlockHeader.new(header)
+        @body = Casper::Entity::BlockBody.new(body)
+        @proofs = []
+        proofs.each { |proof| @proofs << Casper::Entity::BlockProof.new(proof) }
       end
 
-      # @return [String] hash
+      # @return [String] block hash
       def get_hash
         @hash
       end
 
-      # @return [Hash] header
+      # @return [BlockHeader] block header
       def get_header
         @header
       end
 
-      # @return [Hash] body
+      # @return [BlockBody] block body
       def get_body
         @body
       end
 
-      # @return [Array<Hash>] proofs
+      # @return [Array<BlockProof>] list of proofs for this block
       def get_proofs
         @proofs
       end
