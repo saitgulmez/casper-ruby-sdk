@@ -19,34 +19,34 @@ module Casper
         @creator = last_added_block_info[:creator]
       end
 
-      # @return [String] A cryptographic hash identifying a Block.
+      # @return [String] a cryptographic hash identifying a Block.
       def get_hash
         @hash
       end
 
-      # @return [String] Timestamp formatted as per RFC 3339.
+      # @return [String] timestamp formatted as per RFC 3339.
       def get_timestamp
         @timestamp
       end
 
-      # @return [Integer] Era ID in which this block was created.
+      # @return [Integer] era id in which this block was created.
       def get_era_id 
         @era_id
       end
 
-      # @return [Integer] The height of this block, 
+      # @return [Integer] the height of this block, 
       #   i.e., the number of ancestors.
       def get_height
         @height
       end
 
-      # @return [String] The global state root hash produced by 
+      # @return [String] the global state root hash produced by 
       #   executing this block’s body.
       def get_state_root_hash
         @state_root_hash
       end
 
-      # @return [String] Hex-encoded cryptographic public key, 
+      # @return [String] hex-encoded cryptographic public key, 
       #   including the algorithm tag prefix.
       def get_creator
         @creator
