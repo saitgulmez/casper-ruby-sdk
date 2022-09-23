@@ -23,32 +23,32 @@ module Casper
         @id = transfer[:id]
       end
 
-      # @return [String] deploy_hash
+      # @return [String] deploy that created the transfer
       def get_deploy_hash
         @deploy_hash
       end
 
-      # @return [String] from
+      # @return [String] account from which transfer was executed
       def get_from
         @from
       end
 
-      # @return [String] to
+      # @return [String] account to which funds are transferred
       def get_to
         @to
       end
 
-      # @return [String] source
+      # @return [String] tource purse
       def get_source
         @source
       end
 
-      # @return [String] target
+      # @return [String] target purse
       def get_target
         @target
       end
 
-      # @return [String] amount
+      # @return [String] transfer amount
       def get_amount
         @amount
       end
@@ -57,7 +57,7 @@ module Casper
       def get_gas
         @gas
       end
-      # @return [Integer] id
+      # @return [Integer] user-defined id
       def get_id
         @id
       end
