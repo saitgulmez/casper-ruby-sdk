@@ -7,7 +7,7 @@ module Casper
       # @param [BidInfo] bid_info
       def initialize(public_key, bid_info)
         @public_key = public_key
-        @BidInfo = bid_info
+        @bid_info = bid_info
 
       end
 
