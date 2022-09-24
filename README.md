@@ -277,6 +277,24 @@ puts stored_value.get_value # => https://caspercommunity.io
 puts CLValueBytesParsers::CLStringBytesParser.to_bytes(stored_value.get_value) # => 1a00000068747470733a2f2f636173706572636f6d6d756e6974792e696f
 ```
 
+### Get Balance
+
+Retrieves the balances(in motes) of an account
+
+Parameters :
+
+- state root hash
+- account uref hash
+
+```ruby
+node_ip_address = "65.108.78.120" # => Taken from Mainnet
+client = Casper::CasperClient.new(node_ip_address)
+state_root_hash = "610e932aef10d3e1fa04940c79a4a2789ee79c17046f1a9b45a2919f3600f3d5"
+uref = "uref-7de5e973b7d70bc2b328814411f2009aafd8dba901cfc2c588ba65088dcd22bb-007"
+balance = client.state_get_balance(state_root_hash, uref)
+puts balance # => 29269647684075  (current balance  9/24/2022)
+```
+
 
 ### Get 5 peer IP addresses randomly
 ```ruby
