@@ -7,7 +7,7 @@ module Casper
       # @param [String] staked_amount
       # @param [Integer] delegation_rate
       # @param [VestingSchedule] vesting_schedule
-      # @param [Hash<Delegator>] delegators
+      # @param [Array<Delegator>] delegators
       # @param [Boolean] inactive
       def initialize(bonding_purse, staked_amount, delegation_rate, vesting_schedule, delegators, inactive)
         @bonding_purse = bonding_purse
