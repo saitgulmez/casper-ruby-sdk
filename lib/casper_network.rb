@@ -10,7 +10,7 @@ require 'net/http'
 # require "./rpc/rpc.rb"
 require_relative './rpc/rpc_error.rb'
 require_relative './rpc/rpc_client.rb'
-
+require_relative './serialization/deploy_serializer.rb'
 # Dir["./entity/*.rb"].each {|file|  require  file }
 # Dir["./serialization/*.rb"].each {|file|  require file }
 # Dir["./types/*.rb"].each {|file|  require file }
@@ -141,6 +141,8 @@ module Casper
         status = Timeout::timeout(10) {
           client = Jimson::Client.new(@url)
           @node_status = client.info_get_status
+          @node_status.deep_symbolize_keys!
+          Casper::Entity::Status.new(@node_status)
         }
       rescue
         @rpc_error = Casper::RpcError::ErrorHandle.new
@@ -176,7 +178,8 @@ module Casper
           if (!@block_info.empty?() && @block_info["hash"] != block_hash)
             raise("Returned block does not have a matching hash.")
           else
-            @block_info
+            @block_info.deep_symbolize_keys!
+            Casper::Entity::Block.new(@block_info[:hash], @block_info[:header], @block_info[:body], @block_info[:proofs])
           end
         }
       rescue
@@ -196,7 +199,8 @@ module Casper
         if @era_summary == nil
           Casper::RpcError::InvalidParameter.error
         else
-          @era_summary
+          @era_summary.deep_symbolize_keys!
+          Casper::Entity::EraSummary.new(@era_summary)
         end
         }
       rescue
@@ -217,7 +221,8 @@ module Casper
             "path" => path
           })
           @stored_value = response["stored_value"]
-          @stored_value
+          @stored_value.deep_symbolize_keys!
+          Casper::Entity::StoredValue.new(@stored_value)
         }
       rescue
         Casper::RpcError::InvalidParameter.error
@@ -236,7 +241,10 @@ module Casper
             "dictionary_identifier" => {'URef' => 
               {'seed_uref' => uref, 'dictionary_item_key' => item_key} }})
             @stored_value = response["stored_value"]
-            @stored_value
+            @stored_value.deep_symbolize_keys!
+            # cl_type = @stored_value[:CLValue][:cl_type]
+            # bytes = @stored_value[:CLValue][:bytes]
+            DeploySerializer.new().build_cl_value(@stored_value[:CLValue])
         }
       rescue
         Casper::RpcError::InvalidParameter.error
@@ -263,13 +271,19 @@ module Casper
 
     # Returns current auction system contract information.
     # @return [Hash] auction_state
-    def state_get_AuctionInfo
+    def state_get_AuctionInfo(block_hash = "")
       begin 
         state = Timeout::timeout(50) {
         client = Jimson::Client.new(@url)
         response = client.state_get_auction_info
         @auction_state = response['auction_state']
+        @auction_state.deep_symbolize_keys!
+        state_root_hash = @auction_state[:state_root_hash]
+        block_height = @auction_state[:block_height]
+        era_validators = @auction_state[:era_validators]
         @auction_state
+        bids = @auction_state[:bids]
+        Casper::Entity::AuctionState.new(state_root_hash, block_height, era_validators, bids)
         }
       rescue
         @rpc_error = Casper::RpcError::ErrorHandle.new
@@ -277,6 +291,7 @@ module Casper
       end
     end
     
+    # @param [Deploy] deploy
     def put_deploy(deploy)
       client = Jimson::Client.new(url)
       response = client.account_put_deploy(deploy)
