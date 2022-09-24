@@ -295,6 +295,43 @@ balance = client.state_get_balance(state_root_hash, uref)
 puts balance # => 29269647684075  (current balance  9/24/2022)
 ```
 
+### Get current auction state
+
+Retrieves an AutionState object.
+
+call parameters :
+- block hash
+
+```ruby
+# block_Hash taken from MainNet
+block_hash = "5fdbdf3fa70d37821aa2d1752743e9653befc15e65e40c2655e1ce93a807260f"
+node_ip_address = "65.108.78.120" # => Taken from Mainnet
+client = Casper::CasperClient.new(node_ip_address)
+auction = client.state_get_AuctionInfo
+# Retrieve and print an instance of AuctionState entity
+puts auction # => #<Casper::Entity::AuctionState:0x0000000003306bc0>
+# Retrieve and print state root hash as a String value
+puts auction.get_state_root_hash # => "6448b55f1dd7c9ad337f4fd4c77586d7ae30da146e0b340932aba7e7efa9cbcb"
+# Retrieve and print block height as an Integer value
+puts auction.get_block_height    # => 1128800
+# Retrieve and print an array of instances of EraValidor entity
+puts auction.get_era_validators # => [#<Casper::Entity::EraValidator:0x0000000002b69980>, #<Casper::Entity::EraValidator:0x0000000002b68940>]
+# Retrieve and print an array of instances of Bid entity
+puts auction.get_bids # => [#<Casper::Entity::Bid:0x000000000430bcf0>, #<Casper::Entity::Bid:0x000000000430b6d8>....]
+
+# Retrieve and print an instance of BidInfo, which is also the member of bid object
+bids = auction.get_bids
+bid =  bids[0] # => #<Casper::Entity::Bid:0x0000000003773dc0>
+bid_info = bid.get_bid_info # => #<Casper::Entity::BidInfo:0x00000000042cffc0>
+# Retrieve and print an array of delegator objects, which are instance of Delegator entity
+delegators = bid_info.get_delegators
+puts delegators # => [#<Casper::Entity::Delegator:0x000000000396c550>, #<Casper::Entity::Delegator:0x000000000396c500>.....]
+# How to access members of one of the above delegator instances
+# For instance, access to stake amount at first delegator    
+delegator = delegators[0]
+stake_amount = delegator.get_staked_amount # => 27871095039894
+```
+
 
 ### Get 5 peer IP addresses randomly
 ```ruby
