@@ -27,6 +27,11 @@ module Utils
       # byte_array.pack("C*").unpack1("H*")
       byte_array.pack("C*").unpack("H*").first
     end
+   
+    def byte_array_to_hex_64(byte_array)
+      # byte_array.pack("C*").unpack1("H*")
+      byte_array.pack("C*").unpack("H*").first
+    end
 
     # @param [String] str
     # @return [Array]
@@ -77,6 +82,12 @@ module Utils
       [n].pack("Q<*").unpack("H*").first
     end
 
+    # @param [Integer] n
+    # @return [String]
+    def to_u512(n)
+      [n].pack("Q<*").unpack("H*").first
+    end
+
     # @param [String] hex_str
     # @return [String] 
     def hex_from_little_endian_to_big_endian(hex_str)
@@ -102,6 +113,20 @@ module Utils
 
     def hex_to_u64_value(hex_str)
       [hex_str].pack("H*").unpack("Q*").first
+    end
+    def hex_to_u512_value(hex_str)
+      [hex_str].pack("H*").unpack("Q*").first
+    end
+
+    # @return byte array containing two's complement representation of Bignum/Fixnum
+    def to_byte_array(num)
+      result = []
+      begin
+        result << (num & 0xff)
+        num >>= 8
+      end until (num == 0 || num == -1) && (result.last[7] == num[7])
+      # result.reverse
+      result
     end
   end
 end
