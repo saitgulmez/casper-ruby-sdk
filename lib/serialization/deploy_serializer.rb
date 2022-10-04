@@ -3,25 +3,33 @@ require_relative './deploy_approval_serializer'
 require_relative './deploy_executable_serializer'
 require_relative './deploy_named_arg_serializer'
 require_relative '../utils/byte_utils.rb'
-
+require_relative '../types/cl_option.rb'
 # Byte serializer for Deploy object
 class DeploySerializer
-
+  attr_accessor :payment_session_serializer, :transfer_serializer, :payment_serializer
+  def initialize
+  end
+  
   def to_bytes(deploy)
+    @payment_session_serializer = ""
+    @amount_serializer = ""
+    @target_serializer = ""
+    @id_serializer = ""
+    @transfer_serializer = ""
+    @payment_serializer = ""
     result = "" 
     deploy_header = Casper::Entity::DeployHeader.new(deploy.get_header)
     result += DeployHeaderSerializer.new().to_bytes(deploy_header)
     
     deploy_hash = Casper::Entity::DeployHash.new(deploy.get_hash)
     result += deploy_hash.get_hash
-        
     payment = deploy.get_payment
     session = deploy.get_session
     if payment.keys[0] == :ModuleBytes 
       temp_args = []
       module_bytes = payment[:ModuleBytes][:module_bytes]
       args = payment[:ModuleBytes][:args]
-      module_bytes = Casper::Entity::ModuleBytes.new(module_bytes, args)
+      # module_bytes = Casper::Entity::ModuleBytes.new(module_bytes, args)
       args.each do |arg|
         name1 = arg[0]
         clvalue_hash = arg[1]
@@ -31,6 +39,8 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::ModuleBytes.new(module_bytes, temp_args).to_bytes)
       result += temp
+      @payment_serializer += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif payment.keys[0] == :StoredContractByHash
       temp_args = []
@@ -48,6 +58,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByHash.new(name, entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif payment.keys[0] == :StoredContractByName
       temp_args = []
@@ -64,6 +75,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByName.new(name, entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif payment.keys[0] == :StoredVersionedContractByHash
       temp_args = []
@@ -81,6 +93,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByHash.new(name, version,entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif payment.keys[0] == :StoredVersionedContractByName
       temp_args = []
@@ -98,6 +111,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByName.new(name, version,entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif payment.keys[0] == :Transfer
       temp_args = []
@@ -113,6 +127,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::DeployExecutableTransfer.new(temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     end
 
@@ -120,7 +135,7 @@ class DeploySerializer
       temp_args = []
       module_bytes = session[:ModuleBytes][:module_bytes]
       args = session[:ModuleBytes][:args]
-      module_bytes = Casper::Entity::ModuleBytes.new(module_bytes, args)
+      # module_bytes = Casper::Entity::ModuleBytes.new(module_bytes, args)
       args.each do |arg|
         name1 = arg[0]
         clvalue_hash = arg[1]
@@ -129,6 +144,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::ModuleBytes.new(module_bytes, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif session.keys[0] == :StoredContractByHash
       temp_args = []
@@ -146,6 +162,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByHash.new(name, entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif session.keys[0] == :StoredContractByName
       temp_args = []
@@ -162,6 +179,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByName.new(name, entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif session.keys[0] == :StoredVersionedContractByHash
       temp_args = []
@@ -179,6 +197,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByHash.new(name, version,entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
     elsif session.keys[0] == :StoredVersionedContractByName
       temp_args = []
@@ -196,6 +215,7 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredVersionedContractByName.new(name, version,entry_point, temp_args).to_bytes)
       result += temp
+      @payment_session_serializer += temp
       temp = nil
 
     elsif session.keys[0] == :Transfer
@@ -203,26 +223,67 @@ class DeploySerializer
       args = session[:Transfer][:args]
 
       transfer = Casper::Entity::DeployExecutableTransfer.new(args)
+      # args.each do |arg|
+      #   name1 = arg[0] # => "amount"
+      #   clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
+      #   clvalue = build_cl_value(arg[1])
+      #   # puts clvalue
+      #   temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+      # end
+
       args.each do |arg|
-        name1 = arg[0] # => "amount"
-        clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
-        clvalue = build_cl_value(arg[1])
-        # puts clvalue
-        temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+        name1 = arg[0]
+        if name1 == "amount" || name1 == "target"
+          clvalue_hash = arg[1]
+          clvalue = build_cl_value(arg[1])
+          puts "clvalue.get_value: #{clvalue.get_value}"
+          temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+        elsif name1 == "id"
+          bytes = arg[1][:bytes]
+          parsed = arg[1][:parsed]
+          h = arg[1][:cl_type]
+          key, value = h.first
+          cl_type = h.keys[0]
+          # puts key, value
+          inner_type = value
+          data = { "cl_type": inner_type, "bytes": bytes, "parsed": parsed}
+          clvalue = CLOption.new(data, inner_type)
+              # type = clvalue.get_cl_type
+              # puts type
+              # value = clvalue.get_value
+              # puts value
+              # tag = CLType::TAGS[type.to_sym]
+              # puts tag
+          # cl_value = { "cl_type": cl_type, "bytes": bytes, "parsed": parsed}
+          # clvalue = build_cl_value(cloption)
+          # puts cloption.get_value
+          temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
+        end
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::DeployExecutableTransfer.new(temp_args).to_bytes)
+      @target_serializer = temp
+      # puts @target_serializer
       result += temp
+      @transfer_serializer += temp
+      @payment_session_serializer += temp
       temp = nil
     end
 
     approvals =  deploy.get_approvals
     num_of_approvals = approvals.size
+    puts "num_of_approvals: #{num_of_approvals}"
+    approval_serializer = ""
     deploy_approval_serializer = DeployApprovalSerializer.new
     result += Utils::ByteUtils.to_u32(num_of_approvals)
+    approval_serializer += Utils::ByteUtils.to_u32(num_of_approvals)
+    # @payment_session_serializer += Utils::ByteUtils.to_u32(num_of_approvals)
     for approval in approvals
       deploy_approval = Casper::Entity::DeployApproval.new(approval)
+      # @payment_session_serializer += deploy_approval_serializer.to_bytes(deploy_approval)
       result += deploy_approval_serializer.to_bytes(deploy_approval)
+      approval_serializer += deploy_approval_serializer.to_bytes(deploy_approval)
     end
+    puts "approval_serializer: #{approval_serializer}"
     # result
     Utils::ByteUtils.hex_to_byte_array(result)
   end
@@ -230,6 +291,7 @@ class DeploySerializer
   def build_cl_value(h = {})
     cl_type = h[:cl_type]
     bytes = h[:bytes]
+    # puts bytes
     parsed = h[:parsed]
     if cl_type == "Bool"
       CLValueBytesParsers::CLBoolBytesParser.from_bytes([bytes])
@@ -248,6 +310,19 @@ class DeploySerializer
     elsif cl_type == "U64"
       value = Utils::ByteUtils.hex_to_u64_value(bytes)
       CLu32.new(value)
+    elsif cl_type == "U512"
+      bytes = h[:bytes] # => 0400e1f505
+      num_of_bytes = bytes[0..1] # => 04
+      bytes = bytes[2..] # => "00e1f505"
+      puts "bytes: #{bytes}"
+      value = [bytes].pack("H*").unpack("L*").first
+      puts "build_cl_value --> value: #{value}"
+      # CLu512.new(value)
+      CLu512.new(parsed.to_i)
+      # value = Utils::ByteUtils.hex_to_u64_value(bytes)
+      # CLu512.new(value)
+      # value = Utils::ByteUtils.hex_to_u512_value(bytes)
+      # CLu512.new(value)
     elsif cl_type == "Unit"
       # value = CLValueBytesParsers::CLUnitBytesParser.from_bytes(bytes)
       if bytes == ""
@@ -260,6 +335,54 @@ class DeploySerializer
     elsif cl_type == "URef"
       value = Utils::ByteUtils.hex_to_byte_array(bytes)
       CLValueBytesParsers::CLURefBytesParser.from_bytes(value)
+    # elsif cl_type = "Option"
+
+    elsif cl_type == "PublicKey"
+      CLPublicKey.from_hex(bytes)
+    end
+  end
+
+  def build_cl_value_with_option(h = {})
+    cl_type = h[:cl_type]
+    bytes = h[:bytes]
+    # puts bytes
+    parsed = h[:parsed]
+    if cl_type == "Bool"
+      CLValueBytesParsers::CLBoolBytesParser.from_bytes([bytes])
+    elsif cl_type == "I32"
+      value = Utils::ByteUtils.hex_to_integer(bytes)
+      CLi32.new(value)
+    elsif cl_type == "I64"
+      value = Utils::ByteUtils.hex_to_i64_value(bytes)
+      CLi64.new(value)
+    elsif cl_type == "U8"
+      value = Utils::ByteUtils.hex_to_u8_value(bytes)
+      CLu8.new(value)
+    elsif cl_type == "U32"
+      value = Utils::ByteUtils.hex_to_u32_value(bytes)
+      CLu32.new(value)
+    elsif cl_type == "U64"
+      value = Utils::ByteUtils.hex_to_u64_value(bytes)
+      CLu32.new(value)
+    elsif cl_type == "U512"
+      value = Utils::ByteUtils.hex_to_u64_value(bytes)
+      CLu512.new(value)
+      # value = Utils::ByteUtils.hex_to_u512_value(bytes)
+      # CLu512.new(value)
+    elsif cl_type == "Unit"
+      # value = CLValueBytesParsers::CLUnitBytesParser.from_bytes(bytes)
+      if bytes == ""
+        value = nil
+        CLUnit.new(value)
+      end
+    elsif cl_type == "String"
+      value = CLValueBytesParsers::CLStringBytesParser.from_bytes(bytes)
+      CLString.new(value)
+    elsif cl_type == "URef"
+      value = Utils::ByteUtils.hex_to_byte_array(bytes)
+      CLValueBytesParsers::CLURefBytesParser.from_bytes(value)
+    # elsif cl_type = "Option"
+
     elsif cl_type == "PublicKey"
       CLPublicKey.from_hex(bytes)
     end
