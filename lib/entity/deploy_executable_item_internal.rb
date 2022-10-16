@@ -1,5 +1,5 @@
 require_relative './deploy_named_argument.rb'
-
+require_relative '../serialization/deploy_named_arg_serializer'
 module Casper
   module Entity
     # DeployExecutableItemInternal
