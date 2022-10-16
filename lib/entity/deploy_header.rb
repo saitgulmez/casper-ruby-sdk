@@ -47,6 +47,10 @@ module Casper
         @body_hash
       end
 
+      def set_body_hash(body_hash)
+        @body_hash = body_hash
+      end
+
       # @return [Array] dependencies
       def get_dependencies
         @dependencies
@@ -55,6 +59,19 @@ module Casper
       # @return [String] chain_name
       def get_chain_name
         @chain_name
+      end
+
+      # @return [Hash] Deploy header
+      def to_hash
+        header = {}
+        header[:ttl] = @ttl
+        header[:account] = @account
+        header[:body_hash] = @body_hash
+        header[:gas_price] = @gas_price
+        header[:timestamp] = @timestamp
+        header[:chain_name] = @chain_name
+        header[:dependencies] = @dependencies
+        return header
       end
     end
   end
