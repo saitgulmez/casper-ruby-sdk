@@ -18,6 +18,7 @@ class CLOption < CLValue
     elsif data == nil && inner_type != nil
       @inner_type = inner_type
     else
+      # @inner_type = data[:cl_type]
       @inner_type = data.get_cl_type
     end
   end
@@ -27,7 +28,12 @@ class CLOption < CLValue
   end
 
   def get_cl_type
-   CLOptionType.new(@inner_type)
-   @inner_type
+   CLOptionType.new(@inner_type).get_type
+   # @inner_type
+   # get_type
+  end
+
+  def get_inner_type
+   @inner_type 
   end
 end
