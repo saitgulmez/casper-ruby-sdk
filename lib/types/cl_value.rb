@@ -8,4 +8,12 @@ class CLValue
     @cl_type = cl_type
     @parsed = parsed
   end
+
+  def to_hash(bytes, value, type)
+    {
+      "bytes": bytes,
+      "parsed": value,
+      "cl_type": type
+    }
+  end
 end
