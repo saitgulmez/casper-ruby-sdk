@@ -4,8 +4,10 @@ require_relative './deploy_executable_serializer'
 require_relative './deploy_named_arg_serializer'
 require_relative '../utils/byte_utils.rb'
 require_relative '../types/cl_option.rb'
+require_relative '../utils/helpers.rb'
 # Byte serializer for Deploy object
 class DeploySerializer
+  include Utils::Helpers
   attr_accessor :payment_session_serializer, :transfer_serializer, :payment_serializer
   def initialize
   end
@@ -34,7 +36,6 @@ class DeploySerializer
         name1 = arg[0]
         clvalue_hash = arg[1]
         clvalue = build_cl_value(arg[1])
-        # puts clvalue
         temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::ModuleBytes.new(module_bytes, temp_args).to_bytes)
@@ -53,7 +54,6 @@ class DeploySerializer
         name1 = arg[0] # => "quantity"
         clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
         clvalue = build_cl_value(arg[1])
-        # puts clvalue
         temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByHash.new(name, entry_point, temp_args).to_bytes)
@@ -122,7 +122,6 @@ class DeploySerializer
         name1 = arg[0] # => "amount"
         clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
         clvalue = build_cl_value(arg[1])
-        # puts clvalue
         temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::DeployExecutableTransfer.new(temp_args).to_bytes)
@@ -157,7 +156,6 @@ class DeploySerializer
         name1 = arg[0] # => "quantity"
         clvalue_hash = arg[1] # => {:cl_type=>"I32", :bytes=>"e8030000", :parsed=>1000}
         clvalue = build_cl_value(arg[1])
-        # puts clvalue
         temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::StoredContractByHash.new(name, entry_point, temp_args).to_bytes)
@@ -236,7 +234,6 @@ class DeploySerializer
         if name1 == "amount" || name1 == "target"
           clvalue_hash = arg[1]
           clvalue = build_cl_value(arg[1])
-          puts "clvalue.get_value: #{clvalue.get_value}"
           temp_args << [Casper::Entity::DeployNamedArgument.new(name1, clvalue)]
         elsif name1 == "id"
           bytes = arg[1][:bytes]
@@ -244,10 +241,12 @@ class DeploySerializer
           h = arg[1][:cl_type]
           key, value = h.first
           cl_type = h.keys[0]
-          # puts key, value
           inner_type = value
-          data = { "cl_type": inner_type, "bytes": bytes, "parsed": parsed}
-          clvalue = CLOption.new(data, inner_type)
+          # data = { "cl_type": inner_type, "bytes": bytes, "parsed": parsed}
+          # clvalue = CLOption.new(data, inner_type)
+
+          inner_clvalue = Utils::Helpers.construct_inner_clvalue(inner_type, parsed)
+          clvalue = CLOption.new(inner_clvalue, inner_type)
               # type = clvalue.get_cl_type
               # puts type
               # value = clvalue.get_value
@@ -262,7 +261,6 @@ class DeploySerializer
       end
       temp = Utils::ByteUtils.byte_array_to_hex(Casper::Entity::DeployExecutableTransfer.new(temp_args).to_bytes)
       @target_serializer = temp
-      # puts @target_serializer
       result += temp
       @transfer_serializer += temp
       @payment_session_serializer += temp
@@ -271,7 +269,6 @@ class DeploySerializer
 
     approvals =  deploy.get_approvals
     num_of_approvals = approvals.size
-    puts "num_of_approvals: #{num_of_approvals}"
     approval_serializer = ""
     deploy_approval_serializer = DeployApprovalSerializer.new
     result += Utils::ByteUtils.to_u32(num_of_approvals)
@@ -283,15 +280,12 @@ class DeploySerializer
       result += deploy_approval_serializer.to_bytes(deploy_approval)
       approval_serializer += deploy_approval_serializer.to_bytes(deploy_approval)
     end
-    puts "approval_serializer: #{approval_serializer}"
-    # result
     Utils::ByteUtils.hex_to_byte_array(result)
   end
 
   def build_cl_value(h = {})
     cl_type = h[:cl_type]
     bytes = h[:bytes]
-    # puts bytes
     parsed = h[:parsed]
     if cl_type == "Bool"
       CLValueBytesParsers::CLBoolBytesParser.from_bytes([bytes])
@@ -311,12 +305,10 @@ class DeploySerializer
       value = Utils::ByteUtils.hex_to_u64_value(bytes)
       CLu32.new(value)
     elsif cl_type == "U512"
-      bytes = h[:bytes] # => 0400e1f505
+      bytes = h[:bytes] # => 0400f90295
       num_of_bytes = bytes[0..1] # => 04
-      bytes = bytes[2..] # => "00e1f505"
-      puts "bytes: #{bytes}"
+      bytes = bytes[2..] # => "00f90295"
       value = [bytes].pack("H*").unpack("L*").first
-      puts "build_cl_value --> value: #{value}"
       # CLu512.new(value)
       CLu512.new(parsed.to_i)
       # value = Utils::ByteUtils.hex_to_u64_value(bytes)
@@ -345,7 +337,6 @@ class DeploySerializer
   def build_cl_value_with_option(h = {})
     cl_type = h[:cl_type]
     bytes = h[:bytes]
-    # puts bytes
     parsed = h[:parsed]
     if cl_type == "Bool"
       CLValueBytesParsers::CLBoolBytesParser.from_bytes([bytes])
