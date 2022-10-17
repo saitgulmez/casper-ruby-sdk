@@ -6,7 +6,9 @@ require './lib/rpc/rpc_client.rb'
 # Ip Address taken from Testnet
 # client = Casper::RpcClient.new("65.21.227.101")  # IP is taken from "TestNet"
 # client = Casper::RpcClient.new("138.201.54.44")  # IP is taken from "TestNet"
-client = Casper::RpcClient.new("5.9.23.55")        # IP is taken from "TestNet"
+# client = Casper::RpcClient.new("5.9.23.55")        # IP is taken from "TestNet"
+client = Casper::RpcClient.new("65.21.235.219")    # IP is taken from "TestNet"
+
 
 # block_Hash taken from Testnet
 block_hash = "71e19e2e9629c716dc9578066cfeceace559d32fe51b08245ddd4d218f8c18da"
