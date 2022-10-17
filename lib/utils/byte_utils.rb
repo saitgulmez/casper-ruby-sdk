@@ -79,6 +79,9 @@ module Utils
     # @param [Integer] n
     # @return [String]
     def to_u64(n)
+      # bytes = Utils::ByteUtils.byte_array_to_hex(to_byte_array(n)) + "0000"
+      # puts "bytes: #{bytes}"
+      # puts "bytes_conversion: #{[bytes].pack("H*").unpack("C*")}"
       [n].pack("Q<*").unpack("H*").first
     end
 
