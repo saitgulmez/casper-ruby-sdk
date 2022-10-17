@@ -3,15 +3,15 @@ require_relative '../types/cl_public_key.rb'
 require_relative '../utils/hex_utils.rb'
 require_relative '../utils/hash_utils.rb'
 
-CLPublicKeyTag = {
-  ED25519: 1,
-  SECP256K1: 2
-}
+# CLPublicKeyTag = {
+#   ED25519: 1,
+#   SECP256K1: 2
+# }
 
-SignatureAlgorithm = {
-  Ed25519: 'ed25519',
-  Secp256K1: 'secp256k1'
-}
+# SignatureAlgorithm = {
+#   Ed25519: 'ed25519',
+#   Secp256K1: 'secp256k1'
+# }
 
 class AsymmetricKey
   attr_reader :public_key, :private_key, :signature_algorithm
@@ -19,7 +19,8 @@ class AsymmetricKey
   # @param [CLPublicKey] public_key
   # @param [Array] private_key
   # @param [SignatureAlgorithm] signature_algorithm
-  def initialize(public_key, private_key, signature_algorithm)
+  def initialize(public_key = CLPublicKey.new([204, 238, 25, 54, 110, 175, 3, 72, 124, 184, 17, 151, 174, 142, 220, 
+  177, 180, 127, 33, 76, 238, 0, 214, 89, 115, 128, 9, 107, 159, 132, 99, 193], 1), private_key = nil, signature_algorithm = nil)
     @public_key = public_key
     @private_key = private_key
     @signature_algorithm = signature_algorithm
@@ -49,15 +50,15 @@ class AsymmetricKey
   end
 
   # @return [Array<Integer>] 
-  def account_hash
-    @tag = @public_key.get_cl_public_key_tag
-    key_name = CLPublicKeyTag.key(@tag).to_s
-    prefix = key_name.downcase.unpack("C*") + [0]
-    bytes = prefix + @public_key.get_value
-    result_array = Utils::HashUtils.byte_hash(bytes)
-    @public_key.get_value.length == 0 ? [] : result_array
-    #*** @public_key.to_account_hash_byte_array
-  end
+  # def account_hash
+  #   @tag = @public_key.get_cl_public_key_tag
+  #   key_name = CLPublicKeyTag.key(@tag).to_s
+  #   prefix = key_name.downcase.unpack("C*") + [0]
+  #   bytes = prefix + @public_key.get_value
+  #   result_array = Utils::HashUtils.byte_hash(bytes)
+  #   @public_key.get_value.length == 0 ? [] : result_array
+  #   #*** @public_key.to_account_hash_byte_array
+  # end
  
   # @param [String] path_to_private_key
   def create_from_private_key_file(path_to_private_key)
