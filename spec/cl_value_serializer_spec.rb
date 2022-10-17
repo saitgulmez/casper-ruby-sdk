@@ -69,6 +69,16 @@ describe CLValueSerializer do
     end
   end
 
+  describe "CLu512 Value Serializer" do
+    let(:u512_1) { CLu512.new(1000000000)}
+    let(:u512_2) { CLu512.new(23000000000)}
+
+    it "should serialize CLu512 values" do 
+      puts serializer.to_bytes(u512_1)
+      puts serializer.to_bytes(u512_2)
+    end
+  end
+
   describe "CLString Value Serializer" do
     let (:str1) { CLString.new("Hello, Casper!") }
     it "should serialize CLString values" do
@@ -133,8 +143,10 @@ describe CLValueSerializer do
   describe "CLUnit Value Serializer" do  
     let(:unit)  {CLUnit.new()}
     it "should serialize CLUnit values" do  
-      puts serializer.to_bytes(unit)
+      # puts serializer.to_bytes(unit)
       expect(serializer.to_bytes(unit)).to eql("0000000009")
     end
   end
+
+
 end
