@@ -15,6 +15,8 @@ require_relative './serialization/deploy_serializer.rb'
 # Dir["./serialization/*.rb"].each {|file|  require file }
 # Dir["./types/*.rb"].each {|file|  require file }
 require_relative './include.rb'
+require_relative './crypto/ed25519_key.rb'
+require_relative './crypto/asymmetric_key.rb'
 module Casper
    # Interacting with the network
   class CasperClient 
@@ -281,7 +283,7 @@ module Casper
         state_root_hash = @auction_state[:state_root_hash]
         block_height = @auction_state[:block_height]
         era_validators = @auction_state[:era_validators]
-        @auction_state
+        
         bids = @auction_state[:bids]
         Casper::Entity::AuctionState.new(state_root_hash, block_height, era_validators, bids)
         }
@@ -293,9 +295,10 @@ module Casper
     
     # @param [Deploy] deploy
     def put_deploy(deploy)
-      client = Jimson::Client.new(url)
-      response = client.account_put_deploy(deploy)
-      response['deploy_hash']
+      client = Jimson::Client.new(@url)
+      response = client.account_put_deploy({
+        "deploy" => deploy
+      })
     end
   
   end
