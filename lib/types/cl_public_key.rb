@@ -34,6 +34,8 @@ class CLPublicKey < CLValue
   # @param [Integer] tag
   def initialize(raw_public_key, tag)
     super()
+    @tag = tag
+    @raw_public_key = raw_public_key
     raw_public_key_length_valid?(raw_public_key, tag)
   end
 
