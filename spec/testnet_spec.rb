@@ -252,8 +252,8 @@ describe Casper::RpcClient do
         expect(peers_from_info_get_status.size).to be > 0
       end
 
-      it "passes, node public key is : 018597e78805200d5469105024d7741894c2c1eac69fb9c15e718e1824261722a2" do
-        our_public_signing_key = "018597e78805200d5469105024d7741894c2c1eac69fb9c15e718e1824261722a2"
+      it "passes, node public key is : 01ac58a7b87cd67f03b1ccf371a1f3979efb6ddafb9fbb7b59096ed5a6425eccc3" do
+        our_public_signing_key = "01ac58a7b87cd67f03b1ccf371a1f3979efb6ddafb9fbb7b59096ed5a6425eccc3"
         expect(node_status[:our_public_signing_key]).to eql(our_public_signing_key)
       end
     end
