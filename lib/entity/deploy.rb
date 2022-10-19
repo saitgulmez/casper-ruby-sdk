@@ -49,7 +49,7 @@ module Casper
         @approvals  
       end
 
-      # @param []
+      # @param [DeployApproval] 
       def add_approval(approval)
         @approvals << approval
       end
@@ -83,9 +83,11 @@ module Casper
         @deploy = Deploy.new(nil, nil, nil, nil, nil)
       end
 
-      # @param [Hash] the header of Deploy
-      # @param [Hash] the payment of Deploy
-      # @param [Hash] the session of Deploy
+      # @param [String] deploy_hash the hash of Deploy
+      # @param [Hash] header the header of Deploy
+      # @param [Hash] payment the payment of Deploy
+      # @param [Hash] session the session of Deploy
+      # @param [Array<DeployApproval>] approvals the approval list of Deploy
       # @return [Deploy] 
       def make_deploy(deploy_hash, header, payment, session, approvals)
         @header = Casper::Entity::DeployHeader.new(header)
@@ -113,8 +115,8 @@ module Casper
           session_byte_array = session_serializer.to_bytes
           arr = payment_byte_array.concat(session_byte_array)
           hex = Utils::ByteUtils.byte_array_to_hex(arr)
-          puts "body_serializer:"
-          puts Utils::ByteUtils.byte_array_to_hex(arr)
+          # puts "body_serializer:"
+          # puts Utils::ByteUtils.byte_array_to_hex(arr)
           len = 32
           key = Blake2b::Key.none
           Blake2b.hex(hex, key, len)
@@ -122,29 +124,34 @@ module Casper
         end
       end
 
-      def update_header_body_hash(deploy_hash)
-        @header.set_body_hash(deploy_hash)
+      # @return [String] the body hash of Deploy header
+      def update_header_body_hash(body_hash)
+        @header.set_body_hash(body_hash)
       end
 
 
       # Compute deploy hash
       #
-      # @return [String]
+      # @return [String] the hash of Deploy
       def deploy_hash(deploy_header)
         serializer = DeployHeaderSerializer.new
         hex = serializer.to_bytes(deploy_header)
-        puts "Header Serializer:"
-        puts hex
+        # puts "Header Serializer:"
+        # puts hex
         len = 32
         key = Blake2b::Key.none
         Blake2b.hex(@deploy_hash, key, len)
-        @deploy_hash = "015f4939664adf15e03116734410daeddfc1a4c1c898bacf6eeb6a94ecdfe5e8"
+        @deploy_hash = "29e29b09c1bbc1900059bcdb9f6f461a96591dec478ca3a50154d5e6a20eca87"
       end
 
+      # @param [Array<DeployApproval>] approvals
+      # @param [Hash] approval 
+      # @return [Array<DeployApproval>] the approval list of Deploy
       def add_approval(approvals, approval)
         @approvals << approval
       end
 
+      # @return [Array<DeployApproval>] the approval list of Deploy
       def get_approvals
         @approvals
       end
@@ -153,11 +160,11 @@ module Casper
 
       # @param [Deploy] deploy to sign
       # @param [Key] key_pair to sign deploy with
-      # @return [Deploy]
+      # @return [Deploy] the Deploy object
       def sign_deploy(deploy, key_pair)
         public_key = deploy.get_header[:account]
         signature = key_pair.sign(deploy.get_hash)
-        puts signature
+        # puts "Signer = #{signature}"
         signer = public_key
         approval = {
           "signer": signer,
@@ -181,6 +188,7 @@ module Casper
         arr = payment_byte_array.concat(session_byte_array)
         hex = Utils::ByteUtils.byte_array_to_hex(arr)
         false unless @body_hash == deploy.get_header[:body_hash] && deploy.get_hash == @deploy_hash
+        puts deploy.get_hash
         true
         # false unless @body_hash == Blake2b(hex) && deploy.get_hash == @deploy_hash
         # true
