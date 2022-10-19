@@ -50,7 +50,18 @@ class Ed25519Key
 
   def get_public_key
     raise ArgumentError, "Expected a 64 character hex String" unless @public_key_hex.length == 64
-     return "01" + @public_key_hex
+    return "01" + @public_key_hex
+  end
+
+  def get_private_key
+    raise ArgumentError, "Expected a 64 character hex String" unless @private_key_hex.length == 64
+    return @private_key_hex
+  end
+
+  # @return [String] an encoded string, as specified by the encoding argument.
+  def get_private_key_base_encoded_format(encoding)
+    # encoding can be "base64" 
+    privKey.getPkcs1ENC(encoding)
   end
 
   def sign(message)
@@ -104,6 +115,7 @@ class Ed25519Key
       @public_key = prefix + @public_key_hex
     end
   end
+
 
   # @param [Array] public_key
   # @return [String]
