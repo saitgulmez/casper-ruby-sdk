@@ -303,7 +303,7 @@ class DeploySerializer
       CLu32.new(value)
     elsif cl_type == "U64"
       value = Utils::ByteUtils.hex_to_u64_value(bytes)
-      CLu32.new(value)
+      CLu64.new(value)
     elsif cl_type == "U512"
       bytes = h[:bytes] # => 0400f90295
       num_of_bytes = bytes[0..1] # => 04
