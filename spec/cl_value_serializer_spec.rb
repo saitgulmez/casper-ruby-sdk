@@ -74,8 +74,10 @@ describe CLValueSerializer do
     let(:u512_2) { CLu512.new(23000000000)}
 
     it "should serialize CLu512 values" do 
-      puts serializer.to_bytes(u512_1)
-      puts serializer.to_bytes(u512_2)
+      # puts serializer.to_bytes(u512_1)
+      expect(serializer.to_bytes(u512_1)).to eql("040000000300ca9a08")
+      # puts serializer.to_bytes(u512_2)
+      expect(serializer.to_bytes(u512_2)).to eql("05000000040026e85a08")
     end
   end
 

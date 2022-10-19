@@ -86,15 +86,15 @@ class CLValueSerializer
       # or
       # inner_type = clvalue.get_inner_type
 
-      puts "inner_clvalue  #{inner_clvalue}"
+      # puts "inner_clvalue  #{inner_clvalue}"
       inner_type = clvalue.get_inner_type # => or
       inner_type = value.get_cl_type
-      puts "inner_type = #{inner_type}"
-      puts inner_value
+      # puts "inner_type = #{inner_type}"
+      # puts inner_value
       bytes = Utils::ByteUtils.to_u64(inner_value)
-      puts bytes  = "01" + bytes
+      bytes  = "01" + bytes
       length = bytes.size/2
-      tag = CLType::TAGS[inner_type.to_sym]
+      tag = CLType::TAGS[inner_type.to_sym] 
       [length].pack("L<*").unpack1("H*") + bytes + "0d" + [tag].pack("C*").unpack1("H*")
     elsif type == "List"
       [0].pack("L<*").unpack1("H*")
