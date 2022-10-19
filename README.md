@@ -72,7 +72,17 @@ yardoc --help
 
 ## Documentation
 
-The SDK documentation can be found [here](https://www.rubydoc.info/gems/casper_network/1.0.2) in detail. 
+The SDK documentation can be found [here](https://www.rubydoc.info/gems/casper_network/1.1.2) in detail.
+
+### Serialization
+Casper provides a custom implementation to serialize data structures used by the Casper node to their byte representation.
+More information on this custom implementation can be found [here](https://caspernetwork.readthedocs.io/en/latest/implementation/serialization-standard.html).
+
+* [Serialization](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/serialization.md#serialization)
+* [Examples](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/serialization.md#examples)
+
+### Key Management
+* [CLPublicKey](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/keys.md#public-keys)
 
 ### Casper-Ruby-Sdk RPC
 * [info_get_peers](https://github.com/saitgulmez/casper-ruby-sdk/blob/main/docs/rpc.md#info_get_peers)
