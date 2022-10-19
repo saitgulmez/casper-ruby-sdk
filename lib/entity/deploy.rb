@@ -49,12 +49,12 @@ module Casper
         @approvals  
       end
 
-      # @param [DeployApproval] 
+      # @param [DeployApproval] approval
       def add_approval(approval)
         @approvals << approval
       end
 
-      # @return [Hash] 
+      # @return [Hash] header as a hash
       def to_hash
         h = {}
         h[:hash] = @hash

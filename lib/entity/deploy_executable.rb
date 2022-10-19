@@ -57,7 +57,6 @@ module Casper
         @stored_contract_by_name = nil
         @stored_versioned_contract_by_hash = nil
         @stored_versioned_contract_by_name = nil
-         # @transfer = nil
       end
 
       def standard_payment(payment_amount)

@@ -29,8 +29,10 @@ class CLOption < CLValue
 
   def get_cl_type
    CLOptionType.new(@inner_type).get_type
-   # @inner_type
-   # get_type
+=begin
+   @inner_type
+   get_type
+=end
   end
 
   def get_inner_type

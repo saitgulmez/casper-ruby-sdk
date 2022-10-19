@@ -28,7 +28,7 @@ module Casper
         @args
       end
 
-      # @param [DeployNamedArgument] 
+      # @param [DeployNamedArgument] deploy_named_arg
       # @return [Array<DeployNamedArgument>] an array of DeployNamedArgument objects
       def set_arg(deploy_named_arg)
         @args << [deploy_named_arg]
