@@ -13,10 +13,10 @@ module Utils
       DateTime.parse( ).strftime("%Q")
       DateTime.parse(timestamp).strftime("%Q").to_i
     end
-
+    
     # Converts milliseconds to timestamp 
     def to_iso_string(milliseconds)
-      milliseconds -= 3 * 60 * 60 * 1000
+      # milliseconds -= 3 * 60 * 60 * 1000
       Time.at(milliseconds/1000.0).strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
     end
 
