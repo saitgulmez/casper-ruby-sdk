@@ -11,7 +11,7 @@ RSpec.describe Utils::TimeUtils do
   end
 
   it "should convert iso datetime to ms from unix epoch" do  
-    date = "2020-11-17T00:39:24.072Z"
+    date = "2020-11-17T00:39:24.072Z"  
     expect(time_utils.to_epoc_ms(date)).to eql(1605573564072)
   end
 
@@ -19,6 +19,11 @@ RSpec.describe Utils::TimeUtils do
     date = "2020-11-17T00:39:24.072Z"
     milliseconds = 1605573564072
     expect(time_utils.to_iso_string(milliseconds)).to eql("2020-11-17T00:39:24.072Z")
+  end
+
+  it "Milliseconds should not be negative" do
+    milliseconds = -10
+    expect {time_utils.to_iso_string(milliseconds)}.to raise_error(ArgumentError)
   end
 
   it "should convert ttl to milliseconds" do 
@@ -84,4 +89,5 @@ RSpec.describe Utils::TimeUtils do
     ttl10 = time_utils.milliseconds_to_ttl(90)
     expect(ttl10).to eql("90ms")
   end
+
 end

@@ -18,6 +18,9 @@ module Utils
 
     # Converts milliseconds to timestamp 
     def to_iso_string(milliseconds)
+      if milliseconds < 0
+        raise ArgumentError.new("Wrong number. Parameter cannot be negative value")
+      end
       # milliseconds -= 3 * 60 * 60 * 1000
       # Time.at(milliseconds/1000.0).strftime('%Y-%m-%dT%H:%M:%S.%3NZ')
       Time.zone = 'UTC'
@@ -44,6 +47,8 @@ module Utils
           n = 24 * 60 * 60 * 1000
         elsif item.include?("day")
           n = 24 * 60 * 60 * 1000
+        else
+          raise ArgumentError.new("Unsupported TTL is given!")
         end
           value = item.gsub(/[^0-9,.]/, "").to_i
           value *= n
