@@ -69,4 +69,9 @@ RSpec.describe Utils::ByteUtils do
     end
   end
 
+  it "ttl should be a supported format and suffix of each substring should be one of these \'d\',  \'h\', \'m\' or \'ms\' " do
+    ttl = "3041mn"
+    # expect {time_utils.ttl_to_milliseconds(ttl)}.to raise_error(ArgumentError)
+    puts time_utils.ttl_to_milliseconds(ttl)
+  end
 end

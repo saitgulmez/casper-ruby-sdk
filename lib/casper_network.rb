@@ -189,6 +189,24 @@ module Casper
       end
     end
 
+    def get_block_by_height(height)
+      begin
+        state = Timeout::timeout(10){
+          client = Jimson::Client.new(@url)
+          result = client.chain_get_block({"block_identifier" => {"Height" => height}})
+          @block_info = result["block"]
+          if (!@block_info.empty?() && @block_info["header"]["height"] != height)
+            raise("Returned block does not have a matching height.")
+          else
+            @block_info.deep_symbolize_keys!
+            Casper::Entity::Block.new(@block_info[:hash], @block_info[:header], @block_info[:body], @block_info[:proofs])
+          end
+        }
+      rescue
+        Casper::RpcError::InvalidParameter.error
+      end
+    end
+
     # @param [String] block_hash
     # @return [Hash] era_summary
     def chain_get_eraInfo_by_SwitchBlock(block_hash)
