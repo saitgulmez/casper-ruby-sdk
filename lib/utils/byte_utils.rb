@@ -20,6 +20,14 @@ module Utils
     def hex_to_byte_array(hex_str)
       [hex_str].pack("H*").unpack("C*")
     end
+
+    # Convert a string of 0-F into a byte array 
+    # hex = "0a0b"=> [10, 11]
+    # hex = "0a0b0"=> [10, 11]
+    # hex = "0a0b0c"=> [10, 11, 13]
+    def convert_hex_to_byte_array(hex)
+      hex.scan(/../).map(&:hex)
+    end
    
     # @param [Array] byte_array
     # @return [String]
