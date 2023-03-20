@@ -170,7 +170,7 @@ module Casper
     end
 
     # @param [String] block_hash
-    # @return [Hash] block_info
+    # @return [Block] block_info
     def chain_get_block(block_hash)
       begin 
         state = Timeout::timeout(10) {
@@ -189,6 +189,9 @@ module Casper
       end
     end
 
+    # Get block info at a provided block height
+    # @param [Integer] height the block height at which to gather the block info
+    # @return [Block] block_info
     def get_block_by_height(height)
       begin
         state = Timeout::timeout(10){
