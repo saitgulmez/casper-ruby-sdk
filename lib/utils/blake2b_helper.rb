@@ -40,4 +40,12 @@ class Blake2bHelper
     return str.to_i(2)
   end
 
+  def bitwise_xor(a, b)
+    u32_max = 0xffffffff
+    i32_max = 0x7fffffff
+    result = (a ^ b) & u32_max
+    result -= 4294967296 if result > i32_max
+    result
+  end
+
 end
