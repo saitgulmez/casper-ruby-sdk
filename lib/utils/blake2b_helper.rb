@@ -48,4 +48,13 @@ class Blake2bHelper
     result
   end
 
+  def convert_signed_value_to_u32(n)
+    # result = n + (2**32)
+    
+    # Bitwise AND
+    # result = n & (0xFFFF_FFFF)
+
+    [n].pack("L").unpack("L").first
+  end
+
 end
