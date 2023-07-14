@@ -21,6 +21,16 @@ class Blake2bHelper
     V = Array.new(32, 0)
     M = Array.new(32, 0)
 
+
+  def initialize
+    @ctx = {
+      b: Array.new(128, 0),
+      h: Array.new(16),
+      t: 0, # Input counter
+      c: 0, # Pointer within buffer
+      outlen: 0 # Output length in bytes
+    }
+  end
   def bitwise_not(n)
     binary = n.to_s(2)
     size = binary.size
