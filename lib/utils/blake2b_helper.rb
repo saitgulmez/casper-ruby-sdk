@@ -31,6 +31,49 @@ class Blake2bHelper
       outlen: 0 # Output length in bytes
     }
   end
+
+  def add64_aa(v, a, b)
+    # If the value of o0 is higher than u32_max then reset its value to zero
+    o0 = v[a] + v[b]
+    # If the value of o1 is higher than u32_max then reset its value to zero
+    o1 = v[a + 1] + v[b + 1]
+    puts "o1\tv[a + 1]\tv[b + 1]"
+    puts "#{o1}\t#{v[a+1]}\t#{v[b+1]}"
+    max_i32 = 0x100000000
+    u32_max = 0xffffffff
+
+    if o0 >= max_i32
+      # if o1 >= u32_max
+      #   o1 = o1 & 0xffffffff
+      # elsif o1 < 0
+      #   o1 = 0
+      # else
+      #   o1 += 1
+      # end
+        o1 += 1
+    end
+    # if o0.to_s(2).size > 32
+    #   v[a] = 0
+    # else
+      puts "\n#{$k} ************ add64_aa ***************"
+      puts "o0 = #{o0}"
+      puts "o1 = #{o1}"
+      o0 = o0 & 0xffffffff
+      o1 = o1 & 0xffffffff
+      puts "Updated o0 = #{o0}"
+      puts "Updated o1 = #{o1}"
+      v[a] = o0
+    # end
+    # if o1.to_s(2).size > 32
+    #   v[a + 1] = 0
+    # else
+      $k += 1
+      v[a + 1] = o1
+      puts "v[a] = o0 = #{v[a]}\n"
+      puts "v[a + 1] = o1 = #{v[a + 1]}\n"
+    # end
+  end
+  
   def bitwise_not(n)
     binary = n.to_s(2)
     size = binary.size
