@@ -110,4 +110,17 @@ class Blake2bHelper
     [n].pack("L").unpack("L").first
   end
 
+  def right_shift_u32(value, n)
+    if n < 0
+      raise "n should not be negative value"
+    end
+    if value < 0
+      binary_str = [value].pack('L>').unpack1('B*')
+      binary_str.slice!(-n, n)
+      binary_str = "0"*n + binary_str
+      binary_str.to_i(2)
+    else 
+      value >> n
+    end
+  end
 end
