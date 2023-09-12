@@ -37,8 +37,6 @@ class Blake2bHelper
     o0 = v[a] + v[b]
     # If the value of o1 is higher than u32_max then reset its value to zero
     o1 = v[a + 1] + v[b + 1]
-    puts "o1\tv[a + 1]\tv[b + 1]"
-    puts "#{o1}\t#{v[a+1]}\t#{v[b+1]}"
     max_i32 = 0x100000000
     u32_max = 0xffffffff
 
@@ -55,24 +53,60 @@ class Blake2bHelper
     # if o0.to_s(2).size > 32
     #   v[a] = 0
     # else
-      puts "\n#{$k} ************ add64_aa ***************"
-      puts "o0 = #{o0}"
-      puts "o1 = #{o1}"
       o0 = o0 & 0xffffffff
       o1 = o1 & 0xffffffff
-      puts "Updated o0 = #{o0}"
-      puts "Updated o1 = #{o1}"
       v[a] = o0
     # end
     # if o1.to_s(2).size > 32
     #   v[a + 1] = 0
     # else
-      $k += 1
       v[a + 1] = o1
-      puts "v[a] = o0 = #{v[a]}\n"
-      puts "v[a + 1] = o1 = #{v[a + 1]}\n"
     # end
   end
+
+   def b2b_g(a, b, c, d, ix, iy)
+    x0 = M[ix]
+    x1 = M[ix + 1]
+    y0 = M[iy]
+    y1 = M[iy + 1]
+
+    add64_aa(V, a, b) 
+
+    add64_ac(V, a, x0, x1) 
+    xor0 = bitwise_xor(V[d], V[a])
+    
+    xor1 = bitwise_xor(V[d + 1], V[a + 1])
+
+    V[d] = convert_signed_value_to_u32(xor1)
+    V[d + 1] = convert_signed_value_to_u32(xor0)
+    add64_aa(V, c, d)
+
+    # v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 24 bits
+    xor0 = bitwise_xor(V[b], V[c])
+    xor1 = bitwise_xor(V[b + 1], V[c + 1])
+
+    xor0 = xor0 & 0xFFFF_FFFF if xor0 > 0
+    xor1 = xor1 & 0xFFFF_FFFF if xor1 > 0
+    V[b] = convert_signed_value_to_u32(bitwise_xor((right_shift_u32(xor0, 24)), (xor1 << 8)))
+    V[b + 1] = convert_signed_value_to_u32(bitwise_xor((right_shift_u32(xor1, 24)), (xor0 << 8)))
+
+    add64_aa(V, a, b)
+    add64_ac(V, a, y0, y1)
+
+    # v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated right by 16 bits
+    xor0 = bitwise_xor(V[d], V[a])
+    xor1 = bitwise_xor(V[d + 1], V[a + 1])
+    V[d] = convert_signed_value_to_u32(bitwise_xor((right_shift_u32(xor0, 16)), (xor1 << 16)))
+    V[d + 1] = convert_signed_value_to_u32(bitwise_xor((right_shift_u32(xor1, 16)), (xor0 << 16)))
+
+    add64_aa(V, c, d)
+
+    # v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 63 bits
+    xor0 = bitwise_xor(V[b], V[c])
+    xor1 =  bitwise_xor(V[b + 1], V[c + 1])
+    V[b] = convert_signed_value_to_u32(bitwise_xor((xor1 >> 31), (xor0 << 1)))
+    V[b + 1] = convert_signed_value_to_u32(bitwise_xor((xor0 >> 31), (xor1 << 1)))
+  end 
   
   def bitwise_not(n)
     binary = n.to_s(2)
