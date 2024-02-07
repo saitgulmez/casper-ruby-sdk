@@ -159,6 +159,6 @@ class Blake2bHelper
   end
 
   def blake2b(hex_str) 
-    RbNaCl::Hash.blake2b([hex_str].pack('H*'), digest_size: 32)
+    RbNaCl::Hash.blake2b([hex_str].pack('H*'), digest_size: 32).unpack1('H*')
   end
 end
