@@ -139,5 +139,14 @@ module Utils
       # result.reverse
       result
     end
+
+    # Prefixes a hexa-decimal string with `0x`.
+    #
+    # @param hex [String] a hex-string to be prefixed.
+    # @return [String] a prefixed hex-string.
+    def prefix_hex(hex)
+      return hex if prefixed? hex
+      return "0x#{hex}"
+    end
   end
 end
